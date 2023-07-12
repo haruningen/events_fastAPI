@@ -1,0 +1,18 @@
+.idea/
+.vscode/
+.env
+logs
+media
+
+# byte-compiled
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache
+.coverage
+
+# mypy
+*.mypy_cache/
+
+# C extensions
+*.so

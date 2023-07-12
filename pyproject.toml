@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "vents-fastapi"
+version = "0.1.0"
+description = "Online event aggregator test project"
+authors = ["Tatiana Kiriushina <higanbana.work@gmail.com>"]
+readme = "README.md"
+packages = [{include = "events_fastapi"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
