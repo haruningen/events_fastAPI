@@ -1,0 +1,33 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres:13-alpine
+    container_name: events-fastAPI-postgres
+    volumes:
+      - events_fastAPI_pgdata:/var/lib/postgresql/data/pgdata
+    environment:
+      - POSTGRES_USER=events_fastAPI_api
+      - POSTGRES_DB=events_fastAPI_api
+      - POSTGRES_PASSWORD=pswd1234
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: events-fastAPI-app
+    env_file:
+      - .env
+    volumes:
+      - ./src:/app
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    command: uvicorn --port 8070 --host 0.0.0.0 --loop uvloop --reload main:app
+
+volumes:
+  events_fastAPI_pgdata:

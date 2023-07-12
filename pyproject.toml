@@ -4,11 +4,14 @@ version = "0.1.0"
 description = "Online event aggregator test project"
 authors = ["Tatiana Kiriushina <higanbana.work@gmail.com>"]
 readme = "README.md"
-packages = [{include = "events_fastapi"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-
+fastapi = "^0.100.0"
+uvicorn = "^0.22.0"
+pydantic = "^2.0.2"
+SQLAlchemy = "^1.4.31"
+mypy = "^1.4.1"
 
 [build-system]
 requires = ["poetry-core"]
