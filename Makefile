@@ -26,3 +26,6 @@ start:  ## Start application
 
 mypy:  ## Run mypy
 	$(COMPOSE_RUN_APP) mypy .
+
+isort:  ## Run isort
+	$(COMPOSE_RUN_APP) isort .
