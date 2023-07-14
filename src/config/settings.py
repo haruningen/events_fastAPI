@@ -42,6 +42,12 @@ class Settings(BaseSettings):
     TICKETMASTER_API_KEY: str
     # Frontend url
     FRONTEND_URL: str
+    # Tokens secrets
+    ACCESS_TOKEN_EXPIRE_MINUTES: int
+    REFRESH_TOKEN_EXPIRE_MINUTES: int
+    ALGORITHM: str
+    JWT_SECRET_KEY: str
+    JWT_REFRESH_SECRET_KEY: str
 
     class Config:
         env_file = './.env'

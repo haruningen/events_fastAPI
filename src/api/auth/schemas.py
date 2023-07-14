@@ -1,15 +1,25 @@
 import uuid
 from datetime import datetime
 
-from pydantic import BaseModel, EmailStr, constr
+from pydantic import BaseModel, EmailStr, constr, model_validator
 
 from api.users.schemas import UserBaseSchema
 
+__all__ = ('CreateUserSchema', 'LoginUserSchema', 'UserResponse')
 
-class CreateUserSchema(UserBaseSchema):
+
+class CreateUserSchema(BaseModel):
+    email: EmailStr
     password: constr(min_length=8)
     passwordConfirm: str
-    verified: bool = False
+
+    @model_validator(mode='after')
+    def check_passwords_match(self) -> 'CreateUserSchema':
+        password = self.password
+        passwordConfirm = self.passwordConfirm
+        if password is not None and passwordConfirm is not None and password != passwordConfirm:
+            raise ValueError('Passwords do not match')
+        return self
 
 
 class LoginUserSchema(BaseModel):

@@ -29,3 +29,4 @@ mypy:  ## Run mypy
 
 isort:  ## Run isort
 	$(COMPOSE_RUN_APP) isort .
+

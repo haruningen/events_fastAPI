@@ -6,8 +6,11 @@ services:
     container_name: events-fastAPI-postgres
     volumes:
       - events_fastAPI_pgdata:/var/lib/postgresql/data/pgdata
-    env_file:
-      - ./.env
+    environment:
+      - POSTGRES_USER=events_fastAPI_api
+      - POSTGRES_DB=events_fastAPI_api
+      - POSTGRES_PASSWORD=pswd1234
+      - PGDATA=/var/lib/postgresql/data/pgdata
     ports:
       - "5432:5432"
 
