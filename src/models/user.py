@@ -1,5 +1,5 @@
-from sqlalchemy import TIMESTAMP, Column, String, text
 from fastapi_users.db import SQLAlchemyBaseUserTableUUID
+from sqlalchemy import TIMESTAMP, Column, String, text
 
 from models.base import BaseModel
 
