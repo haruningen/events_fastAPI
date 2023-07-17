@@ -30,3 +30,7 @@ mypy:  ## Run mypy
 isort:  ## Run isort
 	$(COMPOSE_RUN_APP) isort .
 
+
+generate_key:
+	$(COMPOSE_RUN_APP) python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key())"
+

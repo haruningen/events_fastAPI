@@ -26,6 +26,9 @@ class LoginUserSchema(BaseModel):
     email: EmailStr
     password: constr(min_length=8)
 
+class VerifyEmailSchema(BaseModel):
+    email: EmailStr
+
 
 class RefreshTokenSchema(BaseModel):
     refresh_token: str

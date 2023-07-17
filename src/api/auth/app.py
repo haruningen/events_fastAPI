@@ -1,4 +1,5 @@
 import time
+from email.mime.text import MIMEText
 
 import jwt
 import sqlalchemy as sa
@@ -8,7 +9,14 @@ __all__ = ('router',)
 
 from pydantic import ValidationError
 
-from api.auth.schemas import CreateUserSchema, LoginUserSchema, TokenSchema, UserResponse, RefreshTokenSchema
+from api.auth.schemas import (
+    CreateUserSchema,
+    LoginUserSchema,
+    RefreshTokenSchema,
+    TokenSchema,
+    UserResponse,
+    VerifyEmailSchema
+)
 from api.users.schemas import TokenPayload
 from config import settings
 from connections import db
@@ -17,6 +25,7 @@ from utils.users import (
     create_access_token,
     create_refresh_token,
     get_hashed_password,
+    verify_email,
     verify_password
 )
 
@@ -45,6 +54,7 @@ async def create_user(data: CreateUserSchema):
     db.add(user)
     await db.commit()
     await db.refresh(user)
+    verify_email(data.email)
     return user
 
 
@@ -55,11 +65,10 @@ async def login(data: LoginUserSchema):
     if not user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail='Incorrect Email or Password')
-    # TODO implement when add email verification
-    # # Check if user verified his email
-    # if not user.verified:
-    #     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-    #                         detail='Please verify your email address')
+    # Check if user verified his email
+    if not user.verified:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail='Please verify your email address')
 
     # Check if the password is valid
     if not verify_password(data.password, user.hashed_password):
@@ -89,3 +98,7 @@ async def refresh(data: RefreshTokenSchema):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail='Refresh token is no longer valid')
     return TokenSchema(access_token=create_access_token(user.email), refresh_token=create_refresh_token(user.email))
+
+@router.post('/verify_email', summary="For test sending email verification link")
+async def send_mail(data: VerifyEmailSchema):
+    verify_email(data.email)
