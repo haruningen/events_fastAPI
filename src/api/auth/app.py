@@ -21,7 +21,7 @@ from utils.users import (
     create_refresh_token,
     get_hashed_password,
     token_decode,
-    verify_password
+    verify_password, get_user_by_email
 )
 
 router = APIRouter()
@@ -29,7 +29,7 @@ router = APIRouter()
 
 @router.post('/signup', summary='Create new user', response_model=UserResponse)
 async def create_user(data: CreateUserSchema, _db: AsyncSession = Depends(get_db)) -> User:
-    user = (await _db.execute(sa.select(User).filter_by(email=data.email))).first()[0]
+    user = await get_user_by_email(data.email)
     # Check if the user exist
     if user:
         raise HTTPException(
@@ -48,7 +48,7 @@ async def create_user(data: CreateUserSchema, _db: AsyncSession = Depends(get_db
 
 @router.post('/login', summary='Create access and refresh tokens for user', response_model=TokenSchema)
 async def login(data: LoginUserSchema, _db: AsyncSession = Depends(get_db)) -> dict:
-    user = (await _db.execute(sa.select(User).filter_by(email=data.email))).first()[0]
+    user = await get_user_by_email(data.email)
     # Check if the user exist
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
@@ -70,7 +70,7 @@ async def login(data: LoginUserSchema, _db: AsyncSession = Depends(get_db)) -> d
 @router.post('/refresh', summary='Refresh access and refresh tokens for user', response_model=TokenSchema)
 async def refresh(data: RefreshTokenSchema, _db: AsyncSession = Depends(get_db)) -> dict:
     token_data = token_decode(data.refresh_token)
-    user = (await _db.execute(sa.select(User).filter_by(email=token_data.user_email))).first()[0]
+    user = await get_user_by_email(token_data.user_email)
     # Check if the user exist
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,

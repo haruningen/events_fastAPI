@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from typing import Any, Union
 
 import jwt
 from fastapi import HTTPException, status
@@ -8,6 +7,9 @@ from pydantic import ValidationError
 
 from api.users.schemas import TokenPayload
 from config import settings
+from connections import db
+from models import User
+import sqlalchemy as sa
 
 password_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
@@ -46,3 +48,11 @@ def token_decode(token: str) -> TokenPayload:
     except ValidationError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail='Could not validate credentials', )
+
+
+async def get_user_by_email(email: str) -> User | None:
+    users = (await db.execute(sa.select(User).filter_by(email=email))).first()
+    if users:
+        return users[0]
+    else:
+        return None
