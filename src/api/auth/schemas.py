@@ -11,13 +11,11 @@ __all__ = ('CreateUserSchema', 'LoginUserSchema', 'UserResponse', 'TokenSchema',
 class CreateUserSchema(BaseModel):
     email: EmailStr
     password: constr(min_length=8)
-    passwordConfirm: str
+    password_confirm: str
 
     @model_validator(mode='after')
     def check_passwords_match(self) -> 'CreateUserSchema':
-        password = self.password
-        passwordConfirm = self.passwordConfirm
-        if password is not None and passwordConfirm is not None and password != passwordConfirm:
+        if self.password != self.password_confirm:
             raise ValueError('Passwords do not match')
         return self
 
@@ -40,4 +38,3 @@ class TokenSchema(BaseModel):
 class UserResponse(UserBaseSchema):
     id: uuid.UUID
     created_at: datetime
-    updated_at: datetime

@@ -30,6 +30,8 @@ mypy:  ## Run mypy
 isort:  ## Run isort
 	$(COMPOSE_RUN_APP) isort .
 
+refresh_db:  ## Regenerate migrations and apply them
+	$(COMPOSE_RUN_APP) bash -c "python refresh_db.py && alembic revision --autogenerate -m 'initial'"
 
 generate_key:
 	$(COMPOSE_RUN_APP) python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key())"

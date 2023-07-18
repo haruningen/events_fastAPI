@@ -15,7 +15,6 @@ class Settings(BaseSettings):
     BASE_URL: HttpUrl
     API_ROOT: Path
     ENVIRONMENT: str = 'LOCAL'
-    ENV_NAME: str = 'local'
     APP_NAME: str = 'events_fastAPI'
     DEBUG: bool = True
     LOG_LEVEL: str = 'INFO'
@@ -53,6 +52,3 @@ class Settings(BaseSettings):
 
     class Config:
         env_file = './.env'
-
-
-settings = Settings()
