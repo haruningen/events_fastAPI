@@ -10,6 +10,6 @@ class User(SQLAlchemyBaseUserTableUUID, BaseModel):
     email: Column = Column(String(45), index=True, unique=True)
     avatar_url: Column = Column(String, nullable=True)
     created_at: Column = Column(TIMESTAMP(timezone=True),
-                                nullable=False, server_default=text("now()"))
+                                nullable=False, server_default=text('now()'))
     updated_at: Column = Column(TIMESTAMP(timezone=True),
-                                nullable=False, server_default=text("now()"))
+                                nullable=False, server_default=text('now()'))

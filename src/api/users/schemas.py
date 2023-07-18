@@ -14,5 +14,5 @@ class UserBaseSchema(BaseModel):
 
 
 class TokenPayload(BaseModel):
-    sub: str = None
+    user_email: str = None
     exp: int = None
