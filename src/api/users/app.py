@@ -17,7 +17,7 @@ router = APIRouter()
 
 
 @router.get('/me', summary='Get current user info', dependencies=[Depends(token_decode)], response_model=UserBaseSchema)
-async def get_user(token: Annotated[str, Depends(oauth2_scheme)], _db: AsyncSession = Depends(get_db)) -> User:
+async def get_user(token: str = Depends(oauth2_scheme), _db: AsyncSession = Depends(get_db)) -> User:
     token_data = token_decode(token)
     user = (await _db.execute(sa.select(User).filter_by(email=token_data.user_email))).first()[0]
     # Check if the user exist
