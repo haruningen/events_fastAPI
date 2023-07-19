@@ -1,7 +1,3 @@
-import time
-from email.mime.text import MIMEText
-
-import sqlalchemy as sa
 from fastapi import APIRouter, Depends, HTTPException, status
 
 __all__ = ('router',)
@@ -17,18 +13,15 @@ from api.auth.schemas import (
     VerifyEmailSchema
 )
 from api.depends import get_db
-from api.users.schemas import TokenPayload
-from config import settings
-from connections import db
 from models.user import User
 from utils.users import (
     create_access_token,
     create_refresh_token,
     get_hashed_password,
-    token_decode,
-    verify_password,
     get_user_by_email,
+    token_decode,
     verify_email,
+    verify_password
 )
 
 router = APIRouter()

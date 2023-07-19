@@ -1,8 +1,8 @@
-from connections.postgresql import Base
+from connections.postgresql import Base, DeclarativeBase
 
 __all__ = ('BaseModel',)
 
 
-class BaseModel(Base):  # type: ignore
+class BaseModel(Base, DeclarativeBase):  # type: ignore
     __abstract__ = True
     __tablename__ = ''

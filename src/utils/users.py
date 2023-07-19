@@ -1,24 +1,18 @@
-import base64
 import ssl
 from datetime import datetime, timedelta
 from email.mime.text import MIMEText
-from smtplib import SMTP, SMTP_SSL
-from typing import Any, Union
+from smtplib import SMTP
 
 import jwt
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-from fastapi import HTTPException
 from fastapi import HTTPException, status
 from passlib.context import CryptContext
 from pydantic import ValidationError
 
-from common import templates_env
 from api.users.schemas import TokenPayload
+from common import templates_env
 from config import settings
-from utils import cryptography
-from connections import db
 from models import User
-import sqlalchemy as sa
+from utils import cryptography
 
 password_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
@@ -57,11 +51,10 @@ def token_decode(token: str) -> TokenPayload:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail='Could not validate credentials', )
 
-
 async def get_user_by_email(email: str) -> User | None:
-    users = (await db.execute(sa.select(User).filter_by(email=email))).first()
-    if users:
-        return users[0]
+    user = await User.first(email=email)
+    if user:
+        return user
     else:
         return None
 
@@ -69,6 +62,9 @@ async def get_user_by_email(email: str) -> User | None:
 def create_verify_email_link(email: str) -> str:
     code = cryptography.encrypt_json({'user_email': email}, settings.EMAIL_VERIFY_KEY)
     return f'{settings.FRONTEND_URL}/email-verify/{code}'
+
+def get_user_email_from_link(email_hash: str) -> dict:
+    return cryptography.decrypt_json(email_hash, settings.EMAIL_VERIFY_KEY)
 
 
 def verify_email(email: str):

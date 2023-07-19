@@ -1,12 +1,11 @@
 from email.header import Header
 
-from sqlalchemy.ext.asyncio import AsyncSession
-import sqlalchemy as sa
-
-from connections.postgresql import async_session, db
-from models import User
-from utils.users import token_decode, get_user_by_email
 from fastapi import HTTPException, status
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from connections.postgresql import async_session
+from models import User
+from utils.users import get_user_by_email, token_decode
 
 
 async def get_db() -> AsyncSession:
