@@ -17,9 +17,9 @@ from api.schemas import BaseMessageSchema
 from models.user import User
 from utils.mail import verify_email, reset_password
 from utils.users import (
+    get_user_by_email,
     make_auth_tokens,
     make_hashed_password,
-    get_user_by_email,
     token_decode,
     verify_password, get_user_from_reset_password_link
 )

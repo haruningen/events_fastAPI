@@ -1,4 +1,4 @@
-from fastapi import HTTPException, status, Depends
+from fastapi import Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from common.auth import oauth2_scheme
