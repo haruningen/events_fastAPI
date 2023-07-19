@@ -10,7 +10,7 @@ from api.users.schemas import UserBaseSchema, VerifyEmailSchema
 from models import User
 from utils.users import get_user_by_email, get_user_email_from_link
 
-router = APIRouter()
+router = APIRouter(tags=['users'])
 
 
 @router.get('/me', summary='Get current user info', response_model=UserBaseSchema)

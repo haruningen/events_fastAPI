@@ -14,8 +14,8 @@ class UserBaseSchema(BaseModel):
 
 
 class TokenPayload(BaseModel):
-    user_email: str = None
-    exp: int = None
+    user_id: Optional[str] = None
+    exp: Optional[int] = None
 
 
 class VerifyEmailSchema(BaseModel):
