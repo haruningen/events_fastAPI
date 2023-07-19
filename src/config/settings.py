@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     PORT: int = 8080
     SECRET_KEY: str = secrets.token_urlsafe()
     EMAIL_VERIFY_KEY: bytes
+    RESET_PASSWORD_KEY: bytes
 
     # ---------- Databases ----------
 

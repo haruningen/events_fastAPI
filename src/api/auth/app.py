@@ -10,16 +10,17 @@ from api.auth.schemas import (
     RefreshTokenSchema,
     TokenSchema,
     UserResponse,
-    VerifyEmailSchema
+    EmailSchema
 )
 from api.depends import get_db
+from api.schemas import BaseMessageSchema
 from models.user import User
+from utils.mail import verify_email, reset_password
 from utils.users import (
     make_auth_tokens,
     make_hashed_password,
     get_user_by_email,
     token_decode,
-    verify_email,
     verify_password
 )
 
@@ -76,6 +77,13 @@ async def refresh(data: RefreshTokenSchema, _db: AsyncSession = Depends(get_db))
                             detail='User with this email does not exist')
     return make_auth_tokens(str(user.id))
 
+
 @router.post('/verify_email', summary="For test sending email verification link")
-async def send_mail(data: VerifyEmailSchema):
+async def send_verify_email(data: EmailSchema):
     verify_email(data.email)
+
+
+@router.post('/reset_password', summary="Send reset password link to user email", response_model=BaseMessageSchema)
+async def send_reset_password(data: EmailSchema) -> dict:
+    reset_password(data.email)
+    return {'message': 'Reset password link send to email'}
