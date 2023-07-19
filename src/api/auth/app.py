@@ -15,9 +15,9 @@ from api.auth.schemas import (
 from api.depends import get_db
 from models.user import User
 from utils.users import (
+    get_user_by_email,
     make_auth_tokens,
     make_hashed_password,
-    get_user_by_email,
     token_decode,
     verify_email,
     verify_password

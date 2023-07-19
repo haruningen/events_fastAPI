@@ -84,7 +84,7 @@ class DeclarativeBase:
                 await db.close()
 
     @classmethod
-    async def get(cls, pk: Any, _db: Optional[AsyncSession] = None) -> DeclarativeBaseType | None:
+    async def get(cls, pk: Any, _db: Optional[AsyncSession] = None) -> Optional[DeclarativeBaseType]:
         """Return a model instance by PK."""
 
         db: AsyncSession = _db or cls._get_db()

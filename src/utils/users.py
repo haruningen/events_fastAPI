@@ -19,6 +19,7 @@ from utils import cryptography
 
 password_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
+
 def make_hashed_password(password: str) -> str:
     return password_context.hash(password)
 
@@ -57,7 +58,8 @@ def token_decode(token: str, is_access: bool = True) -> TokenPayload:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail='Could not validate credentials', )
 
-async def get_user_by_email(email: str) -> User | None:
+
+async def get_user_by_email(email: str) -> Optional[User]:
     user = await User.first(email=email)
     if user:
         return user
@@ -68,6 +70,7 @@ async def get_user_by_email(email: str) -> User | None:
 def create_verify_email_link(email: str) -> str:
     code = cryptography.encrypt_json({'user_email': email}, settings.EMAIL_VERIFY_KEY)
     return f'{settings.FRONTEND_URL}/email-verify/{code}'
+
 
 def get_user_email_from_link(email_hash: str) -> dict:
     return cryptography.decrypt_json(email_hash, settings.EMAIL_VERIFY_KEY)

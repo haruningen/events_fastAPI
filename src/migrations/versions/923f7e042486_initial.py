@@ -1,16 +1,17 @@
 """initial
 
-Revision ID: 801cb3d45860
+Revision ID: 923f7e042486
 Revises: 
-Create Date: 2023-07-18 11:08:30.805054
+Create Date: 2023-07-19 14:02:56.363480
 
 """
 import fastapi_users_db_sqlalchemy
 import sqlalchemy as sa
 from alembic import op
 
+
 # revision identifiers, used by Alembic.
-revision = '801cb3d45860'
+revision = '923f7e042486'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -21,6 +22,7 @@ def upgrade() -> None:
     op.create_table('users',
     sa.Column('email', sa.String(length=45), nullable=True),
     sa.Column('avatar_url', sa.String(), nullable=True),
+    sa.Column('verified', sa.Boolean(), server_default='False', nullable=False),
     sa.Column('created_at', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'), nullable=False),
     sa.Column('updated_at', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'), nullable=False),
     sa.Column('id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
