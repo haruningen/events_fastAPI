@@ -1,6 +1,3 @@
-import time
-
-import sqlalchemy as sa
 from fastapi import APIRouter, Depends, HTTPException, status
 
 __all__ = ('router',)
@@ -17,13 +14,14 @@ from api.auth.schemas import (
 from api.depends import get_db
 from models.user import User
 from utils.users import (
-    make_tokens,
+    get_user_by_email,
+    make_auth_tokens,
     make_hashed_password,
     token_decode,
-    verify_password, get_user_by_email
+    verify_password
 )
 
-router = APIRouter()
+router = APIRouter(tags=['auth'])
 
 
 @router.post('/signup', summary='Create new user', response_model=UserResponse)
@@ -63,7 +61,7 @@ async def login(data: LoginUserSchema, _db: AsyncSession = Depends(get_db)) -> d
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail='Incorrect Email or Password')
 
-    return {'access_token': make_tokens(str(user.id)), 'refresh_token': make_tokens(user.email, False)}
+    return make_auth_tokens(str(user.id))
 
 
 @router.post('/refresh', summary='Refresh access and refresh tokens for user', response_model=TokenSchema)
@@ -74,4 +72,4 @@ async def refresh(data: RefreshTokenSchema, _db: AsyncSession = Depends(get_db))
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail='User with this email does not exist')
-    return {'access_token': make_tokens(str(user.id)), 'refresh_token': make_tokens(user.email, False)}
+    return make_auth_tokens(str(user.id))

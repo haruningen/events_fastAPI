@@ -5,7 +5,7 @@ from pydantic import BaseModel, EmailStr, constr, model_validator
 
 from api.users.schemas import UserBaseSchema
 
-__all__ = ('CreateUserSchema', 'LoginUserSchema', 'UserResponse', 'TokenSchema',)
+__all__ = ('CreateUserSchema', 'LoginUserSchema', 'UserResponse', 'TokenSchema', 'RefreshTokenSchema',)
 
 
 class CreateUserSchema(BaseModel):
@@ -28,9 +28,11 @@ class LoginUserSchema(BaseModel):
 class RefreshTokenSchema(BaseModel):
     refresh_token: str
 
+
 class TokenSchema(BaseModel):
     access_token: str
     refresh_token: str
+
 
 class UserResponse(UserBaseSchema):
     id: uuid.UUID
