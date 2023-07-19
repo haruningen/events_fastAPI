@@ -8,7 +8,7 @@ __all__ = ('router',)
 from api.schemas import BaseMessageSchema
 from api.users.schemas import UserBaseSchema, VerifyEmailSchema
 from models import User
-from utils.users import get_user_by_email, get_user_email_from_link
+from utils.users import get_user_by_email, get_user_from_email_link
 
 router = APIRouter(tags=['users'])
 
@@ -19,9 +19,8 @@ async def get_user(user: User = Depends(get_authed_user)) -> User:
 
 
 @router.post('/validate-email-token', summary='Verify user email by hash', response_model=BaseMessageSchema)
-async def get_user(verify_email: VerifyEmailSchema, _db: AsyncSession = Depends(get_db)) -> dict:
-    data = get_user_email_from_link(verify_email.email_verified_hash)
-    user = await get_user_by_email(data['user_email'])
+async def validate_email_confirm(verify_email: VerifyEmailSchema, _db: AsyncSession = Depends(get_db)) -> dict:
+    user = await get_user_from_email_link(verify_email.email_verified_hash)
     # Check if the user exist
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
@@ -29,5 +28,5 @@ async def get_user(verify_email: VerifyEmailSchema, _db: AsyncSession = Depends(
     if user.verified:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail='Email Verification Failed. Email already verified.')
-    await user.update(User.email == data['user_email'], verified=True)
+    await user.update(User.email == user.email, verified=True)
     return {'message': 'Email Verification Done'}

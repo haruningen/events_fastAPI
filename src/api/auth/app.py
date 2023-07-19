@@ -10,7 +10,7 @@ from api.auth.schemas import (
     RefreshTokenSchema,
     TokenSchema,
     UserResponse,
-    EmailSchema
+    EmailSchema, ResetPasswordConfirmSchema
 )
 from api.depends import get_db
 from api.schemas import BaseMessageSchema
@@ -21,7 +21,7 @@ from utils.users import (
     make_hashed_password,
     get_user_by_email,
     token_decode,
-    verify_password
+    verify_password, get_user_from_reset_password_link
 )
 
 router = APIRouter(tags=['auth'])
@@ -87,3 +87,14 @@ async def send_verify_email(data: EmailSchema):
 async def send_reset_password(data: EmailSchema) -> dict:
     reset_password(data.email)
     return {'message': 'Reset password link send to email'}
+
+
+@router.post('/reset_password_confirm', summary='Confirm user reset password by hash', response_model=BaseMessageSchema)
+async def reset_password_confirm(data: ResetPasswordConfirmSchema, _db: AsyncSession = Depends(get_db)) -> dict:
+    user = await get_user_from_reset_password_link(data.password_reset_hash)
+    # Check if the user exist
+    if not user:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail='User with this email does not exist')
+    await user.update(User.email == user.email, hashed_password=make_hashed_password(data.new_password))
+    return {'message': 'Password Reset Done'}

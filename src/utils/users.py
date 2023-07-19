@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from typing import Any
+from typing import Any, Optional
 
 import jwt
 from fastapi import HTTPException, status
@@ -53,7 +53,7 @@ def token_decode(token: str, is_access: bool = True) -> TokenPayload:
                             detail='Could not validate credentials', )
 
 
-async def get_user_by_email(email: str) -> User | None:
+async def get_user_by_email(email: str) -> Optional[User]:
     user = await User.first(email=email)
     if user:
         return user
@@ -61,8 +61,10 @@ async def get_user_by_email(email: str) -> User | None:
         return None
 
 
-def get_user_email_from_link(email_hash: str) -> dict:
-    return cryptography.decrypt_json(email_hash, settings.EMAIL_VERIFY_KEY)
+async def get_user_from_email_link(email_hash: str) -> Optional[User]:
+    data = cryptography.decrypt_json(email_hash, settings.EMAIL_VERIFY_KEY)
+    return await get_user_by_email(data['user_email'])
 
-def get_user_email_from_reset_password_link(reset_password_hash: str) -> dict:
-    return cryptography.decrypt_json(reset_password_hash, settings.RESET_PASSWORD_KEY)
+async def get_user_from_reset_password_link(reset_password_hash: str) -> Optional[User]:
+    data = cryptography.decrypt_json(reset_password_hash, settings.RESET_PASSWORD_KEY)
+    return await get_user_by_email(data['user_email'])

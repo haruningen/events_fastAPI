@@ -6,7 +6,8 @@ from pydantic import BaseModel, EmailStr, constr, model_validator
 from api.users.schemas import UserBaseSchema
 
 __all__ = (
-'CreateUserSchema', 'LoginUserSchema', 'UserResponse', 'TokenSchema', 'RefreshTokenSchema', 'EmailSchema')
+    'CreateUserSchema', 'LoginUserSchema', 'UserResponse', 'TokenSchema', 'RefreshTokenSchema', 'EmailSchema',
+    'ResetPasswordConfirmSchema')
 
 
 class CreateUserSchema(BaseModel):
@@ -42,3 +43,15 @@ class TokenSchema(BaseModel):
 class UserResponse(UserBaseSchema):
     id: uuid.UUID
     created_at: datetime
+
+
+class ResetPasswordConfirmSchema(BaseModel):
+    password_reset_hash: str = None
+    new_password: constr(min_length=8)
+    re_new_password: str
+
+    @model_validator(mode='after')
+    def check_passwords_match(self) -> 'ResetPasswordConfirmSchema':
+        if self.new_password != self.re_new_password:
+            raise ValueError('Passwords do not match')
+        return self
