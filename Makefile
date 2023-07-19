@@ -26,3 +26,9 @@ start:  ## Start application
 
 mypy:  ## Run mypy
 	$(COMPOSE_RUN_APP) mypy .
+
+isort:  ## Run isort
+	$(COMPOSE_RUN_APP) isort .
+
+refresh_db:  ## Regenerate migrations and apply them
+	$(COMPOSE_RUN_APP) bash -c "python refresh_db.py && alembic revision --autogenerate -m 'initial'"

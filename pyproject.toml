@@ -1,18 +1,28 @@
 [tool.poetry]
-name = "vents-fastapi"
-version = "0.1.0"
-description = "Online event aggregator test project"
-authors = ["Tatiana Kiriushina <higanbana.work@gmail.com>"]
-readme = "README.md"
+name = 'vents-fastapi'
+version = '0.1.0'
+description = 'Online event aggregator test project'
+authors = ['Tatiana Kiriushina <higanbana.work@gmail.com>']
+readme = 'README.md'
 
 [tool.poetry.dependencies]
-python = "^3.11"
-fastapi = "^0.100.0"
-uvicorn = "^0.22.0"
-pydantic = "^2.0.2"
-SQLAlchemy = "^1.4.31"
-mypy = "^1.4.1"
+python = '^3.11'
+fastapi = '^0.100.0'
+uvicorn = '^0.22.0'
+pydantic = '^2.0.2'
+pydantic-settings = '^2.0.1'
+SQLAlchemy = '^2.0.18'
+fastapi-users = {version = '^12.1.0', extras = ['sqlalchemy', 'oauth']}
+PyJWT = '^2.7.0'
+asyncpg = '^0.28.0'
+alembic = '^1.11.1'
+
+[tool.poetry.dev-dependencies]
+mypy = '^1.4.1'
+mypy-extensions = '^1.0.0'
+pylint = '^2.12.2'
+isort = '^5.10.1'
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ['poetry-core']
+build-backend = 'poetry.core.masonry.api'
