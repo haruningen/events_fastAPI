@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     LOG_LEVEL: str = 'INFO'
     PORT: int = 8080
     SECRET_KEY: str = secrets.token_urlsafe()
+    EMAIL_VERIFY_KEY: bytes
 
     # ---------- Databases ----------
 
@@ -34,6 +35,7 @@ class Settings(BaseSettings):
 
     # SMTP secrets
     EMAIL_HOST_USER: str
+    EMAIL_HOST: str
     EMAIL_HOST_PASSWORD: str
     EMAIL_PORT: int
     # Ticketmaster secrets

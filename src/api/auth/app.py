@@ -9,7 +9,8 @@ from api.auth.schemas import (
     LoginUserSchema,
     RefreshTokenSchema,
     TokenSchema,
-    UserResponse
+    UserResponse,
+    VerifyEmailSchema
 )
 from api.depends import get_db
 from models.user import User
@@ -18,6 +19,7 @@ from utils.users import (
     make_auth_tokens,
     make_hashed_password,
     token_decode,
+    verify_email,
     verify_password
 )
 
@@ -40,6 +42,7 @@ async def create_user(data: CreateUserSchema, _db: AsyncSession = Depends(get_db
     _db.add(user)
     await _db.commit()
     await _db.refresh(user)
+    verify_email(data.email)
     return user
 
 
@@ -50,11 +53,10 @@ async def login(data: LoginUserSchema, _db: AsyncSession = Depends(get_db)) -> d
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail='User with this email does not exist')
-    # TODO implement when add email verification
-    # # Check if user verified his email
-    # if not user.verified:
-    #     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-    #                         detail='Please verify your email address')
+    # Check if user verified his email
+    if not user.verified:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail='Please verify your email address')
 
     # Check if the password is valid
     if not verify_password(data.password, user.hashed_password):
@@ -73,3 +75,7 @@ async def refresh(data: RefreshTokenSchema, _db: AsyncSession = Depends(get_db))
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail='User with this email does not exist')
     return make_auth_tokens(str(user.id))
+
+@router.post('/verify_email', summary="For test sending email verification link")
+async def send_mail(data: VerifyEmailSchema):
+    verify_email(data.email)
