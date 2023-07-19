@@ -22,6 +22,6 @@ async def get_authed_user(token: str = Header(None, header_name='Authorization')
     user = await get_user_by_id(token_data.user_id)
     # Check if the user exist
     if not user:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail='Incorrect Email or Password')
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail='User with this email does not exist')
     yield user
