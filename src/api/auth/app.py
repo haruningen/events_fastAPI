@@ -38,7 +38,7 @@ async def create_user(data: CreateUserSchema, _db: AsyncSession = Depends(get_db
         )
     user = User(
         email=data.email,
-        hashed_password=make_hashed_password(data.password),
+        hashed_password=make_hashed_password(data.password), # type: ignore[call-arg]
     )
     _db.add(user)
     await _db.commit()
@@ -70,7 +70,7 @@ async def login(data: LoginUserSchema, _db: AsyncSession = Depends(get_db)) -> d
 @router.post('/refresh', summary='Refresh access and refresh tokens for user', response_model=TokenSchema)
 async def refresh(data: RefreshTokenSchema, _db: AsyncSession = Depends(get_db)) -> dict:
     token_data = token_decode(data.refresh_token, False)
-    user = await get_user_by_email(token_data.user_email)
+    user = await User.get(token_data.user_id) # type: ignore[func-returns-value]
     # Check if the user exist
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
@@ -79,9 +79,9 @@ async def refresh(data: RefreshTokenSchema, _db: AsyncSession = Depends(get_db))
 
 
 @router.post('/verify_email', summary="For test sending email verification link")
-async def send_verify_email(data: EmailSchema):
+async def send_verify_email(data: EmailSchema) -> dict:
     verify_email(data.email)
-
+    return {'message': 'Verify email link send to email'}
 
 @router.post('/reset_password', summary="Send reset password link to user email", response_model=BaseMessageSchema)
 async def send_reset_password(data: EmailSchema) -> dict:

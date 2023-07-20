@@ -54,7 +54,7 @@ def token_decode(token: str, is_access: bool = True) -> TokenPayload:
 
 
 async def get_user_by_email(email: str) -> Optional[User]:
-    user = await User.first(email=email)
+    user: User = await User.first(email=email)
     if user:
         return user
     else:

@@ -12,7 +12,7 @@ uvicorn = '^0.22.0'
 pydantic = '^2.0.2'
 pydantic-settings = '^2.0.1'
 SQLAlchemy = '^2.0.18'
-fastapi-users = {version = '^12.1.0', extras = ['sqlalchemy', 'oauth']}
+fastapi-users = { version = '^12.1.0', extras = ['sqlalchemy', 'oauth'] }
 PyJWT = '^2.7.0'
 asyncpg = '^0.28.0'
 alembic = '^1.11.1'
@@ -27,3 +27,8 @@ isort = '^5.10.1'
 [build-system]
 requires = ['poetry-core']
 build-backend = 'poetry.core.masonry.api'
+
+[mypy]
+plugins = [
+    'sqlalchemy.ext.mypy.plugin',
+]

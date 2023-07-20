@@ -1,11 +1,11 @@
 import uuid
 from typing import Any, Optional, TypeVar, Union
 
-from sqlalchemy import Column, MetaData, Select, select, update
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy import Column, MetaData, Select, select, update, ColumnCollection
+from sqlalchemy.engine.result import Result
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.inspection import inspect
-from sqlalchemy.orm import sessionmaker
 
 from config import settings
 
@@ -21,8 +21,18 @@ class DeclarativeBase:
         super().__init__(*args, **kwargs)
 
     @classmethod
+    def _columns(cls) -> ColumnCollection:
+        data: Any = inspect(cls)
+        return data.columns
+
+    @classmethod
+    def _columns_keys(cls) -> list[str]:
+        return [str(c.key) for c in cls._columns()]
+
+    @classmethod
     def _pk_name(cls) -> str:
-        return inspect(cls).primary_key[0].name
+        data: Any = inspect(cls)
+        return data.primary_key[0].name
 
     @classmethod
     def _pk_column(cls) -> Column:
@@ -35,6 +45,21 @@ class DeclarativeBase:
     @classmethod
     def _get_db(cls) -> AsyncSession:
         return async_session()
+
+    @classmethod
+    async def exec(
+            cls, query: Select, _db: Optional[AsyncSession] = None
+    ) -> Result:
+        """Execute provided select query."""
+
+        db: AsyncSession = _db or cls._get_db()
+        try:
+            result = await db.execute(query)
+        finally:
+            if not _db:
+                await db.close()
+
+        return result
 
     @classmethod
     async def create(
@@ -94,7 +119,7 @@ class DeclarativeBase:
             if not _db:
                 await db.close()
 
-        return obj
+        return obj  # type: ignore[return-value]
 
     @classmethod
     async def exists_select(cls, query: Select, _db: Optional[AsyncSession] = None) -> bool:
@@ -106,7 +131,7 @@ class DeclarativeBase:
         finally:
             if not _db:
                 await db.close()
-        return result.scalar()
+        return result.scalar()  # type: ignore[return-value]
 
     @classmethod
     async def first(
@@ -121,7 +146,7 @@ class DeclarativeBase:
             if not _db:
                 await db.close()
 
-        return result.scalars().first()
+        return result.scalars().first()  # type: ignore[return-value]
 
     async def save(
             self,
@@ -174,4 +199,4 @@ Base: DeclarativeBase = declarative_base(cls=DeclarativeBase)
 
 async_engine = create_async_engine(settings.POSTGRES_DSN)
 
-async_session = sessionmaker(bind=async_engine, class_=AsyncSession, future=True, expire_on_commit=False)
+async_session = async_sessionmaker(bind=async_engine, class_=AsyncSession, future=True, expire_on_commit=False)

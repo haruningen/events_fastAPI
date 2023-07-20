@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -20,7 +22,7 @@ async def get_user(user: User = Depends(get_authed_user)) -> User:
 
 @router.post('/validate-email-token', summary='Verify user email by hash', response_model=BaseMessageSchema)
 async def validate_email_confirm(verify_email: VerifyEmailSchema, _db: AsyncSession = Depends(get_db)) -> dict:
-    user = await get_user_from_email_link(verify_email.email_verified_hash)
+    user: Optional[User] = await get_user_from_email_link(verify_email.email_verified_hash)
     # Check if the user exist
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,

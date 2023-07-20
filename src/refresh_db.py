@@ -21,7 +21,7 @@ async def create_database(url: str) -> None:
         database_exists = c.scalar() == 1
 
     if database_exists:
-        await drop_database(url_object)
+        await drop_database(str(url_object))
 
     async with engine.connect() as conn:
         await conn.execute(

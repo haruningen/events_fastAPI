@@ -19,4 +19,4 @@ class TokenPayload(BaseModel):
 
 
 class VerifyEmailSchema(BaseModel):
-    email_verified_hash: str = None
+    email_verified_hash: str
