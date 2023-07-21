@@ -23,6 +23,7 @@ mypy = '^1.4.1'
 mypy-extensions = '^1.0.0'
 pylint = '^2.12.2'
 isort = '^5.10.1'
+flake8 = '^6.0.0'
 
 [build-system]
 requires = ['poetry-core']

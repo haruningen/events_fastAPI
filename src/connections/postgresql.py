@@ -1,9 +1,9 @@
 import uuid
 from typing import Any, Optional, TypeVar, Union
 
-from sqlalchemy import Column, MetaData, Select, select, update, ColumnCollection
+from sqlalchemy import Column, ColumnCollection, MetaData, Select, select, update
 from sqlalchemy.engine.result import Result
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.inspection import inspect
 

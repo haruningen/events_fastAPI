@@ -6,22 +6,24 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.auth.schemas import (
     CreateUserSchema,
+    EmailSchema,
     LoginUserSchema,
     RefreshTokenSchema,
+    ResetPasswordConfirmSchema,
     TokenSchema,
-    UserResponse,
-    EmailSchema, ResetPasswordConfirmSchema
+    UserResponse
 )
 from api.depends import get_db
 from api.schemas import BaseMessageSchema
 from models.user import User
-from utils.mail import verify_email, reset_password
+from utils.mail import reset_password, verify_email
 from utils.users import (
     get_user_by_email,
+    get_user_from_reset_password_link,
     make_auth_tokens,
     make_hashed_password,
     token_decode,
-    verify_password, get_user_from_reset_password_link
+    verify_password
 )
 
 router = APIRouter(tags=['auth'])
@@ -38,7 +40,7 @@ async def create_user(data: CreateUserSchema, _db: AsyncSession = Depends(get_db
         )
     user = User(
         email=data.email,
-        hashed_password=make_hashed_password(data.password), # type: ignore[call-arg]
+        hashed_password=make_hashed_password(data.password),  # type: ignore[call-arg]
     )
     _db.add(user)
     await _db.commit()
@@ -70,7 +72,7 @@ async def login(data: LoginUserSchema, _db: AsyncSession = Depends(get_db)) -> d
 @router.post('/refresh', summary='Refresh access and refresh tokens for user', response_model=TokenSchema)
 async def refresh(data: RefreshTokenSchema, _db: AsyncSession = Depends(get_db)) -> dict:
     token_data = token_decode(data.refresh_token, False)
-    user = await User.get(token_data.user_id) # type: ignore[func-returns-value]
+    user = await User.get(token_data.user_id)  # type: ignore[func-returns-value]
     # Check if the user exist
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
@@ -82,6 +84,7 @@ async def refresh(data: RefreshTokenSchema, _db: AsyncSession = Depends(get_db))
 async def send_verify_email(data: EmailSchema) -> dict:
     verify_email(data.email)
     return {'message': 'Verify email link send to email'}
+
 
 @router.post('/reset_password', summary="Send reset password link to user email", response_model=BaseMessageSchema)
 async def send_reset_password(data: EmailSchema) -> dict:

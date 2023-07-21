@@ -10,7 +10,7 @@ __all__ = ('router',)
 from api.schemas import BaseMessageSchema
 from api.users.schemas import UserBaseSchema, VerifyEmailSchema
 from models import User
-from utils.users import get_user_by_email, get_user_from_email_link
+from utils.users import get_user_from_email_link
 
 router = APIRouter(tags=['users'])
 

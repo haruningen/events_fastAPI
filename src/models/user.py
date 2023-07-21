@@ -13,7 +13,5 @@ class User(SQLAlchemyBaseUserTableUUID, BaseModel):
     email: Mapped[str] = Column(String(45), index=True, unique=True)
     avatar_url: Mapped[str] = Column(String, nullable=True)
     verified: Mapped[bool] = Column(Boolean, nullable=False, server_default='False')
-    created_at: Mapped[datetime] = Column(TIMESTAMP(timezone=True),
-                                nullable=False, server_default=text('now()'))
-    updated_at: Mapped[datetime] = Column(TIMESTAMP(timezone=True),
-                                nullable=False, server_default=text('now()'))
+    created_at: Mapped[datetime] = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
+    updated_at: Mapped[datetime] = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))

@@ -1,4 +1,4 @@
-from typing import Optional, AsyncGenerator
+from typing import AsyncGenerator
 
 from fastapi import Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -19,7 +19,7 @@ async def get_db() -> AsyncGenerator:
 
 async def get_authed_user(token: str = Depends(oauth2_scheme)) -> User:
     token_data = token_decode(token)
-    user = await User.get(token_data.user_id) # type: ignore[func-returns-value]
+    user = await User.get(token_data.user_id)  # type: ignore[func-returns-value]
     # Check if the user exist
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,

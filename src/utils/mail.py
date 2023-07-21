@@ -1,6 +1,7 @@
 import ssl
 from email.mime.text import MIMEText
 from smtplib import SMTP
+
 from fastapi import HTTPException
 
 from common import templates_env

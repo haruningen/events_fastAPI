@@ -65,6 +65,7 @@ async def get_user_from_email_link(email_hash: str) -> Optional[User]:
     data = cryptography.decrypt_json(email_hash, settings.EMAIL_VERIFY_KEY)
     return await get_user_by_email(data['user_email'])
 
+
 async def get_user_from_reset_password_link(reset_password_hash: str) -> Optional[User]:
     data = cryptography.decrypt_json(reset_password_hash, settings.RESET_PASSWORD_KEY)
     return await get_user_by_email(data['user_email'])

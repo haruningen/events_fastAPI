@@ -30,6 +30,9 @@ mypy:  ## Run mypy
 isort:  ## Run isort
 	$(COMPOSE_RUN_APP) isort .
 
+flake8:  ## Run flake8
+	$(COMPOSE_RUN_APP) flake8
+
 refresh_db:  ## Regenerate migrations and apply them
 	$(COMPOSE_RUN_APP) bash -c "python refresh_db.py && alembic revision --autogenerate -m 'initial'"
 
