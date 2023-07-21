@@ -40,7 +40,7 @@ async def create_user(data: CreateUserSchema, _db: AsyncSession = Depends(get_db
         )
     user = User(
         email=data.email,
-        hashed_password=make_hashed_password(data.password),  # type: ignore[call-arg]
+        hashed_password=make_hashed_password(data.password),
     )
     _db.add(user)
     await _db.commit()
