@@ -6,20 +6,23 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.auth.schemas import (
     CreateUserSchema,
+    EmailSchema,
     LoginUserSchema,
     RefreshTokenSchema,
+    ResetPasswordConfirmSchema,
     TokenSchema,
-    UserResponse,
-    VerifyEmailSchema
+    UserResponse
 )
 from api.depends import get_db
+from api.schemas import BaseMessageSchema
 from models.user import User
+from utils.mail import reset_password, verify_email
 from utils.users import (
     get_user_by_email,
+    get_user_from_reset_password_link,
     make_auth_tokens,
     make_hashed_password,
     token_decode,
-    verify_email,
     verify_password
 )
 
@@ -69,13 +72,32 @@ async def login(data: LoginUserSchema, _db: AsyncSession = Depends(get_db)) -> d
 @router.post('/refresh', summary='Refresh access and refresh tokens for user', response_model=TokenSchema)
 async def refresh(data: RefreshTokenSchema, _db: AsyncSession = Depends(get_db)) -> dict:
     token_data = token_decode(data.refresh_token, False)
-    user = await get_user_by_email(token_data.user_email)
+    user = await User.get(token_data.user_id)  # type: ignore[func-returns-value]
     # Check if the user exist
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail='User with this email does not exist')
     return make_auth_tokens(str(user.id))
 
-@router.post('/verify_email', summary="For test sending email verification link")
-async def send_mail(data: VerifyEmailSchema):
+
+@router.post('/verify_email', summary='For test sending email verification link')
+async def send_verify_email(data: EmailSchema) -> dict:
     verify_email(data.email)
+    return {'message': 'Verify email link send to email'}
+
+
+@router.post('/reset_password', summary='Send reset password link to user email', response_model=BaseMessageSchema)
+async def send_reset_password(data: EmailSchema) -> dict:
+    reset_password(data.email)
+    return {'message': 'Reset password link send to email'}
+
+
+@router.post('/reset_password_confirm', summary='Confirm user reset password by hash', response_model=BaseMessageSchema)
+async def reset_password_confirm(data: ResetPasswordConfirmSchema, _db: AsyncSession = Depends(get_db)) -> dict:
+    user = await get_user_from_reset_password_link(data.password_reset_hash)
+    # Check if the user exist
+    if not user:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail='User with this email does not exist')
+    await user.update(User.email == user.email, hashed_password=make_hashed_password(data.new_password))
+    return {'message': 'Password Reset Done'}

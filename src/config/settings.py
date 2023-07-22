@@ -1,7 +1,8 @@
 import secrets
 from pathlib import Path
+from typing import Any
 
-from pydantic import HttpUrl
+from pydantic import HttpUrl, validator
 from pydantic_settings import BaseSettings
 
 __all__ = ('Settings',)
@@ -21,6 +22,13 @@ class Settings(BaseSettings):
     PORT: int = 8080
     SECRET_KEY: str = secrets.token_urlsafe()
     EMAIL_VERIFY_KEY: bytes
+    RESET_PASSWORD_KEY: bytes
+
+    # ---------- Storage ----------
+
+    MEDIA_ROOT: str = 'media'
+    MEDIA_URL: HttpUrl
+    AVATARS_DIR: str = 'avatars'
 
     # ---------- Databases ----------
 
@@ -49,6 +57,25 @@ class Settings(BaseSettings):
     ALGORITHM: str
     JWT_SECRET_KEY: str
     JWT_REFRESH_SECRET_KEY: str
+
+    # ---------- Non env settings ----------
+
+    IMAGE_EXTENSIONS: tuple[str, ...] = ('.jpg', '.png', '.jpeg')
+
+    # ---------- Validators ----------
+
+    @validator('MEDIA_ROOT')
+    def create_media_root_dir(cls, v: Path, values: dict[str, Any]) -> Path:
+        media_root = values['BASE_DIR'].joinpath(v)
+        media_root.mkdir(parents=True, exist_ok=True)
+        avatars_root = media_root.joinpath('avatars/')
+        avatars_root.mkdir(parents=True, exist_ok=True)
+        return media_root
+
+    @validator('AVATARS_DIR')
+    def create_avatars_dir(cls, v: Path, values: dict[str, Any]) -> Path:
+        values['MEDIA_ROOT'].joinpath(v).mkdir(parents=True, exist_ok=True)
+        return v
 
     class Config:
         env_file = './.env'

@@ -1,18 +1,12 @@
-import ssl
 from datetime import datetime, timedelta
-from email.mime.text import MIMEText
-from smtplib import SMTP
 from typing import Any, Optional
 
 import jwt
-import sqlalchemy as sa
 from fastapi import HTTPException, status
-from fastapi_users_db_sqlalchemy import UUID_ID
 from passlib.context import CryptContext
 from pydantic import ValidationError
 
 from api.users.schemas import TokenPayload
-from common import templates_env
 from config import settings
 from models import User
 from utils import cryptography
@@ -60,35 +54,18 @@ def token_decode(token: str, is_access: bool = True) -> TokenPayload:
 
 
 async def get_user_by_email(email: str) -> Optional[User]:
-    user = await User.first(email=email)
+    user: User = await User.first(email=email)
     if user:
         return user
     else:
         return None
 
 
-def create_verify_email_link(email: str) -> str:
-    code = cryptography.encrypt_json({'user_email': email}, settings.EMAIL_VERIFY_KEY)
-    return f'{settings.FRONTEND_URL}/email-verify/{code}'
+async def get_user_from_email_link(email_hash: str) -> Optional[User]:
+    data = cryptography.decrypt_json(email_hash, settings.EMAIL_VERIFY_KEY)
+    return await get_user_by_email(data['user_email'])
 
 
-def get_user_email_from_link(email_hash: str) -> dict:
-    return cryptography.decrypt_json(email_hash, settings.EMAIL_VERIFY_KEY)
-
-
-def verify_email(email: str):
-    template = templates_env.get_template('verify_email.html')
-    body = template.render({'verify_link': create_verify_email_link(email)})
-    msg = MIMEText(body, 'html')
-    msg['Subject'] = 'Verify Your Email'
-    msg['From'] = 'from@events.com'
-    msg['To'] = email
-    # Connect to the email server
-    try:
-        server = SMTP(settings.EMAIL_HOST, settings.EMAIL_PORT)
-        server.starttls(context=ssl.create_default_context())  # Secure the connection
-        server.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
-        server.send_message(msg)  # Send the email
-        server.quit()
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=e)
+async def get_user_from_reset_password_link(reset_password_hash: str) -> Optional[User]:
+    data = cryptography.decrypt_json(reset_password_hash, settings.RESET_PASSWORD_KEY)
+    return await get_user_by_email(data['user_email'])

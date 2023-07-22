@@ -1,6 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
+from starlette.staticfiles import StaticFiles
 
 from api import router as api
 from config import settings
@@ -17,6 +18,12 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*'],
+)
+
+app.mount(
+    path=str(settings.MEDIA_URL.path),
+    app=StaticFiles(directory=str(settings.MEDIA_ROOT)),
+    name='media'
 )
 
 app.include_router(api, prefix=str(settings.API_ROOT))
