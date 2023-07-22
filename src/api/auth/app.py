@@ -80,13 +80,13 @@ async def refresh(data: RefreshTokenSchema, _db: AsyncSession = Depends(get_db))
     return make_auth_tokens(str(user.id))
 
 
-@router.post('/verify_email', summary="For test sending email verification link")
+@router.post('/verify_email', summary='For test sending email verification link')
 async def send_verify_email(data: EmailSchema) -> dict:
     verify_email(data.email)
     return {'message': 'Verify email link send to email'}
 
 
-@router.post('/reset_password', summary="Send reset password link to user email", response_model=BaseMessageSchema)
+@router.post('/reset_password', summary='Send reset password link to user email', response_model=BaseMessageSchema)
 async def send_reset_password(data: EmailSchema) -> dict:
     reset_password(data.email)
     return {'message': 'Reset password link send to email'}
