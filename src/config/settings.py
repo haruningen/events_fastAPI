@@ -57,6 +57,10 @@ class Settings(BaseSettings):
     ALGORITHM: str
     JWT_SECRET_KEY: str
     JWT_REFRESH_SECRET_KEY: str
+    # Google secrets
+    GOOGLE_CLIENT_ID: str
+    GOOGLE_CLIENT_SECRET: str
+    OAUTH_SESSION_KEY: str
 
     # ---------- Non env settings ----------
 
