@@ -24,6 +24,9 @@ downgrade_migration:  ## Downgrade latest migration
 start:  ## Start application
 	docker-compose up -d
 
+tests:  ## Run tests
+	$(COMPOSE_RUN_APP) /bin/bash -c "cd /app && pytest -c $(pyproject)"
+
 mypy:  ## Run mypy
 	$(COMPOSE_RUN_APP) mypy .
 
