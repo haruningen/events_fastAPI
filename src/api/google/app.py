@@ -1,28 +1,29 @@
+import re
+
 from authlib.integrations.base_client import OAuthError
-from fastapi import status, HTTPException, Depends
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi_users.password import PasswordHelper
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette.responses import RedirectResponse
 
 from api.depends import get_db
 from config import oauth
-from fastapi import APIRouter, Request
-
-from models import User, OAuthAccount
+from models import OAuthAccount, User
 from utils.mail import google_success_oauth
-from utils.users import get_user_by_email, make_hashed_password, get_user_oauth, make_auth_tokens
+from utils.users import get_user_by_email, get_user_oauth, make_auth_tokens, make_hashed_password
 
 router = APIRouter(tags=['google'])
 
 
 @router.get('/login')
-async def google_login(request: Request):
+async def google_login(request: Request) -> RedirectResponse:
     redirect_uri = request.url_for('google_auth')
     print(redirect_uri)
     return await oauth.google.authorize_redirect(request, redirect_uri)
 
 
 @router.get('/auth')
-async def google_auth(request: Request, _db: AsyncSession = Depends(get_db)):
+async def google_auth(request: Request, _db: AsyncSession = Depends(get_db)) -> dict:
     try:
         token = await oauth.google.authorize_access_token(request)
     except OAuthError as error:
@@ -58,7 +59,6 @@ async def google_auth(request: Request, _db: AsyncSession = Depends(get_db)):
             user_id = bd_user.id
         else:
             # Create the user and oauth account
-            # TODO сохранение картинки!!!
             password_helper = PasswordHelper()
             password = password_helper.generate()
             user = User(
@@ -69,6 +69,11 @@ async def google_auth(request: Request, _db: AsyncSession = Depends(get_db)):
             _db.add(user)
             await _db.commit()
             await _db.refresh(user)
+            if userinfo.picture:
+                try:
+                    await user.set_avatar_path_by_url(image=re.sub(r's\d+', 's0', userinfo.picture))
+                finally:
+                    await user.save(['avatar_path'])
             account = OAuthAccount(**oauth_account, user_id=user.id)
             _db.add(account)
             await _db.commit()

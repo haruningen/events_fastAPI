@@ -1,4 +1,5 @@
 from functools import lru_cache
+
 from authlib.integrations.starlette_client import OAuth
 from starlette.config import Config
 

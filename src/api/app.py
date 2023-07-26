@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
 from .auth import router as auth_router
-from .users import router as users_router
 from .google import router as google_router
+from .users import router as users_router
 
 __all__ = ('router',)
 
