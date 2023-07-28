@@ -60,32 +60,24 @@ async def google_auth(request: Request, _db: AsyncSession = Depends(get_db)) -> 
         # Check if the user exist
         if db_user := await get_user_by_email(userinfo.email):
             # Add the oauth account
-            account = OAuthAccount(**oauth_account, user_id=db_user.id)
-            _db.add(account)
-            await _db.commit()
-            await _db.refresh(account)
+            await OAuthAccount.create(**oauth_account, user_id=db_user.id)
             user_id = db_user.id
         else:
             # Create the user and oauth account
             password_helper = PasswordHelper()
             password = password_helper.generate()
-            user = User(
-                email=userinfo.email,
-                hashed_password=make_hashed_password(password),
-                verified=True
-            )
-            _db.add(user)
-            await _db.commit()
-            await _db.refresh(user)
+            user = await User.create(email=userinfo.email,
+                                     hashed_password=make_hashed_password(password),
+                                     verified=True)
             if userinfo.picture:
                 try:
                     await user.set_avatar_path_by_url(image=re.sub(r's\d+', 's0', userinfo.picture))
-                finally:
                     await user.save(['avatar_path'])
-            account = OAuthAccount(**oauth_account, user_id=user.id)
-            _db.add(account)
-            await _db.commit()
-            await _db.refresh(account)
+                except Exception as error:
+                    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                                        detail=error)
+
+            await OAuthAccount.create(**oauth_account, user_id=user.id)
             google_success_oauth(userinfo.email, password)
             user_id = user.id
     return make_auth_tokens(str(user_id))
