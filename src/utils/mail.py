@@ -21,12 +21,12 @@ def make_reset_password_link(email: str) -> str:
 
 def verify_email(email: str) -> None:
     template = templates_env.get_template('verify_email.html')
-    send_email('Verify Your Email', template.render({'verify_link': create_verify_email_link(email)}), email)
+    send_email('Verify Your Email', template.render({'link': create_verify_email_link(email)}), email)
 
 
 def reset_password(email: str) -> None:
     template = templates_env.get_template('reset_password.html')
-    send_email('Reset password', template.render({'reset_password_link': make_reset_password_link(email)}), email)
+    send_email('Reset password', template.render({'link': make_reset_password_link(email)}), email)
 
 
 def google_success_oauth(email: str, password: str) -> None:
@@ -36,7 +36,7 @@ def google_success_oauth(email: str, password: str) -> None:
         template.render({
             'email': email,
             'password': password,
-            'login_link': f'{settings.FRONTEND_URL}/signin'
+            'link': f'{settings.FRONTEND_URL}/signin'
         }),
         email
     )
