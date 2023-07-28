@@ -15,11 +15,11 @@ class CreateUserSchema(BaseModel):
     password: str = Field(min_length=8)
     password_confirm: str
 
-    @model_validator(mode='after')  # type: ignore[misc]
+    @model_validator(mode='after')
     def check_passwords_match(self) -> 'CreateUserSchema':
         if self.password != self.password_confirm:
             raise ValueError('Passwords do not match')
-        return self  # type: ignore[return-value]
+        return self
 
 
 class LoginUserSchema(BaseModel):
@@ -50,8 +50,8 @@ class ResetPasswordConfirmSchema(BaseModel):
     new_password: str = Field(min_length=8)
     re_new_password: str
 
-    @model_validator(mode='after')  # type: ignore[misc]
+    @model_validator(mode='after')
     def check_passwords_match(self) -> 'ResetPasswordConfirmSchema':
         if self.new_password != self.re_new_password:
             raise ValueError('Passwords do not match')
-        return self  # type: ignore[return-value]
+        return self

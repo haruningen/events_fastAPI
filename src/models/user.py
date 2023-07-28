@@ -19,6 +19,8 @@ class User(SQLAlchemyBaseUserTableUUID, BaseModel):
     created_at: datetime = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
     updated_at: datetime = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
     avatar_path: str = Column(String(255))
+    tfa_secret: str = Column(String(32), index=True, unique=True)
+    tfa_enabled: bool = Column(Boolean, nullable=False, server_default='False')
 
     @property
     def avatar_url(self) -> Optional[str]:

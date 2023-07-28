@@ -1,4 +1,4 @@
-from fastapi_users_db_sqlalchemy import SQLAlchemyBaseOAuthAccountTableUUID, UUID_ID, GUID
+from fastapi_users_db_sqlalchemy import GUID, UUID_ID, SQLAlchemyBaseOAuthAccountTableUUID
 from sqlalchemy import Column, ForeignKey
 
 from models.base import BaseModel
