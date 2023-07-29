@@ -2,12 +2,12 @@ from datetime import datetime
 from typing import Optional
 
 from fastapi import UploadFile
-from fastapi_users.db import SQLAlchemyBaseUserTableUUID
+from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTableUUID
 from sqlalchemy import TIMESTAMP, Boolean, Column, String, text
 
 from config import settings
 from models.base import BaseModel
-from utils.images import remove_image, save_image
+from utils.images import remove_image, save_image, save_image_by_url
 
 
 class User(SQLAlchemyBaseUserTableUUID, BaseModel):
@@ -29,6 +29,15 @@ class User(SQLAlchemyBaseUserTableUUID, BaseModel):
 
     async def set_avatar_path(self, image: UploadFile) -> None:
         path = await save_image(
+            image=image,
+            name=f'{datetime.utcnow().timestamp()}_{self.id}',  # UTC timestamp + user ID
+            path=settings.AVATARS_DIR
+        )
+        await remove_image(f'{settings.AVATARS_DIR}/{self.avatar_path}')
+        self.avatar_path = path
+
+    async def set_avatar_path_by_url(self, image: str) -> None:
+        path = await save_image_by_url(
             image=image,
             name=f'{datetime.utcnow().timestamp()}_{self.id}',  # UTC timestamp + user ID
             path=settings.AVATARS_DIR

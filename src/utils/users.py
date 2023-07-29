@@ -8,7 +8,7 @@ from pydantic import ValidationError
 
 from api.users.schemas import TokenPayload
 from config import settings
-from models import User
+from models import OAuthAccount, User
 from utils import cryptography
 
 password_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
@@ -54,11 +54,11 @@ def token_decode(token: str, is_access: bool = True) -> TokenPayload:
 
 
 async def get_user_by_email(email: str) -> Optional[User]:
-    user: User = await User.first(email=email)
-    if user:
-        return user
-    else:
-        return None
+    return await User.first(email=email)
+
+
+async def get_user_oauth(oauth_name: str, account_id: str) -> Optional[OAuthAccount]:
+    return await OAuthAccount.first(oauth_name=oauth_name, account_id=account_id)
 
 
 async def get_user_from_email_link(email_hash: str) -> Optional[User]:

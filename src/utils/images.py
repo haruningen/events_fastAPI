@@ -1,10 +1,12 @@
+from io import BytesIO
 from pathlib import PosixPath
 
+from aiohttp import ClientSession, InvalidURL
 from fastapi.datastructures import UploadFile
 from PIL import Image
 from starlette.datastructures import UploadFile as StarletteUploadFile
 
-__all__ = ('save_image', 'remove_image')
+__all__ = ('save_image', 'remove_image', 'save_image_by_url')
 
 from config import settings
 
@@ -20,10 +22,34 @@ async def _get_image(image: UploadFile) -> Image:
     return _image
 
 
+async def _get_image_by_url(image:  str) -> Image:
+    try:
+        async with ClientSession() as client_session:
+            async with client_session.get(image) as resp:
+                _image = Image.open(BytesIO(await resp.read()))
+    except InvalidURL:
+        raise Exception(f'Invalid URL: {image}')
+
+    return _image
+
+
 async def save_image(image: UploadFile, name: str, path: str = '') -> str:
     """Saves an image to local storage."""
 
     _image = await _get_image(image)
+    filename = f'{name}.{_image.format.lower()}'
+
+    # Process an image saving
+    _image.save(f'{settings.MEDIA_ROOT}/{path}/{filename}')
+    _image.close()
+
+    return filename
+
+
+async def save_image_by_url(image: str, name: str, path: str = '') -> str:
+    """Saves an image from URL to local storage."""
+
+    _image = await _get_image_by_url(image)
     filename = f'{name}.{_image.format.lower()}'
 
     # Process an image saving
