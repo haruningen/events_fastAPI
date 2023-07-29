@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Optional
 
+import pyotp
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -9,10 +10,10 @@ from api.depends import get_authed_user, get_db, valid_content_length
 __all__ = ('router',)
 
 from api.schemas import BaseMessageSchema
-from api.users.schemas import UserBaseSchema, VerifyEmailSchema
+from api.users.schemas import UserBaseSchema, VerifyEmailSchema, OTPSchema
 from config import settings
 from models import User
-from utils.users import get_user_from_email_link
+from utils.users import get_user_from_email_link, verify_otp
 
 router = APIRouter(tags=['users'])
 
@@ -54,3 +55,22 @@ async def validate_email_confirm(verify_email: VerifyEmailSchema, _db: AsyncSess
                             detail='Email Verification Failed. Email already verified.')
     await user.update(User.email == user.email, verified=True)
     return {'message': 'Email Verification Done'}
+
+
+@router.post('/otp/enable')
+async def enable_tfa(data: OTPSchema, user: User = Depends(get_authed_user)) -> dict:
+    if user.tfa_enabled:
+        verify_otp(user.tfa_secret, data.otp_code)
+    tfa_secret = pyotp.random_base32()
+    otp_auth_url = pyotp.totp.TOTP(tfa_secret).provisioning_uri(
+        name=user.email, issuer_name='events.com')
+    await user.update(User.email == user.email, tfa_secret=tfa_secret, tfa_enabled=True)
+    return {'otp_auth_url': otp_auth_url}
+
+
+@router.post('/otp/disable')
+async def disable_tfa(data: OTPSchema, user: User = Depends(get_authed_user)) -> dict:
+    if user.tfa_enabled:
+        verify_otp(user.tfa_secret, data.otp_code)
+    await user.update(User.email == user.email, tfa_secret=None, tfa_enabled=False)
+    return {'message': '2-Step Verification Removed Successfully'}

@@ -2,7 +2,7 @@ from typing import Optional
 
 from pydantic import BaseModel, EmailStr
 
-__all__ = ('UserBaseSchema', 'TokenPayload', 'VerifyEmailSchema',)
+__all__ = ('UserBaseSchema', 'TokenPayload', 'VerifyEmailSchema', 'OTPSchema',)
 
 
 class UserBaseSchema(BaseModel):
@@ -20,3 +20,6 @@ class TokenPayload(BaseModel):
 
 class VerifyEmailSchema(BaseModel):
     email_verified_hash: str
+
+class OTPSchema(BaseModel):
+    otp_code: Optional[str] = None

@@ -21,6 +21,7 @@ Pillow = '^10.0.0'
 aiohttp = '^3.8.5'
 Authlib = '^1.2.0'
 itsdangerous = '^2.1.2'
+pyotp = '^2.8.0'
 
 [tool.poetry.dev-dependencies]
 mypy = '^1.4.1'

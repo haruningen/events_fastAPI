@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from typing import Any, Optional
 
 import jwt
+import pyotp
 from fastapi import HTTPException, status
 from passlib.context import CryptContext
 from pydantic import ValidationError
@@ -69,3 +70,10 @@ async def get_user_from_email_link(email_hash: str) -> Optional[User]:
 async def get_user_from_reset_password_link(reset_password_hash: str) -> Optional[User]:
     data = cryptography.decrypt_json(reset_password_hash, settings.RESET_PASSWORD_KEY)
     return await get_user_by_email(data['user_email'])
+
+
+def verify_otp(tfa_secret: str, otp_code: str) -> None:
+    totp = pyotp.TOTP(tfa_secret)
+    if not totp.verify(otp=otp_code, valid_window=1):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail='Unauthorized')
