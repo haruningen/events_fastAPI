@@ -66,9 +66,11 @@ async def google_auth(request: Request, _db: AsyncSession = Depends(get_db)) -> 
             # Create the user and oauth account
             password_helper = PasswordHelper()
             password = password_helper.generate()
-            user: User = await User.create(email=userinfo.email,
-                                     hashed_password=make_hashed_password(password),
-                                     verified=True)
+            user: User = await User.create(
+                email=userinfo.email,
+                hashed_password=make_hashed_password(password),
+                verified=True
+            )
             if userinfo.picture:
                 try:
                     await user.set_avatar_path_by_url(image=re.sub(r's\d+', 's0', userinfo.picture))

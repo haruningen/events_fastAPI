@@ -7,7 +7,7 @@ from api.users.schemas import UserBaseSchema
 
 __all__ = (
     'CreateUserSchema', 'LoginUserSchema', 'UserResponse', 'TokenSchema', 'RefreshTokenSchema', 'EmailSchema',
-    'ResetPasswordConfirmSchema')
+    'ResetPasswordConfirmSchema', 'LoginOTPSchema', 'UserTFAResponse',)
 
 
 class CreateUserSchema(BaseModel):
@@ -55,3 +55,12 @@ class ResetPasswordConfirmSchema(BaseModel):
         if self.new_password != self.re_new_password:
             raise ValueError('Passwords do not match')
         return self
+
+
+class LoginOTPSchema(BaseModel):
+    email: EmailStr
+    otp_code: str
+
+
+class UserTFAResponse(BaseModel):
+    use_tfa: bool

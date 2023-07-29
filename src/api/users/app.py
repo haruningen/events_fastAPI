@@ -10,7 +10,7 @@ from api.depends import get_authed_user, get_db, valid_content_length
 __all__ = ('router',)
 
 from api.schemas import BaseMessageSchema
-from api.users.schemas import UserBaseSchema, VerifyEmailSchema, VerifyOTPSchema
+from api.users.schemas import UserBaseSchema, VerifyEmailSchema
 from config import settings
 from models import User
 from utils.users import get_user_from_email_link
@@ -57,8 +57,8 @@ async def validate_email_confirm(verify_email: VerifyEmailSchema, _db: AsyncSess
     return {'message': 'Email Verification Done'}
 
 
-@router.post('/otp/generate')
-async def generate_otp(user: User = Depends(get_authed_user)) -> dict:
+@router.post('/otp/enable')
+async def enable_tfa(user: User = Depends(get_authed_user)) -> dict:
     tfa_secret = pyotp.random_base32()
     otp_auth_url = pyotp.totp.TOTP(tfa_secret).provisioning_uri(
         name=user.email, issuer_name='events.com')
@@ -66,17 +66,7 @@ async def generate_otp(user: User = Depends(get_authed_user)) -> dict:
     return {'otp_auth_url': otp_auth_url}
 
 
-@router.post('/otp/remove')
-async def remove_otp(user: User = Depends(get_authed_user)) -> dict:
+@router.post('/otp/disable')
+async def disable_tfa(user: User = Depends(get_authed_user)) -> dict:
     await user.update(User.email == user.email, tfa_secret=None, tfa_enabled=False)
     return {'message': '2-Step Verification Removed Successfully'}
-
-
-@router.post('/otp/validate')
-def validate_otp(verify_otp: VerifyOTPSchema, user: User = Depends(get_authed_user)) -> dict:
-    totp = pyotp.TOTP(user.tfa_secret)
-    if not totp.verify(otp=verify_otp.otp_code, valid_window=1):
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail='Token is invalid')
-
-    return {'otp_valid': True}
