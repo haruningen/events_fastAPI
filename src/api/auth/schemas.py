@@ -63,4 +63,4 @@ class LoginOTPSchema(BaseModel):
 
 
 class UserTFAResponse(BaseModel):
-    use_tfa: bool
+    otp_required: bool
