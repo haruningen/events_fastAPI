@@ -1,3 +1,4 @@
+import pyotp
 from fastapi import APIRouter, Depends, HTTPException, status
 
 __all__ = ('router',)
@@ -7,11 +8,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from api.auth.schemas import (
     CreateUserSchema,
     EmailSchema,
+    LoginOTPSchema,
     LoginUserSchema,
     RefreshTokenSchema,
     ResetPasswordConfirmSchema,
     TokenSchema,
-    UserResponse
+    UserResponse,
+    UserTFAResponse,
 )
 from api.depends import get_db
 from api.schemas import BaseMessageSchema
@@ -23,7 +26,7 @@ from utils.users import (
     make_auth_tokens,
     make_hashed_password,
     token_decode,
-    verify_password
+    verify_password, verify_otp
 )
 
 router = APIRouter(tags=['auth'])
@@ -38,18 +41,15 @@ async def create_user(data: CreateUserSchema, _db: AsyncSession = Depends(get_db
             status_code=status.HTTP_400_BAD_REQUEST,
             detail='User with this email already exist'
         )
-    user = User(
+    user = await User.create(
         email=data.email,
-        hashed_password=make_hashed_password(data.password),
+        hashed_password=make_hashed_password(data.password)
     )
-    _db.add(user)
-    await _db.commit()
-    await _db.refresh(user)
     verify_email(data.email)
     return user
 
 
-@router.post('/login', summary='Create access and refresh tokens for user', response_model=TokenSchema)
+@router.post('/login', summary='Login user by credentials or with TFA', response_model=TokenSchema | UserTFAResponse)
 async def login(data: LoginUserSchema, _db: AsyncSession = Depends(get_db)) -> dict:
     user = await get_user_by_email(data.email)
     # Check if the user exist
@@ -60,12 +60,23 @@ async def login(data: LoginUserSchema, _db: AsyncSession = Depends(get_db)) -> d
     if not user.verified:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail='Please verify your email address')
-
     # Check if the password is valid
     if not verify_password(data.password, user.hashed_password):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail='Incorrect Email or Password')
+    if user.tfa_enabled:
+        return {'otp_required': True}
 
+    return make_auth_tokens(str(user.id))
+
+
+@router.post('/otp/login', summary='Create access and refresh tokens for user', response_model=TokenSchema)
+async def login_otp(data: LoginOTPSchema, _db: AsyncSession = Depends(get_db)) -> dict:
+    user = await get_user_by_email(data.email)
+    if not (user or user.verified or not user.tfa_enabled):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail='Unauthorized')
+    verify_otp(user.tfa_secret, data.otp_code)
     return make_auth_tokens(str(user.id))
 
 

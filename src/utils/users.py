@@ -2,13 +2,14 @@ from datetime import datetime, timedelta
 from typing import Any, Optional
 
 import jwt
+import pyotp
 from fastapi import HTTPException, status
 from passlib.context import CryptContext
 from pydantic import ValidationError
 
 from api.users.schemas import TokenPayload
 from config import settings
-from models import User
+from models import OAuthAccount, User
 from utils import cryptography
 
 password_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
@@ -54,11 +55,11 @@ def token_decode(token: str, is_access: bool = True) -> TokenPayload:
 
 
 async def get_user_by_email(email: str) -> Optional[User]:
-    user: User = await User.first(email=email)
-    if user:
-        return user
-    else:
-        return None
+    return await User.first(email=email)
+
+
+async def get_user_oauth(oauth_name: str, account_id: str) -> Optional[OAuthAccount]:
+    return await OAuthAccount.first(oauth_name=oauth_name, account_id=account_id)
 
 
 async def get_user_from_email_link(email_hash: str) -> Optional[User]:
@@ -69,3 +70,10 @@ async def get_user_from_email_link(email_hash: str) -> Optional[User]:
 async def get_user_from_reset_password_link(reset_password_hash: str) -> Optional[User]:
     data = cryptography.decrypt_json(reset_password_hash, settings.RESET_PASSWORD_KEY)
     return await get_user_by_email(data['user_email'])
+
+
+def verify_otp(tfa_secret: str, otp_code: str) -> None:
+    totp = pyotp.TOTP(tfa_secret)
+    if not totp.verify(otp=otp_code, valid_window=1):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail='Unauthorized')
