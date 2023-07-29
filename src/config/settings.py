@@ -61,6 +61,7 @@ class Settings(BaseSettings):
     GOOGLE_CLIENT_ID: str
     GOOGLE_CLIENT_SECRET: str
     OAUTH_SESSION_KEY: str
+    GOOGLE_OAUTH_URL: str = 'https://accounts.google.com/.well-known/openid-configuration'
 
     # ---------- Non env settings ----------
 
