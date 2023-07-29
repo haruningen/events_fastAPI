@@ -57,7 +57,6 @@ async def login(data: LoginUserSchema, _db: AsyncSession = Depends(get_db)) -> d
     if not user.verified:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail='Please verify your email address')
-
     # Check if the password is valid
     if not verify_password(data.password, user.hashed_password):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
@@ -78,7 +77,10 @@ async def login_otp(data: LoginOTPSchema, _db: AsyncSession = Depends(get_db)) -
     # Check if user verified his email
     if not user.verified:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                            detail='Please verify your email address')
+                            detail='User is not authorized')
+    if user.tfa_enabled:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail='User is not authorized')
     # Verify otp code
     totp = pyotp.TOTP(user.tfa_secret)
     if not totp.verify(otp=data.otp_code, valid_window=1):
