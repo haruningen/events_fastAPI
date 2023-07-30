@@ -73,7 +73,7 @@ async def login(data: LoginUserSchema, _db: AsyncSession = Depends(get_db)) -> d
 @router.post('/otp/login', summary='Create access and refresh tokens for user', response_model=TokenSchema)
 async def login_otp(data: LoginOTPSchema, _db: AsyncSession = Depends(get_db)) -> dict:
     user = await get_user_by_email(data.email)
-    if not (user or user.verified or not user.tfa_enabled):
+    if not user or (user and not user.verified or user.tfa_enabled):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail='Unauthorized')
     verify_otp(user.tfa_secret, data.otp_code)

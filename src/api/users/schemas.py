@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 
 __all__ = ('UserBaseSchema', 'TokenPayload', 'VerifyEmailSchema', 'OTPSchema',)
 
@@ -9,8 +9,9 @@ class UserBaseSchema(BaseModel):
     email: EmailStr
     avatar_url: Optional[str]
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(
+        from_attributes=True
+    )
 
 
 class TokenPayload(BaseModel):
@@ -20,6 +21,7 @@ class TokenPayload(BaseModel):
 
 class VerifyEmailSchema(BaseModel):
     email_verified_hash: str
+
 
 class OTPSchema(BaseModel):
     otp_code: Optional[str] = None

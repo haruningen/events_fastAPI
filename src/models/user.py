@@ -2,17 +2,17 @@ from datetime import datetime
 from typing import Optional
 
 from fastapi import UploadFile
-from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTableUUID
-from sqlalchemy import TIMESTAMP, Boolean, Column, String, text
+from sqlalchemy import TIMESTAMP, Boolean, Column, String, text, Integer
 
 from config import settings
 from models.base import BaseModel
 from utils.images import remove_image, save_image, save_image_by_url
 
 
-class User(SQLAlchemyBaseUserTableUUID, BaseModel):
+class User(BaseModel):
     __tablename__ = 'users'
 
+    id: int = Column(Integer, primary_key=True)
     email: str = Column(String(45), index=True, unique=True)
     hashed_password: str = Column(String(1024), index=True, unique=True)
     verified: bool = Column(Boolean, nullable=False, server_default='False')
@@ -21,6 +21,8 @@ class User(SQLAlchemyBaseUserTableUUID, BaseModel):
     avatar_path: str = Column(String(255))
     tfa_secret: str = Column(String(32), index=True, unique=True)
     tfa_enabled: bool = Column(Boolean, nullable=False, server_default='False')
+    is_superuser: bool = Column(Boolean, default=False, nullable=False)
+    is_moderator: bool = Column(Boolean, default=False, nullable=False)
 
     @property
     def avatar_url(self) -> Optional[str]:
