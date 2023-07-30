@@ -83,8 +83,8 @@ class Settings(BaseSettings):
 
     @field_validator('AVATARS_DIR')
     def create_avatars_dir(cls, v: Path, info: FieldValidationInfo) -> Path:
-        base_dir = info.data.get('BASE_DIR')
-        assert base_dir and isinstance(base_dir, Path), 'BASE_DIR must be provided'
+        media_root = info.data.get('MEDIA_ROOT')
+        assert media_root and isinstance(media_root, Path), 'MEDIA_ROOT must be provided'
 
-        base_dir.joinpath(v).mkdir(parents=True, exist_ok=True)
+        media_root.joinpath(v).mkdir(parents=True, exist_ok=True)
         return v
