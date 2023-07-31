@@ -1,5 +1,5 @@
 from io import BytesIO
-from pathlib import PosixPath
+from pathlib import PosixPath, Path
 
 from aiohttp import ClientSession, InvalidURL
 from fastapi.datastructures import UploadFile
@@ -33,7 +33,7 @@ async def _get_image_by_url(image:  str) -> Image:
     return _image
 
 
-async def save_image(image: UploadFile, name: str, path: str = '') -> str:
+async def save_image(image: UploadFile, name: str, path: Path) -> str:
     """Saves an image to local storage."""
 
     _image = await _get_image(image)
@@ -46,7 +46,7 @@ async def save_image(image: UploadFile, name: str, path: str = '') -> str:
     return filename
 
 
-async def save_image_by_url(image: str, name: str, path: str = '') -> str:
+async def save_image_by_url(image: str, name: str, path: Path) -> str:
     """Saves an image from URL to local storage."""
 
     _image = await _get_image_by_url(image)
