@@ -65,6 +65,7 @@ async def remove_image(path: str) -> None:
     abs_path: PosixPath = PosixPath(f'{settings.MEDIA_ROOT}/{path}')
     abs_path.unlink(missing_ok=True)
 
+
 def generate_test_image() -> BytesIO:
     def _im_to_bytes(img: Image) -> BytesIO:
         mem_file = BytesIO()

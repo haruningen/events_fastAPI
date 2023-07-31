@@ -3,6 +3,7 @@ from starlette import status
 
 from tests.mixins import BaseTestCase
 
+
 class TestUsers(BaseTestCase):
     url_name = 'get_user'
 

@@ -1,4 +1,5 @@
 import asyncio
+from pathlib import Path
 
 import pytest
 from asgi_lifespan import LifespanManager
@@ -40,7 +41,9 @@ async def setup(event_loop: asyncio.AbstractEventLoop) -> YieldAsyncFixture[None
     yield
 
     # Remove nested avatars directory with files
-    avatars_path = settings.MEDIA_ROOT.joinpath(settings.AVATARS_DIR)
+    avatars_path: Path = settings.MEDIA_ROOT.joinpath(settings.AVATARS_DIR)
+    assert avatars_path and isinstance(avatars_path, Path), 'AVATARS_DIR must be provided'
+
     if avatars_path.exists():
         for file in avatars_path.glob('*'):
             file.unlink()

@@ -29,9 +29,9 @@ class Settings(BaseSettings):
 
     # ---------- Storage ----------
 
-    MEDIA_ROOT: str = 'media'
+    MEDIA_ROOT: Path = Path('media')
     MEDIA_URL: HttpUrl
-    AVATARS_DIR: str = 'avatars'
+    AVATARS_DIR: Path = Path('avatars')
 
     # ---------- Databases ----------
 
