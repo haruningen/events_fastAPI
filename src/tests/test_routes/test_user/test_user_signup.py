@@ -18,7 +18,7 @@ class TestUsersSignUp(BaseTestCase):
         assert data['email'] == user['email']
         assert data['avatar_url'] is None
 
-    async def test_create_user_exist_fail(self, httpx_client: AsyncClient) -> None:
+    async def test_create_user_exist(self, httpx_client: AsyncClient) -> None:
         user = UserSignUpFactory()
         await User.create(
             email=user['email'],
@@ -28,7 +28,7 @@ class TestUsersSignUp(BaseTestCase):
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert response.json() == {'detail': 'User with this email already exist'}
 
-    async def test_create_user_passwords_dont_match_fail(self, httpx_client: AsyncClient) -> None:
+    async def test_create_user_passwords_dont_match(self, httpx_client: AsyncClient) -> None:
         user = UserPasswordNotMatchFactory()
         response = await httpx_client.post(self.url_path(), json=user)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY

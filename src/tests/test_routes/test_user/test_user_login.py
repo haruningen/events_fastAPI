@@ -22,13 +22,13 @@ class TestUsersLogin(BaseTestCase):
         data = response.json()
         assert 'access_token' in data and 'refresh_token' in data
 
-    async def test_login_user_not_exit_fail(self, httpx_client: AsyncClient) -> None:
+    async def test_login_user_not_exit(self, httpx_client: AsyncClient) -> None:
         user = UserLoginFactory()
         response = await httpx_client.post(self.url_path(), json=user)
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
         assert response.json() == {'detail': 'User with this email does not exist'}
 
-    async def test_login_user_not_verified_fail(self, httpx_client: AsyncClient) -> None:
+    async def test_login_user_not_verified(self, httpx_client: AsyncClient) -> None:
         user = UserLoginFactory()
         await User.create(
             email=user['email'],
@@ -38,7 +38,7 @@ class TestUsersLogin(BaseTestCase):
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
         assert response.json() == {'detail': 'Please verify your email address'}
 
-    async def test_login_user_verify_password_fail(self, httpx_client: AsyncClient) -> None:
+    async def test_login_user_verify_password(self, httpx_client: AsyncClient) -> None:
         user = UserLoginFactory()
         await User.create(
             email=user['email'],
