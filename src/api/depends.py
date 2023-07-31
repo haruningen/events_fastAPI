@@ -21,13 +21,18 @@ async def get_db() -> AsyncGenerator:
         await db.close()
 
 
-async def get_authed_user(token: HTTPAuthorizationCredentials = Depends(HTTPBearer())) -> User:
+async def get_authed_user(
+        token: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False))
+) -> User:
+    if not token:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail='Unauthorized')
     token_data = token_decode(token.credentials)
     user = await User.get(token_data.user_id)  # type: ignore[func-returns-value]
     # Check if the user exist
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                            detail='User with this email does not exist')
+                            detail='Unauthorized')
     return user
 
 

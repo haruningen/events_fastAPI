@@ -8,9 +8,8 @@ from httpx import AsyncClient
 from config import settings
 from gen_typing import YieldAsyncFixture
 from main import app
-from tests.fixtures.base import *  # noqa: F401,F403
-
 from refresh_db import create_database
+from tests.fixtures.base import *  # noqa: F401,F403
 
 mark_async = pytest.mark.asyncio
 POSTGRES_DEFAULT_DB = 'postgres'

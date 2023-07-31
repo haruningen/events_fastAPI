@@ -15,7 +15,7 @@ class UserBaseSchema(BaseModel):
 
 
 class TokenPayload(BaseModel):
-    user_id: Optional[str] = None
+    user_id: Optional[int] = None
     exp: Optional[int] = None
 
 

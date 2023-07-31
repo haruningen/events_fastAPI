@@ -3,7 +3,7 @@ from typing import Any, Optional
 
 import jwt
 import pyotp
-from bcrypt import checkpw, hashpw, gensalt
+from bcrypt import checkpw, hashpw
 from fastapi import HTTPException, status
 from pydantic import ValidationError
 
@@ -48,6 +48,9 @@ def token_decode(token: str, is_access: bool = True) -> TokenPayload:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail='Token signature has expired', )
     except ValidationError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail='Could not validate credentials', )
+    except jwt.exceptions.DecodeError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail='Could not validate credentials', )
 
