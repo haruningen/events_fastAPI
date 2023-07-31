@@ -10,7 +10,7 @@ from api.depends import get_authed_user, get_db, valid_content_length
 __all__ = ('router',)
 
 from api.schemas import BaseMessageSchema
-from api.users.schemas import UserBaseSchema, VerifyEmailSchema, OTPSchema
+from api.users.schemas import OTPSchema, UserBaseSchema, VerifyEmailSchema
 from config import settings
 from models import User
 from utils.users import get_user_from_email_link, verify_otp

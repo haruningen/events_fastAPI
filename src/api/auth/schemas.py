@@ -1,4 +1,3 @@
-import uuid
 from datetime import datetime
 
 from pydantic import BaseModel, EmailStr, Field, model_validator
@@ -41,7 +40,7 @@ class TokenSchema(BaseModel):
 
 
 class UserResponse(UserBaseSchema):
-    id: uuid.UUID
+    id: int
     created_at: datetime
 
 

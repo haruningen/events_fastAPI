@@ -43,6 +43,9 @@ def google_success_oauth(email: str, password: str) -> None:
 
 
 def send_email(subject: str, body: str, to_email: str) -> None:
+    if settings.ENVIRONMENT.lower() == 'test':
+        return
+
     msg = MIMEText(body, 'html')
     msg['Subject'] = subject
     msg['From'] = 'from@events.com'

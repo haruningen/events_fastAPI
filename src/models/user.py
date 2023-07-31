@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 from fastapi import UploadFile
-from sqlalchemy import TIMESTAMP, Boolean, Column, String, text, Integer
+from sqlalchemy import TIMESTAMP, Boolean, Column, Integer, String, text
 
 from config import settings
 from models.base import BaseModel

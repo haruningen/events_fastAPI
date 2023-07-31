@@ -1,4 +1,3 @@
-import pyotp
 from fastapi import APIRouter, Depends, HTTPException, status
 
 __all__ = ('router',)
@@ -14,7 +13,7 @@ from api.auth.schemas import (
     ResetPasswordConfirmSchema,
     TokenSchema,
     UserResponse,
-    UserTFAResponse,
+    UserTFAResponse
 )
 from api.depends import get_db
 from api.schemas import BaseMessageSchema
@@ -26,7 +25,8 @@ from utils.users import (
     make_auth_tokens,
     make_hashed_password,
     token_decode,
-    verify_password, verify_otp
+    verify_otp,
+    verify_password
 )
 
 router = APIRouter(tags=['auth'])

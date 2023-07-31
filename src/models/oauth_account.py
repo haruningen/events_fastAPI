@@ -1,5 +1,6 @@
 from typing import Optional
-from sqlalchemy import Column, ForeignKey, String, Integer
+
+from sqlalchemy import Column, ForeignKey, Integer, String
 
 from models.base import BaseModel
 

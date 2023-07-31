@@ -20,13 +20,24 @@ async def create_database(url: str) -> None:
         )
         database_exists = c.scalar() == 1
 
-    if database_exists:
-        await drop_database(str(url_object))
+        if database_exists:
+            disc_users = '''
+                    SELECT pg_terminate_backend(pg_stat_activity.%(pid_column)s)
+                    FROM pg_stat_activity
+                    WHERE pg_stat_activity.datname = '%(database)s'
+                      AND %(pid_column)s <> pg_backend_pid();
+                    ''' % {
+                'pid_column': 'pid',
+                'database': url_object.database,
+            }
+            await conn.execute(text(disc_users))
 
-    async with engine.connect() as conn:
+            await conn.execute(text(f'DROP DATABASE "{database_name}"'))
+
         await conn.execute(
             text(f'CREATE DATABASE "{database_name}" ENCODING "utf8" TEMPLATE template1')
         )
+
     await engine.dispose()
 
 

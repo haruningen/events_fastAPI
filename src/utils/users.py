@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
 from typing import Any, Optional
-from bcrypt import hashpw, checkpw
 
 import jwt
 import pyotp
+from bcrypt import checkpw, hashpw, gensalt
 from fastapi import HTTPException, status
 from pydantic import ValidationError
 
@@ -12,8 +12,9 @@ from config import settings
 from models import OAuthAccount, User
 from utils import cryptography
 
+
 def make_hashed_password(password: str) -> str:
-    return hashpw(password.encode(), settings.SECRET_KEY.encode()).decode()
+    return hashpw(password.encode('utf8'), settings.PASSWORD_SALT).decode()
 
 
 def verify_password(password: str, hashed_pass: str) -> bool:

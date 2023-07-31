@@ -1,5 +1,5 @@
-import re
 import random
+import re
 import string
 
 from authlib.integrations.base_client import OAuthError

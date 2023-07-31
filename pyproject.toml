@@ -32,13 +32,30 @@ pylint = '^2.12.2'
 isort = '^5.10.1'
 flake8 = '^6.0.0'
 pytest = '^7.4.0'
+pytest-asyncio = "^0.20.3"
+pytest-cov = "^4.0.0"
+pytest-env = "^0.8.1"
+pytest-pythonpath = "^0.7.3"
+asgi_lifespan = '^2.1.0'
+factory-boy = '^3.2.1'
 
 [tool.pytest.ini_options]
-minversion = "6.0"
-addopts = "-ra -q"
-testpaths = [
-    "tests",
+asyncio_mode = "auto"
+console_output_style = "count"
+python_classes = "Test*"
+python_files = "test_*.py"
+python_functions = "test_*"
+norecursedirs = ".venv .vscode .devcontainer scripts venv env deploy"
+filterwarnings = ["ignore::DeprecationWarning"]
+markers = ["unit: Run only unit tests"]
+env = [
+    "ENVIRONMENT=test",
+    "POSTGRES_DSN=postgresql+asyncpg://events_fastAPI_api:pswd1234@postgres:5432/test_events_fastAPI_api",
+    "MEDIA_ROOT=test_media",
+    "LOG_LEVEL=CRITICAL",
+    "NEED_MOCK=true",
 ]
+addopts = "-s -p no:warning"
 
 [build-system]
 requires = ['poetry-core']

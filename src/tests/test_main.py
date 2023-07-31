@@ -1,11 +1,17 @@
-from starlette.testclient import TestClient
+from fastapi import status
+from httpx import AsyncClient as Httpx
 
-from main import app
+from .conftest import mark_async
+from .mixins import BaseTestCase
 
-client = TestClient(app)
 
+class TestLive(BaseTestCase):
+    url_name = 'live'
 
-def test_read_main() -> None:
-    response = client.get('/api/live')
-    assert response.status_code == 200
-    assert response.json() == {'live': 'ok'}
+    @mark_async
+    async def test_live(self, httpx_client: Httpx) -> None:
+        """Test live endpoint"""
+
+        r = await httpx_client.get(self.url_path())
+        assert r.json() == {'live': 'ok'}
+        assert r.status_code == status.HTTP_200_OK

@@ -1,7 +1,8 @@
 import secrets
 from pathlib import Path
 
-from pydantic import HttpUrl, field_validator, FieldValidationInfo, model_validator
+from bcrypt import gensalt
+from pydantic import FieldValidationInfo, HttpUrl, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 __all__ = ('Settings',)
@@ -24,6 +25,7 @@ class Settings(BaseSettings):
     SECRET_KEY: str = secrets.token_urlsafe()
     EMAIL_VERIFY_KEY: bytes
     RESET_PASSWORD_KEY: bytes
+    PASSWORD_SALT: bytes = gensalt()
 
     # ---------- Storage ----------
 
