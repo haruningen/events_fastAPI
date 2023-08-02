@@ -3,7 +3,7 @@ from typing import Optional
 
 from pydantic import BaseModel, ConfigDict
 
-__all__ = ('EventSchema', 'EventsListSchema',)
+__all__ = ('EventSchema', 'EventsListSchema', 'EventDetailScheme',)
 
 
 class EventSchema(BaseModel):
@@ -14,9 +14,12 @@ class EventSchema(BaseModel):
     online_event: Optional[bool]
     start: datetime
     end: datetime
-    want_go: bool
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class EventDetailScheme(EventSchema):
+    want_go: bool
 
 
 class EventsListSchema(BaseModel):

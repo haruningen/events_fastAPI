@@ -146,7 +146,7 @@ class DeclarativeBase:
         order_by = kwargs.pop('order_by', cls._pk_name())
         assert order_by in cls._columns_keys(), 'Unknown field'
 
-        query = select(cls).filter_by(**kwargs).order_by(order_by)
+        query = select(cls).filter(*args, **kwargs).order_by(order_by)
         if limit is not None and offset is not None:
             query = query.limit(limit).offset(offset)
 

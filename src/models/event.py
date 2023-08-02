@@ -2,7 +2,7 @@ from datetime import datetime
 
 from sqlalchemy import TIMESTAMP, Boolean, Column, Integer, String, text
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Mapped, relationship
 
 from models.base import BaseModel
 
@@ -24,7 +24,7 @@ class Event(BaseModel):
     start: datetime = Column(TIMESTAMP(timezone=True), nullable=True)
     end: datetime = Column(TIMESTAMP(timezone=True), nullable=True)
 
-    users: list[User] = relationship('User', secondary='users_events', lazy='joined')
+    users: Mapped[list[User]] = relationship('User', secondary='users_events', lazy='joined')
 
     async def add_user(self, user: User, _db: AsyncSession) -> None:
         self.users.append(user)

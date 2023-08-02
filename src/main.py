@@ -6,6 +6,7 @@ from starlette.staticfiles import StaticFiles
 
 from api import router as api
 from config import settings
+from errors import unexpected_exceptions_handler
 
 app = FastAPI()
 
@@ -20,6 +21,7 @@ app.add_middleware(
     allow_methods=['*'],
     allow_headers=['*'],
 )
+app.add_exception_handler(Exception, unexpected_exceptions_handler)
 
 app.mount(
     path=str(settings.MEDIA_URL.path),

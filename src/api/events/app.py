@@ -7,7 +7,7 @@ from api.depends import PaginationDeps, get_authed_user, get_db
 
 __all__ = ('router',)
 
-from api.events.schemas import EventSchema, EventsListSchema
+from api.events.schemas import EventDetailScheme, EventsListSchema
 from api.schemas import MessageSchema
 from models import Event, User
 
@@ -25,7 +25,25 @@ async def get_events(pagination: PaginationDeps) -> dict[str, Any]:
     return {'items': events_list, 'count': total_count}
 
 
-@router.get('/{event_id}', summary='Get event info by id', response_model=EventSchema)
+@router.get(
+    '/my',
+    summary='Get user list of events',
+    response_model=EventsListSchema
+)
+async def get_user_events(
+        pagination: PaginationDeps,
+        user: User = Depends(get_authed_user),
+) -> dict[str, Any]:
+    events_list: list[Event] = await Event.get_list(
+        Event.users.any(id=user.id),
+        limit=pagination.limit,
+        offset=pagination.offset
+    )
+    total_count: Optional[int] = await Event.get_count()
+    return {'items': events_list, 'count': total_count}
+
+
+@router.get('/{event_id}', summary='Get event info by id', response_model=EventDetailScheme)
 async def get_event(event_id: int, user: User = Depends(get_authed_user)) -> Event:
     event: Optional[Event] = await Event.get(event_id)  # type: ignore[func-returns-value]
     if not event:
