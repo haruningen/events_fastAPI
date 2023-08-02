@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
-__all__ = ('BaseMessageSchema',)
+__all__ = ('MessageSchema',)
 
 
-class BaseMessageSchema(BaseModel):
+class MessageSchema(BaseModel):
     message: str

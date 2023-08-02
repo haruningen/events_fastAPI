@@ -1,5 +1,5 @@
 from io import BytesIO
-from pathlib import PosixPath, Path
+from pathlib import Path, PosixPath
 
 from aiohttp import ClientSession, InvalidURL
 from fastapi.datastructures import UploadFile

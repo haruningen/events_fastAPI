@@ -5,10 +5,10 @@ from starlette.datastructures import URLPath
 
 from config import settings
 from connections.postgresql import Base, async_engine
-from tests.fixtures.factories import UserFactory
 from gen_typing import YieldAsyncFixture
 from main import app
 from models import User
+from tests.fixtures.factories import UserFactory
 from utils.users import make_token
 
 

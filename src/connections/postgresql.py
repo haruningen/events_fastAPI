@@ -1,7 +1,7 @@
 import uuid
 from typing import Any, Optional, TypeVar, Union
 
-from sqlalchemy import Column, ColumnCollection, MetaData, Select, select, update
+from sqlalchemy import Column, ColumnCollection, MetaData, Select, func, select, update
 from sqlalchemy.engine.result import Result
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.inspection import inspect
@@ -120,6 +120,83 @@ class DeclarativeBase:
                 await db.close()
 
         return obj  # type: ignore[return-value]
+
+    @classmethod
+    def select(cls, *args: Column | str) -> Select:
+        """Return SQL statement of SELECT."""
+
+        if args:
+            _columns = cls._columns()
+            return select(*[_columns[i] for i in args if isinstance(i, str)])
+
+        return select(cls)
+
+    @classmethod
+    async def get_list(
+            cls,
+            *args: Any,
+            _db: Optional[AsyncSession] = None,
+            limit: Optional[int] = None,
+            offset: Optional[int] = None,
+            **kwargs: Any
+    ) -> list[DeclarativeBaseType]:
+        """Return a list of model instances."""
+
+        db: AsyncSession = _db or cls._get_db()
+        order_by = kwargs.pop('order_by', cls._pk_name())
+        assert order_by in cls._columns_keys(), 'Unknown field'
+
+        query = select(cls).filter_by(**kwargs).order_by(order_by)
+        if limit is not None and offset is not None:
+            query = query.limit(limit).offset(offset)
+
+        try:
+            result = (await db.execute(query)).unique()
+        finally:
+            if not _db:
+                await db.close()
+
+        return result.scalars().all()  # type: ignore[return-value]
+
+    @classmethod
+    async def get_count(
+            cls, *args: Any, _db: Optional[AsyncSession] = None, **kwargs: Any
+    ) -> Optional[int]:
+        """Return a count of model in list instances."""
+
+        db: AsyncSession = _db or cls._get_db()
+
+        try:
+            query = select(func.count()).select_from(cls)
+            if args:
+                query = query.where(*args)
+
+            count = (await db.execute(query)).scalar()
+        finally:
+            if not _db:
+                await db.close()
+
+        return count
+
+    @classmethod
+    async def paginate(cls,
+                       limit: int,
+                       offset: int,
+                       *args: Any,
+                       _db: Optional[AsyncSession] = None,
+                       **kwargs: Any) -> list[DeclarativeBaseType]:
+        db: AsyncSession = _db or cls._get_db()
+        order_by = kwargs.pop('order_by', cls._pk_name())
+        assert order_by in cls._columns_keys(), 'Unknown field'
+
+        try:
+            result = await db.execute(
+                select(cls).filter(*args, **kwargs).order_by(order_by).limit(limit).offset(offset))
+        finally:
+            if not _db:
+                await db.close()
+
+        return result.all()  # type: ignore[return-value]
 
     @classmethod
     async def exists_select(cls, query: Select, _db: Optional[AsyncSession] = None) -> bool:

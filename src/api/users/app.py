@@ -9,7 +9,7 @@ from api.depends import get_authed_user, get_db, valid_content_length
 
 __all__ = ('router',)
 
-from api.schemas import BaseMessageSchema
+from api.schemas import MessageSchema
 from api.users.schemas import OTPSchema, UserBaseSchema, VerifyEmailSchema
 from config import settings
 from models import User
@@ -43,7 +43,7 @@ async def upload_user_avatar(
     return {'avatar_url': user.avatar_url}
 
 
-@router.post('/validate-email-token', summary='Verify user email by hash', response_model=BaseMessageSchema)
+@router.post('/validate-email-token', summary='Verify user email by hash', response_model=MessageSchema)
 async def validate_email_confirm(verify_email: VerifyEmailSchema, _db: AsyncSession = Depends(get_db)) -> dict:
     user: Optional[User] = await get_user_from_email_link(verify_email.email_verified_hash)
     # Check if the user exist

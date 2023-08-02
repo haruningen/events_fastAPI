@@ -1,4 +1,4 @@
-from typing import AsyncGenerator
+from typing import Annotated, AsyncGenerator
 
 from fastapi import Depends, Header, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -8,7 +8,14 @@ from connections.postgresql import async_session
 from models import User
 from utils.users import token_decode
 
-__all__ = ('get_db', 'get_authed_user', 'valid_content_length')
+__all__ = (
+    'get_db',
+    'get_authed_user',
+    'Pagination',
+    'PaginationDeps',
+    'valid_content_length',
+    'verify_token',
+)
 
 _10_MB = (1024 * 1024) * 10  # 10 Mb size limit
 
@@ -36,5 +43,36 @@ async def get_authed_user(
     return user
 
 
+async def verify_token(
+        token: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False))
+) -> None:
+    if not token:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail='Unauthorized')
+    token_decode(token.credentials)
+
+
 async def valid_content_length(content_length: int = Header(..., lt=_10_MB)) -> int:
     return content_length
+
+
+class Pagination:
+
+    def __init__(self, page: int, page_size: int) -> None:
+        self.page = page
+        self.page_size = page_size
+
+    @property
+    def limit(self) -> int:
+        return self.page_size
+
+    @property
+    def offset(self) -> int:
+        return (self.page - 1) * self.page_size
+
+
+async def pagination_parameters(page: int = 1, page_size: int = 20) -> Pagination:
+    return Pagination(page, page_size)
+
+
+PaginationDeps = Annotated[Pagination, Depends(pagination_parameters)]

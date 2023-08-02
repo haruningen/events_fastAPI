@@ -16,7 +16,7 @@ from api.auth.schemas import (
     UserTFAResponse
 )
 from api.depends import get_db
-from api.schemas import BaseMessageSchema
+from api.schemas import MessageSchema
 from models.user import User
 from utils.mail import reset_password, verify_email
 from utils.users import (
@@ -97,13 +97,13 @@ async def send_verify_email(data: EmailSchema) -> dict:
     return {'message': 'Verify email link send to email'}
 
 
-@router.post('/reset_password', summary='Send reset password link to user email', response_model=BaseMessageSchema)
+@router.post('/reset_password', summary='Send reset password link to user email', response_model=MessageSchema)
 async def send_reset_password(data: EmailSchema) -> dict:
     reset_password(data.email)
     return {'message': 'Reset password link send to email'}
 
 
-@router.post('/reset_password_confirm', summary='Confirm user reset password by hash', response_model=BaseMessageSchema)
+@router.post('/reset_password_confirm', summary='Confirm user reset password by hash', response_model=MessageSchema)
 async def reset_password_confirm(data: ResetPasswordConfirmSchema, _db: AsyncSession = Depends(get_db)) -> dict:
     user = await get_user_from_reset_password_link(data.password_reset_hash)
     # Check if the user exist
