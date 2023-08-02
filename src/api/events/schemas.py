@@ -12,8 +12,8 @@ class EventSchema(BaseModel):
     summary: str
     image_url: Optional[str]
     online_event: Optional[bool]
-    start: datetime
-    end: datetime
+    start: Optional[datetime]
+    end: Optional[datetime]
 
     model_config = ConfigDict(from_attributes=True)
 
