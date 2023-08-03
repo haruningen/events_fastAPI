@@ -56,7 +56,7 @@ async def get_event(event_id: int, user: User = Depends(get_authed_user)) -> Eve
 
 
 @router.post('/attend/{event_id}', summary='Attend event to user', response_model=MessageSchema)
-async def attend(
+async def attend_event(
         event_id: int,
         user: User = Depends(get_authed_user),
         _db: AsyncSession = Depends(get_db)
@@ -70,6 +70,8 @@ async def attend(
     event_user = [eu for eu in event.users if user.id == eu.id]
     if any(event_user):
         await event.remove_user(event_user[0], _db)
+        message = 'The user has been removed from the event'
     else:
         await event.add_user(user, _db)
-    return {'message': 'ok'}
+        message = 'The user has been added from the event'
+    return {'message': message}

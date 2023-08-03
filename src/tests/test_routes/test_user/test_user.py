@@ -1,3 +1,5 @@
+from typing import Any
+
 from httpx import AsyncClient, Response
 from starlette import status
 
@@ -7,9 +9,8 @@ from tests.mixins import BaseTestCase
 class TestUsers(BaseTestCase):
     url_name = 'get_user'
 
-    async def _request(self, httpx_client: AsyncClient, **kwargs) -> Response:
+    async def _request(self, httpx_client: AsyncClient, **kwargs: Any) -> Response:
         return await httpx_client.get(self.url_path(), **kwargs)
-
 
     async def test_user_success(self, httpx_client: AsyncClient) -> None:
         token = await self.authorized_user_token()

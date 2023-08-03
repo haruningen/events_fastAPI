@@ -1,3 +1,5 @@
+from typing import Any
+
 from httpx import AsyncClient, Response
 from starlette import status
 
@@ -8,7 +10,7 @@ from utils.images import generate_test_image
 class TestAvatarUpload(BaseTestCase):
     url_name = 'upload_user_avatar'
 
-    async def _request(self, httpx_client: AsyncClient, **kwargs) -> Response:
+    async def _request(self, httpx_client: AsyncClient, **kwargs: Any) -> Response:
         return await httpx_client.post(self.url_path(), **kwargs)
 
     async def test_user_unauthorized_without_token(self, httpx_client: AsyncClient) -> None:

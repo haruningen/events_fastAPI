@@ -1,3 +1,5 @@
+from typing import Any
+
 from httpx import AsyncClient, Response
 from starlette import status
 
@@ -7,11 +9,11 @@ from tests.mixins import BaseTestCase
 class TestEventsMy(BaseTestCase):
     url_name = 'get_user_events'
 
-    async def _request(self, httpx_client: AsyncClient, **kwargs) -> Response:
+    async def _request(self, httpx_client: AsyncClient, **kwargs: Any) -> Response:
         return await httpx_client.get(self.url_path(), **kwargs)
 
     async def test_events_my_success(self, httpx_client: AsyncClient) -> None:
-        user,event = await self.attend_event()
+        user, event = await self.attend_event()
         token = await self.authorized_user_token(user)
         response = await httpx_client.get(self.url_path(), headers={'Authorization': f'Bearer {token}'})
         assert response.status_code == status.HTTP_200_OK

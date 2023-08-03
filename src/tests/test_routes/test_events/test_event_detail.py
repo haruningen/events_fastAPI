@@ -1,3 +1,5 @@
+from typing import Any
+
 from httpx import AsyncClient, Response
 from starlette import status
 
@@ -7,7 +9,7 @@ from tests.mixins import BaseTestCase
 class TestEventDetail(BaseTestCase):
     url_name = 'get_event'
 
-    async def _request(self, httpx_client: AsyncClient, **kwargs) -> Response:
+    async def _request(self, httpx_client: AsyncClient, **kwargs: Any) -> Response:
         return await httpx_client.get(self.url_path(event_id=1), **kwargs)
 
     async def test_event_detail_success(self, httpx_client: AsyncClient) -> None:

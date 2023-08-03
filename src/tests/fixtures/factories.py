@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 
 from factory import DictFactory, Faker
 
@@ -33,4 +33,4 @@ class UserPasswordNotMatchFactory(DictFactory):
 class EventFactory(DictFactory):
     name: str = 'Test'
     summary: str = 'test summary'
-    start: datetime = datetime.datetime.now()
+    start: datetime = datetime.now()

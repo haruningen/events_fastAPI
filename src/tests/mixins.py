@@ -9,8 +9,8 @@ from config import settings
 from connections.postgresql import Base, async_engine, async_session
 from gen_typing import YieldAsyncFixture
 from main import app
-from models import User, Event
-from tests.fixtures.factories import UserFactory, EventFactory
+from models import Event, User
+from tests.fixtures.factories import EventFactory, UserFactory
 from utils.users import make_token
 
 
@@ -67,7 +67,7 @@ class BaseTestCase(PostgresMixin, FactoriesMixin):
     def url_path(self, **kwargs: int | str) -> URLPath:
         return app.router.url_path_for(self.url_name, **kwargs)
 
-    async def _request(self, httpx_client: AsyncClient, **kwargs) -> Response:
+    async def _request(self, httpx_client: AsyncClient, **kwargs: Any) -> Response:
         raise NotImplementedError()
 
     async def _test_user_unauthorized_without_token(self, httpx_client: AsyncClient) -> None:
@@ -75,7 +75,7 @@ class BaseTestCase(PostgresMixin, FactoriesMixin):
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
         assert response.json() == {'detail': 'Unauthorized'}
 
-    async def _test_unauthorized_with_fake_token(self, httpx_client: AsyncClient, **kwargs) -> None:
+    async def _test_unauthorized_with_fake_token(self, httpx_client: AsyncClient, **kwargs: Any) -> None:
         response = await self._request(httpx_client, **kwargs)
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
         assert response.json() == {'detail': 'Could not validate credentials'}
