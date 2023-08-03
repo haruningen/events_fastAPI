@@ -9,10 +9,9 @@ readme = 'README.md'
 python = '^3.11'
 fastapi = '^0.100.0'
 uvicorn = '^0.22.0'
-pydantic = '^2.0.3'
+pydantic = { version = '^2.0.3', extras = ["email"] }
 pydantic-settings = '^2.0.1'
 SQLAlchemy = '^2.0.18'
-fastapi-users = { version = '^12.1.0', extras = ['sqlalchemy', 'oauth'] }
 PyJWT = '^2.7.0'
 asyncpg = '^0.28.0'
 alembic = '^1.11.1'
@@ -22,13 +21,41 @@ aiohttp = '^3.8.5'
 Authlib = '^1.2.0'
 itsdangerous = '^2.1.2'
 pyotp = '^2.8.0'
+httpx = '^0.24.1'
+bcrypt = '^4.0.1'
+python-multipart = '^0.0.6'
 
 [tool.poetry.dev-dependencies]
-mypy = '^1.4.1'
+mypy = '^1.4.0'
 mypy-extensions = '^1.0.0'
 pylint = '^2.12.2'
 isort = '^5.10.1'
 flake8 = '^6.0.0'
+pytest = '^7.4.0'
+pytest-asyncio = "^0.20.3"
+pytest-cov = "^4.0.0"
+pytest-env = "^0.8.1"
+pytest-pythonpath = "^0.7.3"
+asgi_lifespan = '^2.1.0'
+factory-boy = '^3.2.1'
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+console_output_style = "count"
+python_classes = "Test*"
+python_files = "test_*.py"
+python_functions = "test_*"
+norecursedirs = ".venv .vscode .devcontainer scripts venv env deploy"
+filterwarnings = ["ignore::DeprecationWarning"]
+markers = ["unit: Run only unit tests"]
+env = [
+    "ENVIRONMENT=test",
+    "POSTGRES_DSN=postgresql+asyncpg://events_fastAPI_api:pswd1234@postgres:5432/test_events_fastAPI_api",
+    "MEDIA_ROOT=test_media",
+    "LOG_LEVEL=CRITICAL",
+    "NEED_MOCK=true",
+]
+addopts = "-s -p no:warning"
 
 [build-system]
 requires = ['poetry-core']

@@ -1,9 +1,9 @@
 import secrets
 from pathlib import Path
-from typing import Any
 
-from pydantic import HttpUrl, validator
-from pydantic_settings import BaseSettings
+from bcrypt import gensalt
+from pydantic import FieldValidationInfo, HttpUrl, field_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 __all__ = ('Settings',)
 
@@ -11,6 +11,8 @@ DEFAULT_CORS_ORIGINS: list[str] = ['*']
 
 
 class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file='./.env')
+
     # ------- Base settings -------
     BASE_DIR: Path = Path(__file__).parent.parent
     BASE_URL: HttpUrl
@@ -23,12 +25,13 @@ class Settings(BaseSettings):
     SECRET_KEY: str = secrets.token_urlsafe()
     EMAIL_VERIFY_KEY: bytes
     RESET_PASSWORD_KEY: bytes
+    PASSWORD_SALT: bytes = gensalt()
 
     # ---------- Storage ----------
 
-    MEDIA_ROOT: str = 'media'
+    MEDIA_ROOT: Path = Path('media')
     MEDIA_URL: HttpUrl
-    AVATARS_DIR: str = 'avatars'
+    AVATARS_DIR: Path = Path('avatars')
 
     # ---------- Databases ----------
 
@@ -69,18 +72,19 @@ class Settings(BaseSettings):
 
     # ---------- Validators ----------
 
-    @validator('MEDIA_ROOT')
-    def create_media_root_dir(cls, v: Path, values: dict[str, Any]) -> Path:
-        media_root = values['BASE_DIR'].joinpath(v)
+    @field_validator('MEDIA_ROOT')
+    def create_media_root_dir(cls, v: Path, info: FieldValidationInfo) -> Path:
+        base_dir = info.data.get('BASE_DIR')
+        assert base_dir and isinstance(base_dir, Path), 'BASE_DIR must be provided'
+
+        media_root = base_dir.joinpath(v)
         media_root.mkdir(parents=True, exist_ok=True)
-        avatars_root = media_root.joinpath('avatars/')
-        avatars_root.mkdir(parents=True, exist_ok=True)
         return media_root
 
-    @validator('AVATARS_DIR')
-    def create_avatars_dir(cls, v: Path, values: dict[str, Any]) -> Path:
-        values['MEDIA_ROOT'].joinpath(v).mkdir(parents=True, exist_ok=True)
-        return v
+    @field_validator('AVATARS_DIR')
+    def create_avatars_dir(cls, v: Path, info: FieldValidationInfo) -> Path:
+        media_root = info.data.get('MEDIA_ROOT')
+        assert media_root and isinstance(media_root, Path), 'MEDIA_ROOT must be provided'
 
-    class Config:
-        env_file = './.env'
+        media_root.joinpath(v).mkdir(parents=True, exist_ok=True)
+        return v

@@ -3,8 +3,8 @@ from typing import Any, Optional
 
 import jwt
 import pyotp
+from bcrypt import checkpw, hashpw
 from fastapi import HTTPException, status
-from passlib.context import CryptContext
 from pydantic import ValidationError
 
 from api.users.schemas import TokenPayload
@@ -12,15 +12,13 @@ from config import settings
 from models import OAuthAccount, User
 from utils import cryptography
 
-password_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
-
 
 def make_hashed_password(password: str) -> str:
-    return password_context.hash(password)
+    return hashpw(password.encode('utf8'), settings.PASSWORD_SALT).decode()
 
 
 def verify_password(password: str, hashed_pass: str) -> bool:
-    return password_context.verify(password, hashed_pass)
+    return checkpw(password.encode(), hashed_pass.encode())
 
 
 def make_token(expire_minutes: int, secret_key: str, data: dict[str, Any]) -> str:
@@ -52,6 +50,9 @@ def token_decode(token: str, is_access: bool = True) -> TokenPayload:
     except ValidationError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail='Could not validate credentials', )
+    except jwt.exceptions.DecodeError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail='Could not validate credentials', )
 
 
 async def get_user_by_email(email: str) -> Optional[User]:
@@ -72,7 +73,10 @@ async def get_user_from_reset_password_link(reset_password_hash: str) -> Optiona
     return await get_user_by_email(data['user_email'])
 
 
-def verify_otp(tfa_secret: str, otp_code: str) -> None:
+def verify_otp(tfa_secret: str, otp_code: Optional[str]) -> None:
+    if not otp_code:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail='OTP code is required')
     totp = pyotp.TOTP(tfa_secret)
     if not totp.verify(otp=otp_code, valid_window=1):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,

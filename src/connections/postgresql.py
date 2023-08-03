@@ -4,12 +4,12 @@ from typing import Any, Optional, TypeVar, Union
 from sqlalchemy import Column, ColumnCollection, MetaData, Select, select, update
 from sqlalchemy.engine.result import Result
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.inspection import inspect
+from sqlalchemy.orm import declarative_base
 
 from config import settings
 
-__all__ = ('Base', 'DeclarativeBase', 'async_session')
+__all__ = ('Base', 'DeclarativeBase', 'async_engine', 'async_session')
 
 DeclarativeBaseType = TypeVar('DeclarativeBaseType', bound='DeclarativeBase')
 

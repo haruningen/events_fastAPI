@@ -1,9 +1,10 @@
+import random
 import re
+import string
 
 from authlib.integrations.base_client import OAuthError
 from authlib.integrations.starlette_client import OAuth
 from fastapi import APIRouter, Depends, HTTPException, Request, status
-from fastapi_users.password import PasswordHelper
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.config import Config
 from starlette.responses import RedirectResponse
@@ -64,8 +65,7 @@ async def google_auth(request: Request, _db: AsyncSession = Depends(get_db)) -> 
             user_id = db_user.id
         else:
             # Create the user and oauth account
-            password_helper = PasswordHelper()
-            password = password_helper.generate()
+            password = ''.join(random.choice(string.printable) for i in range(8))
             user: User = await User.create(
                 email=userinfo.email,
                 hashed_password=make_hashed_password(password),
