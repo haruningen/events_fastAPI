@@ -79,8 +79,6 @@ class Settings(BaseSettings):
 
         media_root = base_dir.joinpath(v)
         media_root.mkdir(parents=True, exist_ok=True)
-        avatars_root = media_root.joinpath('avatars/')
-        avatars_root.mkdir(parents=True, exist_ok=True)
         return media_root
 
     @field_validator('AVATARS_DIR')
