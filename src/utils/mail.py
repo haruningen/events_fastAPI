@@ -43,6 +43,7 @@ def google_success_oauth(email: str, password: str) -> None:
 
 
 def send_email(subject: str, body: str, to_email: str) -> None:
+    # TODO remove when add patch/mock
     if settings.ENVIRONMENT.lower() == 'test':
         return
 
