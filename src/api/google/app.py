@@ -4,7 +4,7 @@ import string
 
 from authlib.integrations.base_client import OAuthError
 from authlib.integrations.starlette_client import OAuth
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status, BackgroundTasks
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.config import Config
 from starlette.responses import RedirectResponse
@@ -35,7 +35,9 @@ async def google_login(request: Request) -> RedirectResponse:
 
 
 @router.get('/auth')
-async def google_auth(request: Request, _db: AsyncSession = Depends(get_db)) -> dict:
+async def google_auth(request: Request,
+                      background_tasks: BackgroundTasks,
+                      _db: AsyncSession = Depends(get_db)) -> dict:
     try:
         data = await oauth.google.authorize_access_token(request)
     except OAuthError as error:
@@ -80,6 +82,6 @@ async def google_auth(request: Request, _db: AsyncSession = Depends(get_db)) -> 
                                         detail=error)
 
             await OAuthAccount.create(**oauth_account, user_id=user.id)
-            google_success_oauth(userinfo.email, password)
+            background_tasks.add_task(google_success_oauth, userinfo.email, password)
             user_id = user.id
     return make_auth_tokens(str(user_id))
