@@ -24,5 +24,21 @@ downgrade_migration:  ## Downgrade latest migration
 start:  ## Start application
 	docker-compose up -d
 
+tests:  ## Run tests
+	$(COMPOSE_RUN_APP) bash -c "cd /app && pytest -c $(pyproject)"
+
 mypy:  ## Run mypy
 	$(COMPOSE_RUN_APP) mypy .
+
+isort:  ## Run isort
+	$(COMPOSE_RUN_APP) isort .
+
+flake8:  ## Run flake8
+	$(COMPOSE_RUN_APP) flake8
+
+refresh_db:  ## Regenerate migrations and apply them
+	$(COMPOSE_RUN_APP) bash -c "python refresh_db.py && alembic revision --autogenerate -m 'initial'"
+
+generate_key: ## Generate fernet key
+	$(COMPOSE_RUN_APP) python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key())"
+
