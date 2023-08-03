@@ -9,7 +9,7 @@ from tests.fixtures.factories import UserFactory
 from gen_typing import YieldAsyncFixture
 from main import app
 from models import User
-from utils.users import make_token, make_hashed_password
+from utils.users import make_token
 
 
 class PostgresMixin:
