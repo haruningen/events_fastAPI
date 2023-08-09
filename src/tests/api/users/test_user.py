@@ -14,7 +14,8 @@ class TestUsers(BaseTestCase):
 
     async def test_user_success(self, httpx_client: AsyncClient) -> None:
         token = await self.authorized_user_token()
-        response = await httpx_client.get(self.url_path(), headers={'Authorization': f'Bearer {token}'})
+        response = await self._request(httpx_client,
+                                       headers={'Authorization': f'Bearer {token}'})
         assert response.status_code == status.HTTP_200_OK
         data = response.json()
         assert 'email' in data and 'avatar_url' in data

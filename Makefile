@@ -36,6 +36,9 @@ isort:  ## Run isort
 flake8:  ## Run flake8
 	$(COMPOSE_RUN_APP) flake8
 
+all_lint:  ## Run all linters
+	$(COMPOSE_RUN_APP) /bin/bash -c "isort . && flake8 && mypy ."
+
 refresh_db:  ## Regenerate migrations and apply them
 	$(COMPOSE_RUN_APP) bash -c "python refresh_db.py && alembic revision --autogenerate -m 'initial'"
 

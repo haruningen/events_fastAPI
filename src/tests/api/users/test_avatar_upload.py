@@ -21,20 +21,16 @@ class TestAvatarUpload(BaseTestCase):
 
     async def test_user_success(self, httpx_client: AsyncClient) -> None:
         token = await self.authorized_user_token()
-        response = await httpx_client.post(
-            self.url_path(),
-            headers={'Authorization': f'Bearer {token}'},
-            files={'image': ('test.gif', generate_test_image())}
-        )
+        response = await self._request(httpx_client,
+                                       headers={'Authorization': f'Bearer {token}'},
+                                       files={'image': ('test.gif', generate_test_image())})
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
         assert response.json() == {'detail': 'Unsupported image type'}
 
     async def test_upload_success(self, httpx_client: AsyncClient) -> None:
         token = await self.authorized_user_token()
-        response = await httpx_client.post(
-            self.url_path(),
-            headers={'Authorization': f'Bearer {token}'},
-            files={'image': ('test.jpg', generate_test_image())}
-        )
+        response = await self._request(httpx_client,
+                                       headers={'Authorization': f'Bearer {token}'},
+                                       files={'image': ('test.jpg', generate_test_image())})
         assert response.status_code == status.HTTP_200_OK
         assert 'avatar_url' in response.json()

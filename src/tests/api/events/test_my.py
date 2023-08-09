@@ -15,7 +15,7 @@ class TestEventsMy(BaseTestCase):
     async def test_events_my_success(self, httpx_client: AsyncClient) -> None:
         user, event = await self.attend_event()
         token = await self.authorized_user_token(user)
-        response = await httpx_client.get(self.url_path(), headers={'Authorization': f'Bearer {token}'})
+        response = await self._request(httpx_client, headers={'Authorization': f'Bearer {token}'})
         assert response.status_code == status.HTTP_200_OK
         data = response.json()
         assert 'items' in data and 'count' in data
