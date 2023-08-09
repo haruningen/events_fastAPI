@@ -42,6 +42,11 @@ class Settings(BaseSettings):
     POSTGRES_HOSTNAME: str
     POSTGRES_DSN: str
 
+    # ---------- Celery ----------
+
+    CELERY_BROKER_URL: str
+    CELERY_RESULT_BACKEND: str
+
     # ---------- Services ----------
 
     # SMTP secrets
