@@ -1,14 +1,16 @@
-from typing import Optional
+from typing import Any, Optional
 
 import pytest
+from httpx import AsyncClient, Response
+from starlette import status
 from starlette.datastructures import URLPath
 
 from config import settings
-from connections.postgresql import Base, async_engine
-from tests.fixtures.factories import UserFactory
+from connections.postgresql import Base, async_engine, async_session
 from gen_typing import YieldAsyncFixture
 from main import app
-from models import User
+from models import Event, User
+from tests.fixtures.factories import EventFactory, UserFactory
 from utils.users import make_token
 
 
@@ -34,6 +36,11 @@ class FactoriesMixin:
         data = UserFactory(**kwargs)
         return await User.create(**data)
 
+    @staticmethod
+    async def event(**kwargs: str | int | dict) -> Event:
+        data = EventFactory(**kwargs)
+        return await Event.create(**data)
+
     async def authorized_user_token(self, user: Optional[User] = None) -> str:
         if not user:
             user = await self.auth_user()
@@ -43,6 +50,14 @@ class FactoriesMixin:
             {'user_id': user.id}
         )
 
+    async def attend_event(self, user: Optional[User] = None, event: Optional[Event] = None) -> tuple[User, Event]:
+        if not user:
+            user = await self.auth_user()
+        if not event:
+            event = await self.event()
+        await event.add_user(user, async_session())
+        return user, event
+
 
 class BaseTestCase(PostgresMixin, FactoriesMixin):
     """Base test class"""
@@ -51,3 +66,16 @@ class BaseTestCase(PostgresMixin, FactoriesMixin):
 
     def url_path(self, **kwargs: int | str) -> URLPath:
         return app.router.url_path_for(self.url_name, **kwargs)
+
+    async def _request(self, client: AsyncClient, **kwargs: Any) -> Response:
+        raise NotImplementedError()
+
+    async def _test_user_unauthorized_without_token(self, client: AsyncClient) -> None:
+        response = await self._request(client)
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.json() == {'detail': 'Unauthorized'}
+
+    async def _test_unauthorized_with_fake_token(self, client: AsyncClient, **kwargs: Any) -> None:
+        response = await self._request(client, **kwargs)
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.json() == {'detail': 'Could not validate credentials'}

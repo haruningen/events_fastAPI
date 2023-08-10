@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from factory import DictFactory, Faker
 
 from utils.users import make_hashed_password
@@ -26,3 +28,9 @@ class UserPasswordNotMatchFactory(DictFactory):
     email: str = Faker('email')
     password: str = 'strongPassword1'
     password_confirm: str = 'strongPassword2'
+
+
+class EventFactory(DictFactory):
+    name: str = 'Test'
+    summary: str = 'test summary'
+    start: datetime = datetime.now()

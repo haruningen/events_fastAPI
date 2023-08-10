@@ -1,12 +1,12 @@
 from io import BytesIO
-from pathlib import PosixPath, Path
+from pathlib import Path, PosixPath
 
 from aiohttp import ClientSession, InvalidURL
 from fastapi.datastructures import UploadFile
 from PIL import Image, ImageDraw
 from starlette.datastructures import UploadFile as StarletteUploadFile
 
-__all__ = ('save_image', 'remove_image', 'save_image_by_url')
+__all__ = ('save_image', 'remove_image', 'save_image_by_url', 'generate_test_image')
 
 from config import settings
 
