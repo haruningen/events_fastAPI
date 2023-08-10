@@ -6,14 +6,13 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.depends import get_authed_user, get_db, valid_content_length
-
-__all__ = ('router',)
-
 from api.schemas import MessageSchema
 from api.users.schemas import OTPSchema, UserBaseSchema, VerifyEmailSchema
 from config import settings
 from models import User
 from utils.users import get_user_from_email_link, verify_otp
+
+__all__ = ('router',)
 
 router = APIRouter(tags=['users'])
 

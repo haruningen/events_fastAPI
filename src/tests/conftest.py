@@ -65,7 +65,7 @@ async def test_app() -> YieldAsyncFixture[FastAPI]:
 
 
 @pytest.fixture
-async def httpx_client(test_app: FastAPI) -> YieldAsyncFixture[AsyncClient]:
+async def client(test_app: FastAPI) -> YieldAsyncFixture[AsyncClient]:
     """Init httpx client"""
 
     async with AsyncClient(app=test_app, base_url=f'http://0.0.0.0:{settings.PORT}') as client:

@@ -4,12 +4,11 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.depends import PaginationDeps, get_authed_user, get_db
-
-__all__ = ('router',)
-
 from api.events.schemas import EventDetailScheme, EventsListSchema
 from api.schemas import MessageSchema
 from models import Event, User
+
+__all__ = ('router',)
 
 router = APIRouter(tags=['events'])
 
@@ -21,7 +20,7 @@ router = APIRouter(tags=['events'])
 )
 async def get_events(pagination: PaginationDeps) -> dict[str, Any]:
     events_list: list[Event] = await Event.get_list(limit=pagination.limit, offset=pagination.offset)
-    total_count: Optional[int] = await Event.get_count()
+    total_count: int = await Event.get_count()
     return {'items': events_list, 'count': total_count}
 
 
@@ -39,7 +38,7 @@ async def get_user_events(
         limit=pagination.limit,
         offset=pagination.offset
     )
-    total_count: Optional[int] = await Event.get_count()
+    total_count: int = await Event.get_count()
     return {'items': events_list, 'count': total_count}
 
 
@@ -67,11 +66,10 @@ async def attend_event(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f'Event with ID {event_id} does not exist'
         )
-    try:
-        event_user = next(eu for eu in event.users if user.id == eu.id)
+    if event_user := next((eu for eu in event.users if user.id == eu.id), None):
         await event.remove_user(event_user, _db)
         message = 'The user has been removed from the event'
-    except StopIteration:
+    else:
         await event.add_user(user, _db)
-        message = 'The user has been added from the event'
+        message = 'The user has been added to the event'
     return {'message': message}
