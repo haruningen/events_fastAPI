@@ -3,6 +3,8 @@
 .env
 logs
 media
+.DS_Store
+src/.DS_Store
 
 # byte-compiled
 __pycache__/
