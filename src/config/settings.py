@@ -54,9 +54,6 @@ class Settings(BaseSettings):
     EMAIL_HOST: str
     EMAIL_HOST_PASSWORD: str
     EMAIL_PORT: int
-    # Ticketmaster secrets
-    TICKETMASTER_API_URL: str
-    TICKETMASTER_API_KEY: str
     # Frontend url
     FRONTEND_URL: str
     # Tokens secrets

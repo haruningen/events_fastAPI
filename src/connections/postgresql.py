@@ -1,5 +1,5 @@
 import uuid
-from typing import Any, Optional, TypeVar, Union, Generator
+from typing import Any, Optional, TypeVar, Union
 
 from sqlalchemy import Column, ColumnCollection, MetaData, Select, func, select, update
 from sqlalchemy.engine.result import Result

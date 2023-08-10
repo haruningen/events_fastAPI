@@ -1,9 +1,9 @@
-from abc import abstractmethod, ABC
-from typing import Optional, Any
+from abc import ABC, abstractmethod
+from typing import Any, Optional
 
 from aiohttp import ClientSession
 
-from models import Event
+from models import DataSource, Event
 
 
 class BaseDataHandler(ABC):
@@ -12,10 +12,14 @@ class BaseDataHandler(ABC):
     of some events seed.
     """
 
+    def __init__(self, ds: DataSource) -> None:
+        self.ds = ds
+        self.config = self.ds.config
+
     @abstractmethod
-    async def to_event(self, data: Any) -> Optional[Event]:
+    async def to_event(self, data: dict) -> Optional[dict]:
         pass
 
     @abstractmethod
-    async def get_events(self, session: ClientSession) -> Optional[list[Event]]:
+    async def get_events(self, session: ClientSession) -> Optional[list[dict]]:
         pass

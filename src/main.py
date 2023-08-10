@@ -3,9 +3,10 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.staticfiles import StaticFiles
+
 from api import router as api
-from data.tasks import load_data
 from config import settings
+from data.tasks import load_data
 from errors import unexpected_exceptions_handler
 
 app = FastAPI()
@@ -31,8 +32,9 @@ app.mount(
 
 app.include_router(api, prefix=str(settings.API_ROOT))
 
+# TODO replace with beat
 @app.post("/tasks", status_code=201)
-async def run_task():
+async def run_task() -> None:
     await load_data()
 
 # if settings.ENVIRONMENT == 'LOCAL' and __name__ == '__main__':

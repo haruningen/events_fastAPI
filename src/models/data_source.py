@@ -10,7 +10,6 @@ class DataSource(BaseModel):
     id: int = Column(Integer, primary_key=True)
     name: str = Column(String(32))
     handler: str = Column(String(1024))
-    last_event_id: str = Column(String(1024))
     api_url: str = Column(String(1024))
     secret: str = Column(String(1024), nullable=True)
     config = Column(JSONB, nullable=True)
