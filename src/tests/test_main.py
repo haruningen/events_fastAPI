@@ -9,9 +9,9 @@ class TestLive(BaseTestCase):
     url_name = 'live'
 
     @mark_async
-    async def test_live(self, httpx_client: Httpx) -> None:
+    async def test_live(self, client: Httpx) -> None:
         """Test live endpoint"""
 
-        r = await httpx_client.get(self.url_path())
+        r = await client.get(self.url_path())
         assert r.json() == {'live': 'ok'}
         assert r.status_code == status.HTTP_200_OK

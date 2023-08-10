@@ -162,7 +162,7 @@ class DeclarativeBase:
     @classmethod
     async def get_count(
             cls, *args: Any, _db: Optional[AsyncSession] = None, **kwargs: Any
-    ) -> Optional[int]:
+    ) -> int:
         """Return a count of model in list instances."""
 
         db: AsyncSession = _db or cls._get_db()
@@ -177,27 +177,8 @@ class DeclarativeBase:
             if not _db:
                 await db.close()
 
+        assert isinstance(count, int)
         return count
-
-    @classmethod
-    async def paginate(cls,
-                       limit: int,
-                       offset: int,
-                       *args: Any,
-                       _db: Optional[AsyncSession] = None,
-                       **kwargs: Any) -> list[DeclarativeBaseType]:
-        db: AsyncSession = _db or cls._get_db()
-        order_by = kwargs.pop('order_by', cls._pk_name())
-        assert order_by in cls._columns_keys(), 'Unknown field'
-
-        try:
-            result = await db.execute(
-                select(cls).filter(*args, **kwargs).order_by(order_by).limit(limit).offset(offset))
-        finally:
-            if not _db:
-                await db.close()
-
-        return result.all()  # type: ignore[return-value]
 
     @classmethod
     async def exists_select(cls, query: Select, _db: Optional[AsyncSession] = None) -> bool:
