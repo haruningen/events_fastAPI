@@ -5,6 +5,7 @@ from pydantic import BaseModel, model_validator
 
 __all__ = ('ParsedEventTicketmasterSchema', 'ParsedEventPredictHQSchema',)
 
+
 class ParsedEventBaseSchema(BaseModel):
     name: str
     summary: str = ''

@@ -5,7 +5,6 @@ from aiohttp import ClientSession
 
 from data.base import BaseDataHandler
 from data.schemas import ParsedEventPredictHQSchema
-from utils.images import save_image_by_url
 
 
 class PredictHQDataHandler(BaseDataHandler):
@@ -17,20 +16,21 @@ class PredictHQDataHandler(BaseDataHandler):
         schema = ParsedEventPredictHQSchema(**data)
         return schema.model_dump()
 
-    async def get_events(self, session: ClientSession) -> Optional[list[dict]]:
+    async def get_events(self, session: ClientSession) -> Optional[list[dict]]:  # type: ignore
         page = 0
         headers = {
             'Authorization': f'Bearer {self.ds.secret}'
         }
+        limit = self.ds.config and self.ds.config.get('limit') or 1
         params = {
             'active.gt': datetime.today().strftime('%Y-%m-%d'),
-            'offset': page * self.ds.config['limit']
+            'offset': page * limit
         }
         next_page = True
 
         while 3 > page and next_page:
             page += 1
-            params['offset'] = page * self.ds.config['limit']
+            params['offset'] = page * limit
             if self.ds.config:
                 params = self.ds.config | params
             res, next_page = await self.fetch_events(session, headers, params)

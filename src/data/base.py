@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
-from typing import Any, Optional
+from typing import Optional
 
 from aiohttp import ClientSession
 
-from models import DataSource, Event
+from models import DataSource
 
 
 class BaseDataHandler(ABC):

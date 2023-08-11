@@ -24,7 +24,7 @@ class TicketmasterDataHandler(BaseDataHandler):
         schema = ParsedEventTicketmasterSchema(image_path=image_path, **data)
         return schema.model_dump()
 
-    async def get_events(self, session: ClientSession) -> Optional[list[dict]]:
+    async def get_events(self, session: ClientSession) -> Optional[list[dict]]:  # type: ignore
         page = 0
         headers = {'Content-Type': 'application/json'}
         params = {
@@ -37,7 +37,7 @@ class TicketmasterDataHandler(BaseDataHandler):
         while 3 > page and next_page:
             page += 1
             params['page'] = page
-            if  self.ds.config:
+            if self.ds.config:
                 params = self.ds.config | params
             res, next_page = await self.fetch_events(session, headers, params)
 
