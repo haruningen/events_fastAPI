@@ -10,7 +10,7 @@ from connections.postgresql import Base, async_engine, async_session
 from gen_typing import YieldAsyncFixture
 from main import app
 from models import Event, User
-from tests.fixtures.factories import EventFactory, UserFactory
+from tests.fixtures.factories import EventFactory, UserFactory, UserTFAFactory
 from utils.users import make_token
 
 
@@ -37,13 +37,21 @@ class FactoriesMixin:
         return await User.create(**data)
 
     @staticmethod
+    async def auth_user_tfa(**kwargs: str | int | dict) -> User:
+        data = UserTFAFactory(**kwargs)
+        return await User.create(**data)
+
+    @staticmethod
     async def event(**kwargs: str | int | dict) -> Event:
         data = EventFactory(**kwargs)
         return await Event.create(**data)
 
-    async def authorized_user_token(self, user: Optional[User] = None) -> str:
+    async def authorized_user_token(self, user: Optional[User] = None, tfa_enabled: bool = False) -> str:
         if not user:
-            user = await self.auth_user()
+            if tfa_enabled:
+                user = await self.auth_user_tfa()
+            else:
+                user = await self.auth_user()
         return make_token(
             settings.ACCESS_TOKEN_EXPIRE_MINUTES,
             settings.JWT_SECRET_KEY,

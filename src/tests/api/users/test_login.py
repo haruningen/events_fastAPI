@@ -27,6 +27,18 @@ class TestUsersLogin(BaseTestCase):
         data = response.json()
         assert 'access_token' in data and 'refresh_token' in data
 
+    async def test_login_user_tfa_enabled(self, client: AsyncClient) -> None:
+        user = UserLoginFactory()
+        await User.create(
+            email=user['email'],
+            hashed_password=make_hashed_password(user['password']),
+            verified=True,
+            tfa_enabled=True,
+        )
+        response = await self._request(client, json=user)
+        assert response.status_code == status.HTTP_200_OK
+        assert response.json() == {'otp_required': True}
+
     async def test_login_user_not_exit(self, client: AsyncClient) -> None:
         user = UserLoginFactory()
         response = await self._request(client, json=user)
