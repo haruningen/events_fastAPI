@@ -11,6 +11,7 @@ from config import settings
 
 DeclarativeBaseType = TypeVar('DeclarativeBaseType', bound='DeclarativeBase')
 
+
 class DeclarativeBase:
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:

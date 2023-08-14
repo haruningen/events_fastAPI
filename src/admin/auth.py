@@ -5,19 +5,19 @@ from starlette.requests import Request
 from starlette.responses import RedirectResponse
 
 from config import settings
-from connections import async_session
 from models import User
 from utils.users import make_token
 
 
 class AdminAuth(AuthenticationBackend):
+
     async def login(self, request: Request) -> bool:
         form = await request.form()
         username, password = form['username'], form['password']
         assert username and isinstance(username, str), 'username must be provided'
         assert password and isinstance(password, str), 'password must be provided'
 
-        user = await User.first(email=username)
+        user: Optional[User] = await User.first(email=username)
 
         if not user:
             return False
@@ -41,5 +41,6 @@ class AdminAuth(AuthenticationBackend):
     async def authenticate(self, request: Request) -> Optional[RedirectResponse]:
         token = request.session.get("token")
 
-        if not token:
-            return RedirectResponse(request.url_for("admin:login"), status_code=302)
+        if token:
+            return None
+        return RedirectResponse(request.url_for("admin:login"), status_code=302)

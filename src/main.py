@@ -1,16 +1,16 @@
 import uvicorn
 from fastapi import FastAPI
+from sqladmin import Admin
 from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.staticfiles import StaticFiles
-from sqladmin import Admin
 
-from admin import UserAdmin, EventAdmin, AdminAuth
+from admin import AdminAuth, EventAdmin, UserAdmin
 from api import router as api
 from config import settings
+from connections import async_engine
 from data import load_data_task  # noqa
 from errors import unexpected_exceptions_handler
-from connections import async_engine
 from worker import celery  # noqa
 
 app = FastAPI()
