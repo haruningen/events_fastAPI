@@ -9,8 +9,7 @@ from worker import celery
 logger = getLogger(__name__)
 
 
-@celery.task(name='load_data')  # type: ignore
-async def load_data() -> dict:
+async def load_data() -> None:
     handlers: list[DataSource] = await DataSource.get_list()
     for handler in handlers:
         module_name, class_name = handler.handler.rsplit('.', 1)
@@ -18,5 +17,8 @@ async def load_data() -> dict:
         cls = getattr(module, class_name)
         await DataContext(cls(ds=handler)).load_events()
 
-    return {'status': True}
 
+@celery.task(name='load_data_task')  # type: ignore
+def load_data_task() -> None:
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(load_data())

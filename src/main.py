@@ -6,9 +6,9 @@ from starlette.staticfiles import StaticFiles
 
 from api import router as api
 from config import settings
+from data import load_data_task  # noqa
 from errors import unexpected_exceptions_handler
-from worker import celery # noqa
-from data import load_data # noqa
+from worker import celery  # noqa
 
 app = FastAPI()
 
@@ -32,11 +32,6 @@ app.mount(
 )
 
 app.include_router(api, prefix=str(settings.API_ROOT))
-#
-# # TODO replace with beat
-# @app.post("/tasks", status_code=201)
-# async def run_task() -> None:
-#     await load_data()
 
 # if settings.ENVIRONMENT == 'LOCAL' and __name__ == '__main__':
 if __name__ == '__main__':
