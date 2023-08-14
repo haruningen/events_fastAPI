@@ -1,15 +1,15 @@
 """initial
 
-Revision ID: ee98ea188fd2
+Revision ID: 2a7d5c026929
 Revises:
-Create Date: 2023-08-01 19:43:35.912670
+Create Date: 2023-08-10 22:14:17.451678
 
 """
 import sqlalchemy as sa
 from alembic import op
+from sqlalchemy.dialects import postgresql
 
-# revision identifiers, used by Alembic.
-revision = 'ee98ea188fd2'
+revision = '2a7d5c026929'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -17,19 +17,30 @@ depends_on = None
 
 def upgrade() -> None:
     op.create_table(
+        'data_source',
+        sa.Column('id', sa.Integer(), nullable=False),
+        sa.Column('name', sa.String(length=32), nullable=True),
+        sa.Column('handler', sa.String(length=1024), nullable=True),
+        sa.Column('api_url', sa.String(length=1024), nullable=True),
+        sa.Column('secret', sa.String(length=1024), nullable=True),
+        sa.Column('config', postgresql.JSONB(astext_type=sa.Text()), nullable=True),  # type: ignore[no-untyped-call]
+        sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table(
         'events',
         sa.Column('id', sa.Integer(), nullable=False),
         sa.Column('created_at', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'), nullable=False),
         sa.Column('updated_at', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'), nullable=False),
         sa.Column('name', sa.String(length=100), nullable=True),
         sa.Column('summary', sa.String(length=1000), nullable=True),
-        sa.Column('image_url', sa.String(length=255), nullable=True),
+        sa.Column('image_path', sa.String(length=255), nullable=True),
         sa.Column('source', sa.String(length=100), nullable=True),
         sa.Column('source_id', sa.String(length=100), nullable=True),
         sa.Column('online_event', sa.Boolean(), server_default='False', nullable=False),
         sa.Column('start', sa.TIMESTAMP(timezone=True), nullable=True),
         sa.Column('end', sa.TIMESTAMP(timezone=True), nullable=True),
-        sa.PrimaryKeyConstraint('id')
+        sa.PrimaryKeyConstraint('id'),
+        sa.UniqueConstraint('source', 'source_id', name='ix_unique_source_source_id')
     )
     op.create_table(
         'users',
@@ -37,10 +48,8 @@ def upgrade() -> None:
         sa.Column('email', sa.String(length=45), nullable=True),
         sa.Column('hashed_password', sa.String(length=1024), nullable=True),
         sa.Column('verified', sa.Boolean(), server_default='False', nullable=False),
-        sa.Column('created_at', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'),
-                  nullable=False),
-        sa.Column('updated_at', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'),
-                  nullable=False),
+        sa.Column('created_at', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'), nullable=False),
+        sa.Column('updated_at', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'), nullable=False),
         sa.Column('avatar_path', sa.String(length=255), nullable=True),
         sa.Column('tfa_secret', sa.String(length=32), nullable=True),
         sa.Column('tfa_enabled', sa.Boolean(), server_default='False', nullable=False),
@@ -86,3 +95,4 @@ def downgrade() -> None:
     op.drop_index(op.f('ix_users_email'), table_name='users')
     op.drop_table('users')
     op.drop_table('events')
+    op.drop_table('data_source')

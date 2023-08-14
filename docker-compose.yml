@@ -25,9 +25,43 @@ services:
       - ./src:/app
     depends_on:
       - postgres
+      - redis
+      - beat
+      - worker
     ports:
       - "8080:8080"
     command: uvicorn --port 8080 --host 0.0.0.0 --loop uvloop --reload main:app
+
+  redis:
+    image: redis:7-alpine
+
+  beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: fastapi_events_celery_beat
+    command: celery -A main.celery beat -l debug
+    volumes:
+      - ./src:/app
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - postgres
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: fastapi_events_celery_worker
+    command: celery -A main.celery worker --loglevel=debug
+    volumes:
+      - ./src:/app
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - postgres
 
 volumes:
   events_fastAPI_pgdata:

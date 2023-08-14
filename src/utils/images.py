@@ -1,5 +1,6 @@
 from io import BytesIO
 from pathlib import Path, PosixPath
+from typing import Optional
 
 from aiohttp import ClientSession, InvalidURL
 from fastapi.datastructures import UploadFile
@@ -46,14 +47,17 @@ async def save_image(image: UploadFile, name: str, path: Path) -> str:
     return filename
 
 
-async def save_image_by_url(image: str, name: str, path: Path) -> str:
+async def save_image_by_url(image: str, name: str, path: Optional[Path] = None) -> str:
     """Saves an image from URL to local storage."""
 
     _image = await _get_image_by_url(image)
     filename = f'{name}.{_image.format.lower()}'
 
     # Process an image saving
-    _image.save(f'{settings.MEDIA_ROOT}/{path}/{filename}')
+    if path:
+        _image.save(f'{settings.MEDIA_ROOT}/{path}/{filename}')
+    else:
+        _image.save(f'{settings.MEDIA_ROOT}/{filename}')
     _image.close()
 
     return filename

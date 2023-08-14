@@ -8,8 +8,10 @@ from sqladmin import Admin
 from admin import UserAdmin, EventAdmin, AdminAuth
 from api import router as api
 from config import settings
+from data import load_data_task  # noqa
 from errors import unexpected_exceptions_handler
 from connections import async_engine
+from worker import celery  # noqa
 
 app = FastAPI()
 
