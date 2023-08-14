@@ -3,12 +3,21 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.staticfiles import StaticFiles
+from sqladmin import Admin
 
+from admin import UserAdmin, EventAdmin, AdminAuth
 from api import router as api
 from config import settings
 from errors import unexpected_exceptions_handler
+from connections import async_engine
 
 app = FastAPI()
+
+authentication_backend = AdminAuth(secret_key=settings.SECRET_KEY)
+
+admin = Admin(app=app, engine=async_engine, authentication_backend=authentication_backend)
+admin.add_view(UserAdmin)
+admin.add_view(EventAdmin)
 
 origins = [
     settings.FRONTEND_URL,
