@@ -83,7 +83,7 @@ class BaseTestCase(PostgresMixin, FactoriesMixin):
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
         assert response.json() == {'detail': 'Unauthorized'}
 
-    async def _test_unauthorized_with_fake_token(self, client: AsyncClient, **kwargs: Any) -> None:
-        response = await self._request(client, **kwargs)
+    async def _test_unauthorized_with_fake_token(self, client: AsyncClient) -> None:
+        response = await self._request(client, token='fake')
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
         assert response.json() == {'detail': 'Could not validate credentials'}
