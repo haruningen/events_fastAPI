@@ -13,9 +13,10 @@ class TestAvatarUpload(BaseTestCase):
     async def _request(self, client: AsyncClient, **kwargs: Any) -> Response:
         token = kwargs.pop('token', None)
         image_type = kwargs.pop('image_type', None)
+        headers = {'Authorization': f'Bearer {token}'} if token else {}
         return await client.post(
             self.url_path(),
-            headers={'Authorization': f'Bearer {token}'} if token else {},
+            headers=headers,
             files={'image': (image_type, generate_test_image())}
         )
 

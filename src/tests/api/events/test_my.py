@@ -11,9 +11,10 @@ class TestEventsMy(BaseTestCase):
 
     async def _request(self, client: AsyncClient, **kwargs: Any) -> Response:
         token = kwargs.pop('token', None)
+        headers = {'Authorization': f'Bearer {token}'} if token else {}
         return await client.get(
             self.url_path(),
-            headers={'Authorization': f'Bearer {token}'} if token else {},
+            headers=headers,
         )
 
     async def test_events_my_success(self, client: AsyncClient) -> None:

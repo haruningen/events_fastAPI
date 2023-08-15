@@ -1,7 +1,6 @@
 from typing import Any
 
 from httpx import AsyncClient, Response
-from pyotp import TOTP
 from starlette import status
 
 from tests.mixins import BaseTestCase
@@ -13,16 +12,17 @@ class TestUsers(BaseTestCase):
     async def _request(self, client: AsyncClient, **kwargs: Any) -> Response:
         token = kwargs.pop('token', None)
         otp_code = kwargs.pop('otp_code', None)
+        headers = {'Authorization': f'Bearer {token}'} if token else {}
         return await client.post(
             self.url_path(),
-            headers={'Authorization': f'Bearer {token}'} if token else {},
+            headers=headers,
             json={'otp_code': otp_code} if otp_code else {}
         )
 
     async def test_tfa_enable_with_code_success(self, client: AsyncClient) -> None:
         user = await self.auth_user_tfa()
         token = await self.authorized_user_token(user)
-        response = await self._request(client, token=token, otp_code=TOTP(user.tfa_secret).now())
+        response = await self._request(client, token=token, otp_code=self.get_otp_code(user.tfa_secret))
         assert response.status_code == status.HTTP_200_OK
         data = response.json()
         assert 'otp_auth_url' in data

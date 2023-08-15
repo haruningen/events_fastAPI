@@ -12,9 +12,10 @@ class TestEventDetail(BaseTestCase):
     async def _request(self, client: AsyncClient, **kwargs: Any) -> Response:
         event_id = kwargs.pop('event_id', 1)
         token = kwargs.pop('token', None)
+        headers = {'Authorization': f'Bearer {token}'} if token else {}
         return await client.get(
             self.url_path(event_id=event_id),
-            headers={'Authorization': f'Bearer {token}'} if token else {},
+            headers=headers,
         )
 
     async def test_event_detail_success(self, client: AsyncClient) -> None:

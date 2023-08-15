@@ -2,6 +2,7 @@ from typing import Any, Optional
 
 import pytest
 from httpx import AsyncClient, Response
+from pyotp import TOTP, random_base32
 from starlette import status
 from starlette.datastructures import URLPath
 
@@ -10,7 +11,7 @@ from connections.postgresql import Base, async_engine, async_session
 from gen_typing import YieldAsyncFixture
 from main import app
 from models import Event, User
-from tests.fixtures.factories import EventFactory, UserFactory, UserTFAFactory
+from tests.fixtures.factories import EventFactory, UserFactory
 from utils.users import make_token
 
 
@@ -32,14 +33,17 @@ class FactoriesMixin:
     """Class for accessing to factories"""
 
     @staticmethod
+    def get_otp_code(tfa_secret: str) -> str:
+        return TOTP(tfa_secret).now()
+
+    @staticmethod
     async def auth_user(**kwargs: str | int | dict) -> User:
         data = UserFactory(**kwargs)
         return await User.create(**data)
 
-    @staticmethod
-    async def auth_user_tfa(**kwargs: str | int | dict) -> User:
-        data = UserTFAFactory(**kwargs)
-        return await User.create(**data)
+    @classmethod
+    async def auth_user_tfa(cls, **kwargs: str | int | dict) -> User:
+        return await cls.auth_user(tfa_secret=random_base32(), tfa_enabled=True)
 
     @staticmethod
     async def event(**kwargs: str | int | dict) -> Event:
