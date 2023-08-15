@@ -3,7 +3,10 @@ from typing import Optional
 
 from pydantic import BaseModel, model_validator
 
-__all__ = ('ParsedEventTicketmasterSchema', 'ParsedEventPredictHQSchema',)
+__all__ = (
+    'ParsedEventTicketmasterSchema', 'ParsedEventPredictHQSchema',
+    'TicketmasterConfigSchema', 'PredictHQConfigSchema'
+)
 
 
 class ParsedEventBaseSchema(BaseModel):
@@ -16,8 +19,15 @@ class ParsedEventBaseSchema(BaseModel):
     end: Optional[datetime] = None
 
 
-class ParsedEventTicketmasterSchema(ParsedEventBaseSchema):
+class TicketmasterConfigSchema(BaseModel):
+    size: int
 
+
+class PredictHQConfigSchema(BaseModel):
+    limit: int
+
+
+class ParsedEventTicketmasterSchema(ParsedEventBaseSchema):
     source: str = 'ticketmaster'
 
     @model_validator(mode='before')
@@ -46,7 +56,6 @@ class ParsedEventTicketmasterSchema(ParsedEventBaseSchema):
 
 
 class ParsedEventPredictHQSchema(ParsedEventBaseSchema):
-
     source: str = 'predicthq'
 
     @model_validator(mode='before')
