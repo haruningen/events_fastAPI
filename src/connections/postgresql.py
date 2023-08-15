@@ -65,7 +65,6 @@ class DeclarativeBase:
     async def create(
             cls,
             _db: Optional[AsyncSession] = None,
-            _obj: Optional[DeclarativeBaseType] = None,
             _commit: bool = True,
             _refresh: bool = True,
             **kwargs: Any
@@ -74,7 +73,7 @@ class DeclarativeBase:
 
         db: AsyncSession = _db or cls._get_db()
         try:
-            obj = _obj or cls.__call__(**kwargs)
+            obj = cls.__call__(**kwargs)
             db.add(obj)
 
             if _commit:

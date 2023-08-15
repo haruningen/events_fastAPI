@@ -3,6 +3,7 @@ from typing import Optional
 
 from aiohttp import ClientSession
 
+from config import settings
 from data.base import BaseDataHandler
 from data.schemas import ParsedEventPredictHQSchema
 
@@ -21,18 +22,18 @@ class PredictHQDataHandler(BaseDataHandler):
         headers = {
             'Authorization': f'Bearer {self.ds.secret}'
         }
-        limit = self.ds.config and self.ds.config.get('limit') or 1
+        limit = self.config.get('limit', 1) if self.config else 1
         params = {
             'active.gt': datetime.today().strftime('%Y-%m-%d'),
             'offset': page * limit
         }
         next_page = True
 
-        while 3 > page and next_page:
+        while settings.DATA_HANDLER_TOTAL_PAGE > page and next_page:
             page += 1
             params['offset'] = page * limit
-            if self.ds.config:
-                params = self.ds.config | params
+            if self.config:
+                params = self.config | params
             res, next_page = await self.fetch_events(session, headers, params)
 
             for i in res:

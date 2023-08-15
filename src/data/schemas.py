@@ -21,7 +21,7 @@ class ParsedEventTicketmasterSchema(ParsedEventBaseSchema):
     source: str = 'ticketmaster'
 
     @model_validator(mode='before')
-    def process_data(cls, data: dict) -> 'ParsedEventTicketmasterSchema':
+    def process_data(cls, data: dict) -> dict:
         new_data: dict = {
             'online_event': data.get('place') is None,
             'source_id': data['id'],
@@ -34,15 +34,15 @@ class ParsedEventTicketmasterSchema(ParsedEventBaseSchema):
             new_data['summary'] = data['description']
         if data['dates'].get('start'):
             if data['dates']['start'].get('dateTime'):
-                new_data['start'] = datetime.strptime(data['dates']['start']['dateTime'], '%Y-%m-%dT%H:%M:%SZ')
+                new_data['start'] = data['dates']['start']['dateTime']
             if data['dates']['start'].get('localDate'):
-                new_data['start'] = datetime.strptime(data['dates']['start']['localDate'], '%Y-%m-%d')
+                new_data['start'] = data['dates']['start']['localDate']
         if data['dates'].get('end'):
             if data['dates']['end'].get('dateTime'):
-                new_data['end'] = datetime.strptime(data['dates']['end']['dateTime'], '%Y-%m-%dT%H:%M:%SZ')
+                new_data['end'] = data['dates']['end']['dateTime']
             if data['dates']['end'].get('localDate'):
-                new_data['end'] = datetime.strptime(data['dates']['end']['localDate'], '%Y-%m-%d')
-        return new_data  # type: ignore[return-value]
+                new_data['end'] = data['dates']['end']['localDate'], '%Y-%m-%d'
+        return new_data
 
 
 class ParsedEventPredictHQSchema(ParsedEventBaseSchema):
@@ -50,7 +50,7 @@ class ParsedEventPredictHQSchema(ParsedEventBaseSchema):
     source: str = 'predicthq'
 
     @model_validator(mode='before')
-    def process_data(cls, data: dict) -> 'ParsedEventPredictHQSchema':
+    def process_data(cls, data: dict) -> dict:
         new_data: dict = {
             'online_event': data.get('location') is None,
             'source_id': data['id'],
@@ -59,4 +59,4 @@ class ParsedEventPredictHQSchema(ParsedEventBaseSchema):
             'start': data['start'],
             'end': data['end'],
         }
-        return new_data  # type: ignore[return-value]
+        return new_data

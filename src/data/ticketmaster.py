@@ -3,6 +3,7 @@ from typing import Optional
 
 from aiohttp import ClientSession
 
+from config import settings
 from utils.images import save_image_by_url
 
 from .base import BaseDataHandler
@@ -34,11 +35,11 @@ class TicketmasterDataHandler(BaseDataHandler):
         }
         next_page = True
 
-        while 3 > page and next_page:
+        while settings.DATA_HANDLER_TOTAL_PAGE > page and next_page:
             page += 1
             params['page'] = page
-            if self.ds.config:
-                params = self.ds.config | params
+            if self.config:
+                params = self.config | params
             res, next_page = await self.fetch_events(session, headers, params)
 
             for i in res:
