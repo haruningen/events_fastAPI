@@ -10,7 +10,7 @@ from utils.users import token_decode
 
 __all__ = (
     'get_db',
-    'get_authed_user',
+    'GetAuthUser',
     'Pagination',
     'PaginationDeps',
     'valid_content_length',
@@ -20,20 +20,16 @@ __all__ = (
 _10_MB = (1024 * 1024) * 10  # 10 Mb size limit
 
 
-async def get_db() -> AsyncGenerator:
-    db: AsyncSession = async_session()
-    try:
-        yield db
-    finally:
-        await db.close()
+class GetAuthUser:
 
+    def __init__(self, required: bool = True) -> None:
+        self.required = required
 
-def get_authed_user(required: bool = True) -> Callable:
-    async def _get_user(
+    async def __call__(
+            self,
             token: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False))
     ) -> Optional[User]:
-
-        if not required and not token:
+        if not self.required and not token:
             return None
 
         if not token:
@@ -47,7 +43,13 @@ def get_authed_user(required: bool = True) -> Callable:
                                 detail='Unauthorized')
         return user
 
-    return _get_user
+
+async def get_db() -> AsyncGenerator:
+    db: AsyncSession = async_session()
+    try:
+        yield db
+    finally:
+        await db.close()
 
 
 async def verify_token(

@@ -8,6 +8,7 @@ __all__ = ('UserBaseSchema', 'TokenPayload', 'VerifyEmailSchema', 'OTPSchema',)
 class UserBaseSchema(BaseModel):
     email: EmailStr
     avatar_url: Optional[str]
+    tfa_enabled: bool
 
     model_config = ConfigDict(
         from_attributes=True

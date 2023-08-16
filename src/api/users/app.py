@@ -5,7 +5,7 @@ import pyotp
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.depends import get_authed_user, get_db, valid_content_length
+from api.depends import get_db, valid_content_length, GetAuthUser
 from api.schemas import MessageSchema
 from api.users.schemas import OTPSchema, UserBaseSchema, VerifyEmailSchema
 from config import settings
@@ -18,13 +18,13 @@ router = APIRouter(tags=['users'])
 
 
 @router.get('/me', summary='Get current user info', response_model=UserBaseSchema)
-async def get_user(user: User = Depends(get_authed_user())) -> User:
+async def get_user(user: User = Depends(GetAuthUser())) -> User:
     return user
 
 
 @router.post('/me/avatar', dependencies=[Depends(valid_content_length)], tags=['users'])
 async def upload_user_avatar(
-        image: UploadFile = File(...), user: User = Depends(get_authed_user())
+        image: UploadFile = File(...), user: User = Depends(GetAuthUser())
 ) -> dict[str, Optional[str]]:
     ext = Path(image.filename).suffix.lower()  # type: ignore[arg-type]
     if ext not in settings.IMAGE_EXTENSIONS:
@@ -57,7 +57,7 @@ async def validate_email_confirm(verify_email: VerifyEmailSchema, _db: AsyncSess
 
 
 @router.post('/otp/enable')
-async def enable_tfa(data: OTPSchema, user: User = Depends(get_authed_user())) -> dict:
+async def enable_tfa(data: OTPSchema, user: User = Depends(GetAuthUser())) -> dict:
     if user.tfa_enabled:
         verify_otp(user.tfa_secret, data.otp_code)
     tfa_secret = pyotp.random_base32()
@@ -68,7 +68,7 @@ async def enable_tfa(data: OTPSchema, user: User = Depends(get_authed_user())) -
 
 
 @router.post('/otp/disable')
-async def disable_tfa(data: OTPSchema, user: User = Depends(get_authed_user())) -> dict:
+async def disable_tfa(data: OTPSchema, user: User = Depends(GetAuthUser())) -> dict:
     if user.tfa_enabled:
         verify_otp(user.tfa_secret, data.otp_code)
     await user.update(User.email == user.email, tfa_secret=None, tfa_enabled=False)
