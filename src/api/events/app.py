@@ -31,7 +31,7 @@ async def get_events(pagination: PaginationDeps) -> dict[str, Any]:
 )
 async def get_user_events(
         pagination: PaginationDeps,
-        user: User = Depends(get_authed_user),
+        user: User = Depends(get_authed_user()),
 ) -> dict[str, Any]:
     events_list: list[Event] = await Event.get_list(
         Event.users.any(id=user.id),
@@ -43,7 +43,7 @@ async def get_user_events(
 
 
 @router.get('/{event_id}', summary='Get event info by id', response_model=EventDetailScheme)
-async def get_event(event_id: int, user: User = Depends(get_authed_user(False))) -> Event:
+async def get_event(event_id: int, user: User = Depends(get_authed_user(required=False))) -> Event:
     event: Optional[Event] = await Event.get(event_id)  # type: ignore[func-returns-value]
     if not event:
         raise HTTPException(
@@ -58,7 +58,7 @@ async def get_event(event_id: int, user: User = Depends(get_authed_user(False)))
 @router.post('/attend/{event_id}', summary='Attach event to user', response_model=MessageSchema)
 async def attend_event(
         event_id: int,
-        user: User = Depends(get_authed_user),
+        user: User = Depends(get_authed_user()),
         _db: AsyncSession = Depends(get_db)
 ) -> dict[str, str]:
     event: Optional[Event] = await Event.get(event_id)  # type: ignore[func-returns-value]

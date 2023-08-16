@@ -1,4 +1,4 @@
-from typing import Annotated, AsyncGenerator, Optional
+from typing import Annotated, AsyncGenerator, Callable, Optional
 
 from fastapi import Depends, Header, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -28,7 +28,7 @@ async def get_db() -> AsyncGenerator:
         await db.close()
 
 
-def get_authed_user(required: bool = True):
+def get_authed_user(required: bool = True) -> Callable:
     async def _get_user(
             token: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False))
     ) -> Optional[User]:
