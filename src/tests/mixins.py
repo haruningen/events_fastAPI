@@ -2,6 +2,7 @@ from typing import Any, Optional
 
 import pytest
 from httpx import AsyncClient, Response
+from pyotp import TOTP, random_base32
 from starlette import status
 from starlette.datastructures import URLPath
 
@@ -32,18 +33,29 @@ class FactoriesMixin:
     """Class for accessing to factories"""
 
     @staticmethod
+    def get_otp_code(tfa_secret: str) -> str:
+        return TOTP(tfa_secret).now()
+
+    @staticmethod
     async def auth_user(**kwargs: str | int | dict) -> User:
         data = UserFactory(**kwargs)
         return await User.create(**data)
+
+    @classmethod
+    async def auth_user_tfa(cls, **kwargs: str | int | dict) -> User:
+        return await cls.auth_user(tfa_secret=random_base32(), tfa_enabled=True)
 
     @staticmethod
     async def event(**kwargs: str | int | dict) -> Event:
         data = EventFactory(**kwargs)
         return await Event.create(**data)
 
-    async def authorized_user_token(self, user: Optional[User] = None) -> str:
+    async def authorized_user_token(self, user: Optional[User] = None, tfa_enabled: bool = False) -> str:
         if not user:
-            user = await self.auth_user()
+            if tfa_enabled:
+                user = await self.auth_user_tfa()
+            else:
+                user = await self.auth_user()
         return make_token(
             settings.ACCESS_TOKEN_EXPIRE_MINUTES,
             settings.JWT_SECRET_KEY,
@@ -75,7 +87,7 @@ class BaseTestCase(PostgresMixin, FactoriesMixin):
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
         assert response.json() == {'detail': 'Unauthorized'}
 
-    async def _test_unauthorized_with_fake_token(self, client: AsyncClient, **kwargs: Any) -> None:
-        response = await self._request(client, **kwargs)
+    async def _test_unauthorized_with_fake_token(self, client: AsyncClient) -> None:
+        response = await self._request(client, token='fake')
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
         assert response.json() == {'detail': 'Could not validate credentials'}
