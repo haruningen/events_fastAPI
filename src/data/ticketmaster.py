@@ -15,6 +15,7 @@ class TicketmasterDataHandler(BaseDataHandler):
     The Strategy for get events from Ticketmaster
     """
 
+    config: TicketmasterConfigSchema
     config_schema = TicketmasterConfigSchema
 
     async def to_event(self, data: dict) -> dict:

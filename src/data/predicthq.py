@@ -13,6 +13,7 @@ class PredictHQDataHandler(BaseDataHandler):
         The Strategy for get events from PredictHQ
     """
 
+    config: PredictHQConfigSchema
     config_schema = PredictHQConfigSchema
 
     async def to_event(self, data: dict) -> dict:
