@@ -5,7 +5,7 @@ from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.staticfiles import StaticFiles
 
-from admin import AdminAuth, EventAdmin, UserAdmin, DataSourceAdmin
+from admin import AdminAuth, DataSourceAdmin, EventAdmin, UserAdmin
 from api import router as api
 from config import settings
 from connections import async_engine
