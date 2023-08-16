@@ -1,4 +1,4 @@
-from typing import Annotated, AsyncGenerator
+from typing import Annotated, AsyncGenerator, Optional
 
 from fastapi import Depends, Header, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -28,19 +28,26 @@ async def get_db() -> AsyncGenerator:
         await db.close()
 
 
-async def get_authed_user(
-        token: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False))
-) -> User:
-    if not token:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                            detail='Unauthorized')
-    token_data = token_decode(token.credentials)
-    user = await User.get(token_data.user_id)  # type: ignore[func-returns-value]
-    # Check if the user exist
-    if not user:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                            detail='Unauthorized')
-    return user
+def get_authed_user(required: bool = True):
+    async def _get_user(
+            token: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False))
+    ) -> Optional[User]:
+
+        if not required and not token:
+            return None
+
+        if not token:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                                detail='Unauthorized')
+        token_data = token_decode(token.credentials)
+        user = await User.get(token_data.user_id)  # type: ignore[func-returns-value]
+        # Check if the user exist
+        if not user:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                                detail='Unauthorized')
+        return user
+
+    return _get_user
 
 
 async def verify_token(

@@ -43,14 +43,15 @@ async def get_user_events(
 
 
 @router.get('/{event_id}', summary='Get event info by id', response_model=EventDetailScheme)
-async def get_event(event_id: int, user: User = Depends(get_authed_user)) -> Event:
+async def get_event(event_id: int, user: User = Depends(get_authed_user(False))) -> Event:
     event: Optional[Event] = await Event.get(event_id)  # type: ignore[func-returns-value]
     if not event:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f'Event with ID {event_id} does not exist'
         )
-    event.want_go = any(eu for eu in event.users if user.id == eu.id)  # type: ignore[attr-defined]
+    if user:
+        event.want_go = any(eu for eu in event.users if user.id == eu.id)  # type: ignore[attr-defined]
     return event
 
 
