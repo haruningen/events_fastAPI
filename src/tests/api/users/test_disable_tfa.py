@@ -16,7 +16,7 @@ class TestUsers(BaseTestCase):
         return await client.post(
             self.url_path(),
             headers=headers,
-            json={'otp_code': otp_code}
+            json={'otp_code': otp_code} | kwargs,
         )
 
     async def test_tfa_disable_success(self, client: AsyncClient) -> None:

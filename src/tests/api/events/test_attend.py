@@ -16,6 +16,7 @@ class TestEventAttend(BaseTestCase):
         return await client.post(
             self.url_path(event_id=event_id),
             headers=headers,
+            **kwargs,
         )
 
     async def test_event_attend_success(self, client: AsyncClient) -> None:

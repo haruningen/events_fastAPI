@@ -15,6 +15,7 @@ class TestEventsMy(BaseTestCase):
         return await client.get(
             self.url_path(),
             headers=headers,
+            **kwargs,
         )
 
     async def test_events_my_success(self, client: AsyncClient) -> None:

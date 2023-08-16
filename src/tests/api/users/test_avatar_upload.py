@@ -17,7 +17,8 @@ class TestAvatarUpload(BaseTestCase):
         return await client.post(
             self.url_path(),
             headers=headers,
-            files={'image': (image_type, generate_test_image())}
+            files={'image': (image_type, generate_test_image())},
+            **kwargs,
         )
 
     async def test_user_unauthorized_without_token(self, client: AsyncClient) -> None:

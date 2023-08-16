@@ -16,6 +16,7 @@ class TestEventDetail(BaseTestCase):
         return await client.get(
             self.url_path(event_id=event_id),
             headers=headers,
+            **kwargs,
         )
 
     async def test_event_detail_success(self, client: AsyncClient) -> None:

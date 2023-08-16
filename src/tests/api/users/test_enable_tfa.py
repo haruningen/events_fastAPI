@@ -16,7 +16,7 @@ class TestUsers(BaseTestCase):
         return await client.post(
             self.url_path(),
             headers=headers,
-            json={'otp_code': otp_code} if otp_code else {}
+            json={'otp_code': otp_code} if otp_code else {} | kwargs
         )
 
     async def test_tfa_enable_with_code_success(self, client: AsyncClient) -> None:

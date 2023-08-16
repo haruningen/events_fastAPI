@@ -14,7 +14,7 @@ class TestUsers(BaseTestCase):
         otp_code = kwargs.pop('otp_code', None)
         return await client.post(
             self.url_path(),
-            json={'email': email, 'otp_code': otp_code} if otp_code else {'email': email, 'otp_code': ''}
+            json={'email': email, 'otp_code': otp_code} if otp_code else {'email': email, 'otp_code': ''} | kwargs
         )
 
     async def test_tfa_login_success(self, client: AsyncClient) -> None:
