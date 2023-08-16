@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
 
 __all__ = ('router',)
 
@@ -33,7 +33,9 @@ router = APIRouter(tags=['auth'])
 
 
 @router.post('/signup', summary='Create new user', response_model=UserResponse)
-async def create_user(data: CreateUserSchema, _db: AsyncSession = Depends(get_db)) -> User:
+async def create_user(data: CreateUserSchema,
+                      background_tasks: BackgroundTasks,
+                      _db: AsyncSession = Depends(get_db)) -> User:
     user = await get_user_by_email(data.email)
     # Check if the user exist
     if user:
@@ -45,7 +47,7 @@ async def create_user(data: CreateUserSchema, _db: AsyncSession = Depends(get_db
         email=data.email,
         hashed_password=make_hashed_password(data.password)
     )
-    verify_email(data.email)
+    background_tasks.add_task(verify_email, data.email)
     return user
 
 
@@ -92,15 +94,15 @@ async def refresh(data: RefreshTokenSchema, _db: AsyncSession = Depends(get_db))
 
 
 @router.post('/verify_email', summary='For test sending email verification link')
-async def send_verify_email(data: EmailSchema) -> dict:
-    verify_email(data.email)
+async def send_verify_email(data: EmailSchema, background_tasks: BackgroundTasks) -> dict:
+    background_tasks.add_task(verify_email, data.email)
     return {'message': 'Verify email link send to email'}
 
 
 @router.post('/reset_password', summary='Send reset password link to user email', response_model=MessageSchema)
-async def send_reset_password(data: EmailSchema) -> dict:
-    reset_password(data.email)
-    return {'message': 'Reset password link send to email'}
+async def send_reset_password(data: EmailSchema, background_tasks: BackgroundTasks) -> dict:
+    background_tasks.add_task(reset_password, data.email)
+    return {'message': 'Reset password link sent to email'}
 
 
 @router.post('/reset_password_confirm', summary='Confirm user reset password by hash', response_model=MessageSchema)
