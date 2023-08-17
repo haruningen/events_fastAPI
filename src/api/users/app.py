@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.depends import get_db, valid_content_length, GetAuthUser
 from api.schemas import MessageSchema
-from api.users.schemas import OTPSchema, UserBaseSchema, VerifyEmailSchema
+from api.users.schemas import OTPSchema, UserBaseSchema, VerifyEmailSchema, OTPEnableResponseSchema
 from config import settings
 from models import User
 from utils.users import get_user_from_email_link, verify_otp
@@ -56,7 +56,7 @@ async def validate_email_confirm(verify_email: VerifyEmailSchema, _db: AsyncSess
     return {'message': 'Email Verification Done'}
 
 
-@router.post('/otp/enable')
+@router.post('/otp/enable', summary='Enable user TFA and return OTP url', response_model=OTPEnableResponseSchema)
 async def enable_tfa(data: OTPSchema, user: User = Depends(GetAuthUser())) -> dict:
     if user.tfa_enabled:
         verify_otp(user.tfa_secret, data.otp_code)
@@ -67,7 +67,7 @@ async def enable_tfa(data: OTPSchema, user: User = Depends(GetAuthUser())) -> di
     return {'otp_auth_url': otp_auth_url}
 
 
-@router.post('/otp/disable')
+@router.post('/otp/disable', summary='Disable user TFA ', response_model=MessageSchema)
 async def disable_tfa(data: OTPSchema, user: User = Depends(GetAuthUser())) -> dict:
     if user.tfa_enabled:
         verify_otp(user.tfa_secret, data.otp_code)
