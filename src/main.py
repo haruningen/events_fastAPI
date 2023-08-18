@@ -1,16 +1,26 @@
 import uvicorn
 from fastapi import FastAPI
+from sqladmin import Admin
 from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.staticfiles import StaticFiles
 
+from admin import AdminAuth, DataSourceAdmin, EventAdmin, UserAdmin
 from api import router as api
 from config import settings
+from connections import async_engine
 from data import load_data_task  # noqa
 from errors import unexpected_exceptions_handler
 from worker import celery  # noqa
 
 app = FastAPI()
+
+authentication_backend = AdminAuth(secret_key=settings.SECRET_KEY)
+
+admin = Admin(app=app, engine=async_engine, authentication_backend=authentication_backend)
+admin.add_view(UserAdmin)
+admin.add_view(EventAdmin)
+admin.add_view(DataSourceAdmin)
 
 origins = [
     settings.FRONTEND_URL,
