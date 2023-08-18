@@ -3,14 +3,18 @@ from typing import Optional
 
 from aiohttp import ClientSession
 
+from config import settings
 from data.base import BaseDataHandler
-from data.schemas import ParsedEventPredictHQSchema
+from data.schemas import ParsedEventPredictHQSchema, PredictHQConfigSchema
 
 
 class PredictHQDataHandler(BaseDataHandler):
     """
         The Strategy for get events from PredictHQ
     """
+
+    config: PredictHQConfigSchema
+    config_schema = PredictHQConfigSchema
 
     async def to_event(self, data: dict) -> dict:
         schema = ParsedEventPredictHQSchema(**data)
@@ -21,22 +25,20 @@ class PredictHQDataHandler(BaseDataHandler):
         headers = {
             'Authorization': f'Bearer {self.ds.secret}'
         }
-        limit = self.ds.config and self.ds.config.get('limit') or 1
         params = {
             'active.gt': datetime.today().strftime('%Y-%m-%d'),
-            'offset': page * limit
+            'offset': page * self.config.limit
         }
         next_page = True
 
-        while 3 > page and next_page:
+        while settings.DATA_HANDLER_TOTAL_PAGE > page and next_page:
             page += 1
-            params['offset'] = page * limit
-            if self.ds.config:
-                params = self.ds.config | params
+            params['offset'] = page * self.config.limit
+            params['limit'] = self.config.limit
             res, next_page = await self.fetch_events(session, headers, params)
 
-            for i in res:
-                yield i
+            for event in res:
+                yield event
 
     async def fetch_events(self, session: ClientSession, headers: dict, params: dict) -> tuple[list[dict], bool]:
         events = list()

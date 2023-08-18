@@ -26,6 +26,7 @@ class Settings(BaseSettings):
     EMAIL_VERIFY_KEY: bytes
     RESET_PASSWORD_KEY: bytes
     PASSWORD_SALT: bytes = gensalt()
+    DATA_HANDLER_TOTAL_PAGE: int = 3
 
     # ---------- Storage ----------
 

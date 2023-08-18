@@ -3,16 +3,20 @@ from typing import Optional
 
 from aiohttp import ClientSession
 
+from config import settings
 from utils.images import save_image_by_url
 
 from .base import BaseDataHandler
-from .schemas import ParsedEventTicketmasterSchema
+from .schemas import ParsedEventTicketmasterSchema, TicketmasterConfigSchema
 
 
 class TicketmasterDataHandler(BaseDataHandler):
     """
     The Strategy for get events from Ticketmaster
     """
+
+    config: TicketmasterConfigSchema
+    config_schema = TicketmasterConfigSchema
 
     async def to_event(self, data: dict) -> dict:
         images_size = [i['width'] * i['height'] for i in data['images']]
@@ -34,15 +38,14 @@ class TicketmasterDataHandler(BaseDataHandler):
         }
         next_page = True
 
-        while 3 > page and next_page:
+        while settings.DATA_HANDLER_TOTAL_PAGE > page and next_page:
             page += 1
             params['page'] = page
-            if self.ds.config:
-                params = self.ds.config | params
+            params['size'] = self.config.size
             res, next_page = await self.fetch_events(session, headers, params)
 
-            for i in res:
-                yield i
+            for event in res:
+                yield event
 
     async def fetch_events(self, session: ClientSession, headers: dict, params: dict) -> tuple[list[dict], bool]:
         events = list()

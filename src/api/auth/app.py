@@ -102,7 +102,7 @@ async def send_verify_email(data: EmailSchema, background_tasks: BackgroundTasks
 @router.post('/reset_password', summary='Send reset password link to user email', response_model=MessageSchema)
 async def send_reset_password(data: EmailSchema, background_tasks: BackgroundTasks) -> dict:
     background_tasks.add_task(reset_password, data.email)
-    return {'message': 'Reset password link send to email'}
+    return {'message': 'Reset password link sent to email'}
 
 
 @router.post('/reset_password_confirm', summary='Confirm user reset password by hash', response_model=MessageSchema)
