@@ -1,4 +1,4 @@
-from typing import Annotated, AsyncGenerator
+from typing import Annotated, AsyncGenerator, Optional
 
 from fastapi import Depends, Header, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -10,7 +10,7 @@ from utils.users import token_decode
 
 __all__ = (
     'get_db',
-    'get_authed_user',
+    'GetAuthUser',
     'Pagination',
     'PaginationDeps',
     'valid_content_length',
@@ -20,27 +20,36 @@ __all__ = (
 _10_MB = (1024 * 1024) * 10  # 10 Mb size limit
 
 
+class GetAuthUser:
+
+    def __init__(self, required: bool = True) -> None:
+        self.required = required
+
+    async def __call__(
+            self,
+            token: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False))
+    ) -> Optional[User]:
+        if not self.required and not token:
+            return None
+
+        if not token:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                                detail='Unauthorized')
+        token_data = token_decode(token.credentials)
+        user = await User.get(token_data.user_id)  # type: ignore[func-returns-value]
+        # Check if the user exist
+        if not user:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                                detail='Unauthorized')
+        return user
+
+
 async def get_db() -> AsyncGenerator:
     db: AsyncSession = async_session()
     try:
         yield db
     finally:
         await db.close()
-
-
-async def get_authed_user(
-        token: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False))
-) -> User:
-    if not token:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                            detail='Unauthorized')
-    token_data = token_decode(token.credentials)
-    user = await User.get(token_data.user_id)  # type: ignore[func-returns-value]
-    # Check if the user exist
-    if not user:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                            detail='Unauthorized')
-    return user
 
 
 async def verify_token(

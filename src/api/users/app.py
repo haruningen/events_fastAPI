@@ -5,9 +5,9 @@ import pyotp
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.depends import get_authed_user, get_db, valid_content_length
+from api.depends import GetAuthUser, get_db, valid_content_length
 from api.schemas import MessageSchema
-from api.users.schemas import OTPSchema, UserBaseSchema, VerifyEmailSchema
+from api.users.schemas import OTPEnableResponseSchema, OTPSchema, UserBaseSchema, VerifyEmailSchema
 from config import settings
 from models import User
 from utils.users import get_user_from_email_link, verify_otp
@@ -18,13 +18,13 @@ router = APIRouter(tags=['users'])
 
 
 @router.get('/me', summary='Get current user info', response_model=UserBaseSchema)
-async def get_user(user: User = Depends(get_authed_user)) -> User:
+async def get_user(user: User = Depends(GetAuthUser())) -> User:
     return user
 
 
 @router.post('/me/avatar', dependencies=[Depends(valid_content_length)], tags=['users'])
 async def upload_user_avatar(
-        image: UploadFile = File(...), user: User = Depends(get_authed_user)
+        image: UploadFile = File(...), user: User = Depends(GetAuthUser())
 ) -> dict[str, Optional[str]]:
     ext = Path(image.filename).suffix.lower()  # type: ignore[arg-type]
     if ext not in settings.IMAGE_EXTENSIONS:
@@ -56,8 +56,8 @@ async def validate_email_confirm(verify_email: VerifyEmailSchema, _db: AsyncSess
     return {'message': 'Email Verification Done'}
 
 
-@router.post('/otp/enable')
-async def enable_tfa(data: OTPSchema, user: User = Depends(get_authed_user)) -> dict:
+@router.post('/otp/enable', summary='Enable user TFA and return OTP url', response_model=OTPEnableResponseSchema)
+async def enable_tfa(data: OTPSchema, user: User = Depends(GetAuthUser())) -> dict:
     if user.tfa_enabled:
         verify_otp(user.tfa_secret, data.otp_code)
     tfa_secret = pyotp.random_base32()
@@ -67,8 +67,8 @@ async def enable_tfa(data: OTPSchema, user: User = Depends(get_authed_user)) -> 
     return {'otp_auth_url': otp_auth_url}
 
 
-@router.post('/otp/disable')
-async def disable_tfa(data: OTPSchema, user: User = Depends(get_authed_user)) -> dict:
+@router.post('/otp/disable', summary='Disable user TFA ', response_model=MessageSchema)
+async def disable_tfa(data: OTPSchema, user: User = Depends(GetAuthUser())) -> dict:
     if user.tfa_enabled:
         verify_otp(user.tfa_secret, data.otp_code)
     await user.update(User.email == user.email, tfa_secret=None, tfa_enabled=False)

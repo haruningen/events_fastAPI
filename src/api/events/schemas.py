@@ -19,7 +19,7 @@ class EventSchema(BaseModel):
 
 
 class EventDetailScheme(EventSchema):
-    want_go: bool
+    want_go: Optional[bool] = None
 
 
 class EventsListSchema(BaseModel):
