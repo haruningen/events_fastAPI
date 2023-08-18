@@ -5,9 +5,9 @@ import pyotp
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.depends import get_db, valid_content_length, GetAuthUser
+from api.depends import GetAuthUser, get_db, valid_content_length
 from api.schemas import MessageSchema
-from api.users.schemas import OTPSchema, UserBaseSchema, VerifyEmailSchema, OTPEnableResponseSchema
+from api.users.schemas import OTPEnableResponseSchema, OTPSchema, UserBaseSchema, VerifyEmailSchema
 from config import settings
 from models import User
 from utils.users import get_user_from_email_link, verify_otp

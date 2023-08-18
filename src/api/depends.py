@@ -1,4 +1,4 @@
-from typing import Annotated, AsyncGenerator, Callable, Optional
+from typing import Annotated, AsyncGenerator, Optional
 
 from fastapi import Depends, Header, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer

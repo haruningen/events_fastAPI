@@ -3,7 +3,7 @@ from typing import Any, Optional
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.depends import PaginationDeps, get_db, GetAuthUser
+from api.depends import GetAuthUser, PaginationDeps, get_db
 from api.events.schemas import EventDetailScheme, EventsListSchema
 from api.schemas import MessageSchema
 from models import Event, User
