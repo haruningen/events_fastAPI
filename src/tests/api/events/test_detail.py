@@ -21,11 +21,18 @@ class TestEventDetail(BaseTestCase):
 
     async def test_event_detail_success(self, client: AsyncClient) -> None:
         event = await self.event()
+        response = await self._request(client, event_id=event.id)
+        assert response.status_code == status.HTTP_200_OK
+        data = response.json()
+        assert event.id == data['id']
+
+    async def test_event_detail_success_with_user(self, client: AsyncClient) -> None:
+        event = await self.event()
         token = await self.authorized_user_token()
         response = await self._request(client, event_id=event.id, token=token)
         assert response.status_code == status.HTTP_200_OK
         data = response.json()
-        assert event.id == data['id']
+        assert event.id == data['id'] and data['want_go'] is False
 
     async def test_event_wrong_id(self, client: AsyncClient) -> None:
         event = await self.event()
@@ -34,9 +41,6 @@ class TestEventDetail(BaseTestCase):
         assert response.status_code == status.HTTP_404_NOT_FOUND
         data = response.json()
         assert data['detail'] == f'Event with ID {event.id + 1} does not exist'
-
-    async def test_user_unauthorized_without_token(self, client: AsyncClient) -> None:
-        await self._test_user_unauthorized_without_token(client)
 
     async def test_unauthorized_with_fake_token(self, client: AsyncClient) -> None:
         await self._test_unauthorized_with_fake_token(client)
