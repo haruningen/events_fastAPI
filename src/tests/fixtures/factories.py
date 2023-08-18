@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from factory import DictFactory, Faker
 
@@ -11,23 +12,8 @@ class UserFactory(DictFactory):
     verified: bool = True
     is_superuser: bool = True
     is_moderator: bool = True
-
-
-class UserLoginFactory(DictFactory):
-    email: str = Faker('email')
-    password: str = 'strongPassword1'
-
-
-class UserSignUpFactory(DictFactory):
-    email: str = Faker('email')
-    password: str = 'strongPassword1'
-    password_confirm: str = 'strongPassword1'
-
-
-class UserPasswordNotMatchFactory(DictFactory):
-    email: str = Faker('email')
-    password: str = 'strongPassword1'
-    password_confirm: str = 'strongPassword2'
+    tfa_secret: Optional[str] = None
+    tfa_enabled: bool = False
 
 
 class EventFactory(DictFactory):
