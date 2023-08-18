@@ -6,7 +6,7 @@ from starlette.responses import RedirectResponse
 
 from config import settings
 from models import User
-from utils.users import make_token
+from utils.users import make_token, verify_password
 
 
 class AdminAuth(AuthenticationBackend):
@@ -25,12 +25,15 @@ class AdminAuth(AuthenticationBackend):
         if not (user.verified or user.is_moderator or user.is_superuser):
             return False
 
+        if not verify_password(password, user.hashed_password):
+            return False
+
         token = make_token(
             settings.ACCESS_TOKEN_EXPIRE_MINUTES,
             settings.JWT_SECRET_KEY,
             {'user_id': user.id}
         )
-        request.session.update({"token": token})
+        request.session.update({'token': token})
 
         return True
 
@@ -39,8 +42,8 @@ class AdminAuth(AuthenticationBackend):
         return True
 
     async def authenticate(self, request: Request) -> Optional[RedirectResponse]:
-        token = request.session.get("token")
+        token = request.session.get('token')
 
         if token:
             return None
-        return RedirectResponse(request.url_for("admin:login"), status_code=302)
+        return RedirectResponse(request.url_for('admin:login'), status_code=302)
