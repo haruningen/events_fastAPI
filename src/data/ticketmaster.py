@@ -1,9 +1,9 @@
 from datetime import datetime
-from typing import Optional
 
 from aiohttp import ClientSession
 
 from config import settings
+from gen_typing import YieldAsync
 from utils.images import save_image_by_url
 
 from .base import BaseDataHandler
@@ -30,7 +30,7 @@ class TicketmasterDataHandler(BaseDataHandler):
         schema = ParsedEventTicketmasterSchema(image_path=image_path, **data)
         return schema.model_dump()
 
-    async def get_events(self, session: ClientSession) -> Optional[list[dict]]:  # type: ignore
+    async def get_events(self, session: ClientSession) -> YieldAsync[dict]:
         page = 0
         headers = {'Content-Type': 'application/json'}
         params = {

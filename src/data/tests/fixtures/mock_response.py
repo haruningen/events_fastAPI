@@ -4,7 +4,7 @@ from typing import Optional, Type
 
 
 class MockResponse:
-    def __init__(self, text: str, status: int):
+    def __init__(self, text: str, status: int) -> None:
         self._text = text
         self.status = status
 

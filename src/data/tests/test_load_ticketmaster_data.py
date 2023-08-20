@@ -14,7 +14,7 @@ class TestLoadTicketmasterData:
     @pytest.fixture(autouse=True)
     async def make_patch(self, mocker: MockerFixture) -> None:
         with open(settings.BASE_DIR / 'data/tests/fixtures/ticketmaster_response.json') as f:
-            resp = MockResponse(f.read(), 200, )
+            resp = MockResponse(f.read(), 200)
         mocker.patch('aiohttp.ClientSession.get', return_value=resp)
 
     async def test_load_events(self) -> None:
@@ -28,6 +28,6 @@ class TestLoadTicketmasterData:
         handler = TicketmasterDataHandler(ds)
         res = list()
         async with ClientSession() as session:
-            async for event in handler.get_events(session):  # type: ignore
+            async for event in handler.get_events(session):
                 res.append(event)
         assert len(res) == 10

@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from httpx import AsyncClient
 
 from config import settings
-from gen_typing import YieldAsyncFixture
+from gen_typing import YieldAsync
 from main import app
 from refresh_db import create_database
 from tests.fixtures.base import *  # noqa: F401,F403
@@ -29,7 +29,7 @@ def event_loop() -> asyncio.AbstractEventLoop:
 
 
 @pytest.fixture(scope='session', autouse=True)
-async def setup(event_loop: asyncio.AbstractEventLoop) -> YieldAsyncFixture[None]:
+async def setup(event_loop: asyncio.AbstractEventLoop) -> YieldAsync[None]:
     """
     Set test environment and media root
     And clear media root in the end
@@ -57,7 +57,7 @@ async def setup(event_loop: asyncio.AbstractEventLoop) -> YieldAsyncFixture[None
 
 
 @pytest.fixture
-async def test_app() -> YieldAsyncFixture[FastAPI]:
+async def test_app() -> YieldAsync[FastAPI]:
     """Handle app's lifespan events"""
 
     async with LifespanManager(app):
@@ -65,7 +65,7 @@ async def test_app() -> YieldAsyncFixture[FastAPI]:
 
 
 @pytest.fixture
-async def client(test_app: FastAPI) -> YieldAsyncFixture[AsyncClient]:
+async def client(test_app: FastAPI) -> YieldAsync[AsyncClient]:
     """Init httpx client"""
 
     async with AsyncClient(app=test_app, base_url=f'http://0.0.0.0:{settings.PORT}') as client:

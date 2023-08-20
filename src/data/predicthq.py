@@ -1,11 +1,11 @@
 from datetime import datetime
-from typing import Optional
 
 from aiohttp import ClientSession
 
 from config import settings
 from data.base import BaseDataHandler
 from data.schemas import ParsedEventPredictHQSchema, PredictHQConfigSchema
+from gen_typing import YieldAsync
 
 
 class PredictHQDataHandler(BaseDataHandler):
@@ -20,7 +20,7 @@ class PredictHQDataHandler(BaseDataHandler):
         schema = ParsedEventPredictHQSchema(**data)
         return schema.model_dump()
 
-    async def get_events(self, session: ClientSession) -> Optional[list[dict]]:  # type: ignore
+    async def get_events(self, session: ClientSession) -> YieldAsync[dict]:
         page = 0
         headers = {
             'Authorization': f'Bearer {self.ds.secret}'

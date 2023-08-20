@@ -8,7 +8,7 @@ from starlette.datastructures import URLPath
 
 from config import settings
 from connections.postgresql import Base, async_engine, async_session
-from gen_typing import YieldAsyncFixture
+from gen_typing import YieldAsync
 from main import app
 from models import Event, User
 from tests.fixtures.factories import EventFactory, UserFactory
@@ -19,7 +19,7 @@ class PostgresMixin:
     """Class for PostgreSQL fixtures"""
 
     @pytest.fixture(autouse=True)
-    async def setup_postgres(self) -> YieldAsyncFixture[None]:
+    async def setup_postgres(self) -> YieldAsync[None]:
         async with async_engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
 

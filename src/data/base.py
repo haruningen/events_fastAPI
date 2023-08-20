@@ -4,6 +4,7 @@ from typing import Optional
 from aiohttp import ClientSession
 from pydantic import BaseModel
 
+from gen_typing import YieldAsync
 from models import DataSource
 
 
@@ -24,5 +25,5 @@ class BaseDataHandler(ABC):
         pass
 
     @abstractmethod
-    async def get_events(self, session: ClientSession) -> Optional[list[dict]]:
+    def get_events(self, session: ClientSession) -> YieldAsync[dict]:
         pass
