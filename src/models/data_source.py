@@ -12,4 +12,4 @@ class DataSource(BaseModel):
     handler: str = Column(String(1024))
     api_url: str = Column(String(1024))
     secret: str = Column(String(1024), nullable=True)
-    config = Column(JSONB, nullable=True)
+    config: dict = Column(JSONB, nullable=False)

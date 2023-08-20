@@ -27,6 +27,7 @@ class Settings(BaseSettings):
     RESET_PASSWORD_KEY: bytes
     PASSWORD_SALT: bytes = gensalt()
     DATA_HANDLER_TOTAL_PAGE: int = 3
+    DATA_HANDLER_PER_PAGE: int = 10
 
     # ---------- Storage ----------
 

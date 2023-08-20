@@ -19,12 +19,14 @@ class TicketmasterDataHandler(BaseDataHandler):
     config_schema = TicketmasterConfigSchema
 
     async def to_event(self, data: dict) -> dict:
-        images_size = [i['width'] * i['height'] for i in data['images']]
-        image = data['images'][images_size.index(max(images_size))]
-        image_path = await save_image_by_url(
-            image=image['url'],
-            name=f'{datetime.utcnow().timestamp()}_{data["id"]}',  # UTC timestamp + user ID
-        )
+        image_path = None
+        if self.config.load_images:
+            images_size = [i['width'] * i['height'] for i in data['images']]
+            image = data['images'][images_size.index(max(images_size))]
+            image_path = await save_image_by_url(
+                image=image['url'],
+                name=f'{datetime.utcnow().timestamp()}_{data["id"]}',  # UTC timestamp + user ID
+            )
         schema = ParsedEventTicketmasterSchema(image_path=image_path, **data)
         return schema.model_dump()
 

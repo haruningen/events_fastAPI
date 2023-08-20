@@ -39,6 +39,7 @@ pytest-asyncio = "^0.20.3"
 pytest-cov = "^4.0.0"
 pytest-env = "^0.8.1"
 pytest-pythonpath = "^0.7.3"
+pytest-mock = '^3.11.1'
 asgi_lifespan = '^2.1.0'
 factory-boy = '^3.2.1'
 

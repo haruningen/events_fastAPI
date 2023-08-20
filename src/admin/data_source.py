@@ -4,6 +4,8 @@ from models import DataSource
 
 
 class DataSourceAdmin(ModelView, model=DataSource):
+    icon = 'fa-solid fa-server'
+
     can_export = False
     can_view_details = True
     can_create = True

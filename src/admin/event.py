@@ -12,6 +12,8 @@ from models import Event
 
 
 class EventAdmin(ModelView, model=Event):
+    icon = 'fa-regular fa-calendar'
+
     source: Optional[str] = None
 
     column_sortable_list = [Event.source]

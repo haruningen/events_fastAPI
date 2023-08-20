@@ -17,8 +17,7 @@ class BaseDataHandler(ABC):
 
     def __init__(self, ds: DataSource) -> None:
         self.ds = ds
-        if self.ds.config:
-            self.config: BaseModel = self.config_schema(**self.ds.config)
+        self.config: BaseModel = self.config_schema(**self.ds.config)
 
     @abstractmethod
     async def to_event(self, data: dict) -> Optional[dict]:

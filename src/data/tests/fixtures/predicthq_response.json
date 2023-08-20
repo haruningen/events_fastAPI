@@ -1,0 +1,1467 @@
+{
+  "count": 5000,
+  "overflow": true,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "relevance": 0.0,
+      "id": "3PxNgAKhGUL5hU9vjM",
+      "title": "Hamilton (NY)",
+      "description": "",
+      "category": "performing-arts",
+      "labels": [
+        "entertainment",
+        "music",
+        "performing-arts"
+      ],
+      "rank": 48,
+      "local_rank": 49,
+      "phq_attendance": 795,
+      "entities": [
+        {
+          "entity_id": "UztSj9QwH68DHWvCqMn4hc",
+          "name": "Richard Rodgers Theatre",
+          "type": "venue",
+          "formatted_address": "226 W 46th St\nNY 10036\nUnited States of America"
+        }
+      ],
+      "duration": 0,
+      "start": "2023-11-16T00:00:00Z",
+      "end": "2023-11-16T00:00:00Z",
+      "updated": "2023-07-06T22:17:27Z",
+      "first_seen": "2023-04-25T05:07:28Z",
+      "timezone": "America/New_York",
+      "location": [
+        -73.9866769,
+        40.7590537
+      ],
+      "geo": {
+        "geometry": {
+          "coordinates": [
+            -73.9866769,
+            40.7590537
+          ],
+          "type": "Point"
+        },
+        "placekey": "222@627-wbv-kcq"
+      },
+      "scope": "locality",
+      "country": "US",
+      "place_hierarchies": [
+        [
+          "6295630",
+          "6255149",
+          "6252001",
+          "5128638",
+          "5128594",
+          "6332416"
+        ],
+        [
+          "6295630",
+          "6255149",
+          "6252001",
+          "5128638",
+          "5128594",
+          "7250946",
+          "5125771"
+        ]
+      ],
+      "state": "active",
+      "brand_safe": true,
+      "private": false,
+      "predicted_event_spend": 16588,
+      "predicted_event_spend_industries": {
+        "accommodation": 2890,
+        "hospitality": 8864,
+        "transportation": 4834
+      }
+    },
+    {
+      "relevance": 0.0,
+      "id": "3Y7vJoCmHqpk2vADWS",
+      "title": "Petey",
+      "description": "",
+      "category": "concerts",
+      "labels": [
+        "concert",
+        "music"
+      ],
+      "rank": 1,
+      "local_rank": 15,
+      "phq_attendance": 3,
+      "entities": [
+        {
+          "entity_id": "3ge3SphZdcgzsZjAeeZg4b",
+          "name": "House of Blues - Cleveland",
+          "type": "venue",
+          "formatted_address": "308 Euclid Avenue\nCleveland, OH 44114\nUnited States of America"
+        }
+      ],
+      "duration": 0,
+      "start": "2023-11-16T00:00:00Z",
+      "end": "2023-11-16T00:00:00Z",
+      "updated": "2023-08-04T01:10:46Z",
+      "first_seen": "2023-07-08T00:19:34Z",
+      "timezone": "America/New_York",
+      "location": [
+        -81.6906681,
+        41.49920300000001
+      ],
+      "geo": {
+        "geometry": {
+          "coordinates": [
+            -81.6906681,
+            41.49920300000001
+          ],
+          "type": "Point"
+        },
+        "placekey": "222-222@63v-bdn-r6k"
+      },
+      "scope": "locality",
+      "country": "US",
+      "place_hierarchies": [
+        [
+          "6295630",
+          "6255149",
+          "6252001",
+          "5165418",
+          "5151606",
+          "5150529"
+        ]
+      ],
+      "state": "active",
+      "brand_safe": true,
+      "private": false,
+      "predicted_event_spend": 44,
+      "predicted_event_spend_industries": {
+        "accommodation": 0,
+        "hospitality": 26,
+        "transportation": 18
+      }
+    },
+    {
+      "relevance": 0.0,
+      "id": "3ZHwwSHDpPYQKDFvGs",
+      "title": "Twin Rivers Unified School District - Thanksgiving Break",
+      "description": "",
+      "category": "school-holidays",
+      "labels": [
+        "holiday",
+        "school",
+        "thanksgiving-holiday"
+      ],
+      "rank": 81,
+      "local_rank": 69,
+      "phq_attendance": 36516,
+      "entities": [],
+      "duration": 950399,
+      "start": "2023-11-16T00:00:00Z",
+      "end": "2023-11-26T23:59:59Z",
+      "updated": "2023-08-11T05:32:31Z",
+      "first_seen": "2023-01-10T13:24:27Z",
+      "timezone": null,
+      "location": [
+        -121.4375384563,
+        38.6630244995
+      ],
+      "geo": {
+        "geometry": {
+          "coordinates": [
+            [
+              [
+                [
+                  -121.41980799999997,
+                  38.62523000000001
+                ],
+                [
+                  -121.40404500000002,
+                  38.63978799999999
+                ],
+                [
+                  -121.45634299999998,
+                  38.64039800000001
+                ],
+                [
+                  -121.45764599999995,
+                  38.640439000000036
+                ],
+                [
+                  -121.45809999999996,
+                  38.64067600000002
+                ],
+                [
+                  -121.45875099999999,
+                  38.640167
+                ],
+                [
+                  -121.459423,
+                  38.64017399999995
+                ],
+                [
+                  -121.459422,
+                  38.64117000000004
+                ],
+                [
+                  -121.46022899999998,
+                  38.641272000000036
+                ],
+                [
+                  -121.460242,
+                  38.640182999999986
+                ],
+                [
+                  -121.46110499999999,
+                  38.640194000000015
+                ],
+                [
+                  -121.46114099999994,
+                  38.64138800000004
+                ],
+                [
+                  -121.46233799999996,
+                  38.64144199999998
+                ],
+                [
+                  -121.462344,
+                  38.640207000000025
+                ],
+                [
+                  -121.46337499999996,
+                  38.64021800000004
+                ],
+                [
+                  -121.463545,
+                  38.641482
+                ],
+                [
+                  -121.46458599999997,
+                  38.64151399999998
+                ],
+                [
+                  -121.464624,
+                  38.640533999999995
+                ],
+                [
+                  -121.47554000000001,
+                  38.64059299999999
+                ],
+                [
+                  -121.47552500000002,
+                  38.64201600000005
+                ],
+                [
+                  -121.47861899999995,
+                  38.64193799999999
+                ],
+                [
+                  -121.48030999999997,
+                  38.64218399999999
+                ],
+                [
+                  -121.48791500000003,
+                  38.641927000000045
+                ],
+                [
+                  -121.49323299999995,
+                  38.641979
+                ],
+                [
+                  -121.49324199999998,
+                  38.627445000000044
+                ],
+                [
+                  -121.48847000000004,
+                  38.627487999999964
+                ],
+                [
+                  -121.48839699999995,
+                  38.62031400000004
+                ],
+                [
+                  -121.49197699999995,
+                  38.62026000000001
+                ],
+                [
+                  -121.49091200000002,
+                  38.61332499999997
+                ],
+                [
+                  -121.49075500000001,
+                  38.605833000000025
+                ],
+                [
+                  -121.49056100000003,
+                  38.60484000000003
+                ],
+                [
+                  -121.48961899999998,
+                  38.603685000000034
+                ],
+                [
+                  -121.48882100000003,
+                  38.60313699999998
+                ],
+                [
+                  -121.48858599999996,
+                  38.60240100000002
+                ],
+                [
+                  -121.49293999999996,
+                  38.60261800000003
+                ],
+                [
+                  -121.49663699999996,
+                  38.602501000000025
+                ],
+                [
+                  -121.49948499999996,
+                  38.60210199999997
+                ],
+                [
+                  -121.50261499999995,
+                  38.60138599999997
+                ],
+                [
+                  -121.50488099999995,
+                  38.600608999999984
+                ],
+                [
+                  -121.50627799999998,
+                  38.599759999999996
+                ],
+                [
+                  -121.50715100000001,
+                  38.59883000000004
+                ],
+                [
+                  -121.508088,
+                  38.59732299999997
+                ],
+                [
+                  -121.50866800000003,
+                  38.596803000000016
+                ],
+                [
+                  -121.507402,
+                  38.59199999999999
+                ],
+                [
+                  -121.50683499999998,
+                  38.589021999999964
+                ],
+                [
+                  -121.50490499999998,
+                  38.589718999999995
+                ],
+                [
+                  -121.50508499999995,
+                  38.59029700000004
+                ],
+                [
+                  -121.50503799999997,
+                  38.59134099999999
+                ],
+                [
+                  -121.500796,
+                  38.591675000000016
+                ],
+                [
+                  -121.50034899999996,
+                  38.591797999999976
+                ],
+                [
+                  -121.50034899999996,
+                  38.59275100000004
+                ],
+                [
+                  -121.49658500000001,
+                  38.59289399999998
+                ],
+                [
+                  -121.49640800000002,
+                  38.593315
+                ],
+                [
+                  -121.49267899999994,
+                  38.59235599999996
+                ],
+                [
+                  -121.49181499999996,
+                  38.59436300000002
+                ],
+                [
+                  -121.49138899999997,
+                  38.59425099999999
+                ],
+                [
+                  -121.49133499999994,
+                  38.59437600000003
+                ],
+                [
+                  -121.48973699999998,
+                  38.59396199999997
+                ],
+                [
+                  -121.49053699999999,
+                  38.59213099999999
+                ],
+                [
+                  -121.490507,
+                  38.59176300000001
+                ],
+                [
+                  -121.48441399999999,
+                  38.590099
+                ],
+                [
+                  -121.48394400000001,
+                  38.59122000000003
+                ],
+                [
+                  -121.48195899999999,
+                  38.59067199999998
+                ],
+                [
+                  -121.48242799999998,
+                  38.589559999999985
+                ],
+                [
+                  -121.477809,
+                  38.58833900000004
+                ],
+                [
+                  -121.477764,
+                  38.58844300000002
+                ],
+                [
+                  -121.471158,
+                  38.58660200000002
+                ],
+                [
+                  -121.471581,
+                  38.58560800000003
+                ],
+                [
+                  -121.46884899999999,
+                  38.58487500000003
+                ],
+                [
+                  -121.46836400000001,
+                  38.586016000000036
+                ],
+                [
+                  -121.46529500000001,
+                  38.58521799999999
+                ],
+                [
+                  -121.463762,
+                  38.58861800000003
+                ],
+                [
+                  -121.46248900000002,
+                  38.58876999999999
+                ],
+                [
+                  -121.461073,
+                  38.58924200000005
+                ],
+                [
+                  -121.46134099999998,
+                  38.58829400000004
+                ],
+                [
+                  -121.46341100000001,
+                  38.583467999999975
+                ],
+                [
+                  -121.46181800000001,
+                  38.58309200000004
+                ],
+                [
+                  -121.46064700000002,
+                  38.58391600000001
+                ],
+                [
+                  -121.45890299999996,
+                  38.58458300000003
+                ],
+                [
+                  -121.45007299999997,
+                  38.58567800000004
+                ],
+                [
+                  -121.44859699999998,
+                  38.58631499999999
+                ],
+                [
+                  -121.447526,
+                  38.58726799999997
+                ],
+                [
+                  -121.44719799999996,
+                  38.58773
+                ],
+                [
+                  -121.44942799999998,
+                  38.589771000000034
+                ],
+                [
+                  -121.45018999999998,
+                  38.590290999999986
+                ],
+                [
+                  -121.450114,
+                  38.59311700000004
+                ],
+                [
+                  -121.44985,
+                  38.59496400000001
+                ],
+                [
+                  -121.44914700000001,
+                  38.597107000000044
+                ],
+                [
+                  -121.44800099999996,
+                  38.598953000000016
+                ],
+                [
+                  -121.446882,
+                  38.60021100000001
+                ],
+                [
+                  -121.441855,
+                  38.60020700000003
+                ],
+                [
+                  -121.43864,
+                  38.600760000000044
+                ],
+                [
+                  -121.43691099999994,
+                  38.60180499999999
+                ],
+                [
+                  -121.435047,
+                  38.603621999999966
+                ],
+                [
+                  -121.41995299999998,
+                  38.59607699999999
+                ],
+                [
+                  -121.41991900000001,
+                  38.617849000000014
+                ],
+                [
+                  -121.41966600000003,
+                  38.61902
+                ],
+                [
+                  -121.419687,
+                  38.62009700000002
+                ],
+                [
+                  -121.41997099999996,
+                  38.620218
+                ],
+                [
+                  -121.41980799999997,
+                  38.62523000000001
+                ]
+              ]
+            ],
+            [
+              [
+                [
+                  -121.40932300000001,
+                  38.704697000000046
+                ],
+                [
+                  -121.44342399999998,
+                  38.70489699999998
+                ],
+                [
+                  -121.47527299999994,
+                  38.70522800000001
+                ],
+                [
+                  -121.47529799999997,
+                  38.69995999999997
+                ],
+                [
+                  -121.50727299999998,
+                  38.69988800000005
+                ],
+                [
+                  -121.50736700000003,
+                  38.700101999999994
+                ],
+                [
+                  -121.510631,
+                  38.69994800000004
+                ],
+                [
+                  -121.55798399999998,
+                  38.70014799999998
+                ],
+                [
+                  -121.55788599999995,
+                  38.67136200000004
+                ],
+                [
+                  -121.55009900000003,
+                  38.67134800000003
+                ],
+                [
+                  -121.550091,
+                  38.67105900000002
+                ],
+                [
+                  -121.54017399999995,
+                  38.670797000000015
+                ],
+                [
+                  -121.539946,
+                  38.67089700000002
+                ],
+                [
+                  -121.53992800000003,
+                  38.671140999999956
+                ],
+                [
+                  -121.53995900000001,
+                  38.67860699999998
+                ],
+                [
+                  -121.53847699999996,
+                  38.67858400000002
+                ],
+                [
+                  -121.53389300000002,
+                  38.677823000000025
+                ],
+                [
+                  -121.53189400000001,
+                  38.67724599999999
+                ],
+                [
+                  -121.53153899999994,
+                  38.67679800000004
+                ],
+                [
+                  -121.53105099999998,
+                  38.67711499999998
+                ],
+                [
+                  -121.52950900000002,
+                  38.677510999999974
+                ],
+                [
+                  -121.52980899999997,
+                  38.67855300000003
+                ],
+                [
+                  -121.52987099999996,
+                  38.680005
+                ],
+                [
+                  -121.52808199999998,
+                  38.680024999999965
+                ],
+                [
+                  -121.52807099999997,
+                  38.68044999999996
+                ],
+                [
+                  -121.52391799999998,
+                  38.68020400000004
+                ],
+                [
+                  -121.52073299999998,
+                  38.679025
+                ],
+                [
+                  -121.51973899999997,
+                  38.678484000000005
+                ],
+                [
+                  -121.51884599999998,
+                  38.67929600000004
+                ],
+                [
+                  -121.51654299999996,
+                  38.680343999999984
+                ],
+                [
+                  -121.51609400000001,
+                  38.68094499999997
+                ],
+                [
+                  -121.51598599999996,
+                  38.68211
+                ],
+                [
+                  -121.51510899999997,
+                  38.68231100000002
+                ],
+                [
+                  -121.51487699999996,
+                  38.68187999999997
+                ],
+                [
+                  -121.515191,
+                  38.68050599999997
+                ],
+                [
+                  -121.51308200000003,
+                  38.67732399999995
+                ],
+                [
+                  -121.51194200000002,
+                  38.67743100000002
+                ],
+                [
+                  -121.51047599999997,
+                  38.67731400000002
+                ],
+                [
+                  -121.51047499999997,
+                  38.676892
+                ],
+                [
+                  -121.50758199999997,
+                  38.67690300000003
+                ],
+                [
+                  -121.50754300000003,
+                  38.67341799999998
+                ],
+                [
+                  -121.50391299999997,
+                  38.67352099999997
+                ],
+                [
+                  -121.50354899999996,
+                  38.67318600000005
+                ],
+                [
+                  -121.503775,
+                  38.672997000000045
+                ],
+                [
+                  -121.503483,
+                  38.672736000000036
+                ],
+                [
+                  -121.503747,
+                  38.67224999999997
+                ],
+                [
+                  -121.50416800000002,
+                  38.67237500000001
+                ],
+                [
+                  -121.50423499999997,
+                  38.67081599999998
+                ],
+                [
+                  -121.475382,
+                  38.670937000000045
+                ],
+                [
+                  -121.475382,
+                  38.669965
+                ],
+                [
+                  -121.46610299999999,
+                  38.66989900000005
+                ],
+                [
+                  -121.46610399999999,
+                  38.669553000000015
+                ],
+                [
+                  -121.45325799999998,
+                  38.669376000000035
+                ],
+                [
+                  -121.45311399999997,
+                  38.669205
+                ],
+                [
+                  -121.40128300000002,
+                  38.668984000000016
+                ],
+                [
+                  -121.40129199999997,
+                  38.65411199999998
+                ],
+                [
+                  -121.397282,
+                  38.654109
+                ],
+                [
+                  -121.39690599999997,
+                  38.65427399999998
+                ],
+                [
+                  -121.38797000000002,
+                  38.654170999999984
+                ],
+                [
+                  -121.38754800000001,
+                  38.654283000000014
+                ],
+                [
+                  -121.345926,
+                  38.653603999999966
+                ],
+                [
+                  -121.34591699999997,
+                  38.65639099999999
+                ],
+                [
+                  -121.34623300000001,
+                  38.65702400000004
+                ],
+                [
+                  -121.34609699999994,
+                  38.657423000000016
+                ],
+                [
+                  -121.345856,
+                  38.65746900000001
+                ],
+                [
+                  -121.34586500000003,
+                  38.66809799999998
+                ],
+                [
+                  -121.33843399999998,
+                  38.66800899999999
+                ],
+                [
+                  -121.33811,
+                  38.66778899999999
+                ],
+                [
+                  -121.336692,
+                  38.668271999999995
+                ],
+                [
+                  -121.336691,
+                  38.66798900000003
+                ],
+                [
+                  -121.32726099999994,
+                  38.66791199999995
+                ],
+                [
+                  -121.32728399999998,
+                  38.67214499999999
+                ],
+                [
+                  -121.32750099999998,
+                  38.67273700000003
+                ],
+                [
+                  -121.32682500000001,
+                  38.67318199999999
+                ],
+                [
+                  -121.32736199999995,
+                  38.673663999999995
+                ],
+                [
+                  -121.32704899999999,
+                  38.67388499999998
+                ],
+                [
+                  -121.32700699999997,
+                  38.675402999999996
+                ],
+                [
+                  -121.32733099999996,
+                  38.67561299999996
+                ],
+                [
+                  -121.32739799999999,
+                  38.676056000000024
+                ],
+                [
+                  -121.32690299999999,
+                  38.67631399999997
+                ],
+                [
+                  -121.32689600000002,
+                  38.681028000000005
+                ],
+                [
+                  -121.32628099999994,
+                  38.703493999999985
+                ],
+                [
+                  -121.33469799999995,
+                  38.70352299999998
+                ],
+                [
+                  -121.33517799999996,
+                  38.70307900000001
+                ],
+                [
+                  -121.33633099999997,
+                  38.703425000000045
+                ],
+                [
+                  -121.33785800000001,
+                  38.703540999999966
+                ],
+                [
+                  -121.38360200000001,
+                  38.704119999999996
+                ],
+                [
+                  -121.40932300000001,
+                  38.704697000000046
+                ]
+              ]
+            ]
+          ],
+          "type": "MultiPolygon"
+        }
+      },
+      "scope": "county",
+      "country": "US",
+      "place_hierarchies": [
+        [
+          "6295630",
+          "6255149",
+          "6252001",
+          "5332921",
+          "5389519"
+        ]
+      ],
+      "state": "active",
+      "brand_safe": true,
+      "private": false
+    },
+    {
+      "relevance": 0.0,
+      "id": "3eHKVgPPjBLjtDu5Ab",
+      "title": "Paint and Sip Experience Liverpool",
+      "description": "Paint and Sip Studios is Australia's #1 Paint and Sip Experience.\n\nPaint and Sip Studios combines the fun and relaxation of a party with step-by-step group painting and art experiences.\n\nEvents are generally around two to four hours and are aimed at the non-artist with focus on the occasion and experience with the option of bringing your own food and drinks. Your experience will see you painting in acrylic paints on 30x40cm canvas guided step by step by our lead artist. Paint and Sip Studios specialize in occasion based and themed experiences for a night of fun and laughter. They have a large variety of paintings and experiences to choose from on the website.",
+      "category": "festivals",
+      "labels": [
+        "community",
+        "festival",
+        "food"
+      ],
+      "rank": 46,
+      "local_rank": 60,
+      "phq_attendance": 616,
+      "entities": [
+        {
+          "entity_id": "3BLJ4bRkrV7495idUBNZQRu",
+          "name": "Paint and Sip Experience Liverpool",
+          "type": "event-group",
+          "category": "festivals",
+          "labels": [
+            "community",
+            "event-group",
+            "festival",
+            "food",
+            "recurring"
+          ]
+        }
+      ],
+      "duration": 39600,
+      "start": "2023-11-16T00:00:00Z",
+      "end": "2023-11-16T11:00:00Z",
+      "updated": "2023-08-16T09:57:07Z",
+      "first_seen": "2022-01-06T08:35:22Z",
+      "timezone": "Australia/Sydney",
+      "location": [
+        150.9220589,
+        -33.922121
+      ],
+      "geo": {
+        "geometry": {
+          "coordinates": [
+            150.9220589,
+            -33.922121
+          ],
+          "type": "Point"
+        },
+        "placekey": "@nh2-g2b-ckf"
+      },
+      "scope": "locality",
+      "country": "AU",
+      "place_hierarchies": [
+        [
+          "6295630",
+          "6255151",
+          "2077456",
+          "2155400",
+          "7839360",
+          "2145187"
+        ],
+        [
+          "6295630",
+          "6255151",
+          "2077456",
+          "2155400",
+          "6619279",
+          "2147714"
+        ]
+      ],
+      "state": "active",
+      "brand_safe": true,
+      "private": false,
+      "predicted_event_spend": 19746,
+      "predicted_event_spend_industries": {
+        "accommodation": 2447,
+        "hospitality": 10708,
+        "transportation": 6591
+      },
+      "phq_labels": [
+        {
+          "label": "art-and-cultural",
+          "weight": 1.0
+        }
+      ]
+    },
+    {
+      "relevance": 0.0,
+      "id": "3gLWAVf4HrsUyY87Qv",
+      "title": "Helena Deland",
+      "description": "",
+      "category": "concerts",
+      "labels": [
+        "concert",
+        "music"
+      ],
+      "rank": 35,
+      "local_rank": 56,
+      "phq_attendance": 184,
+      "entities": [
+        {
+          "entity_id": "4AXkaEv33jYVdthbtLdBhv",
+          "name": "El Club",
+          "type": "venue",
+          "formatted_address": "4114 Vernor Highway\nDetroit, MI 48209\nUnited States of America"
+        }
+      ],
+      "duration": 0,
+      "start": "2023-11-16T00:00:00Z",
+      "end": "2023-11-16T00:00:00Z",
+      "updated": "2023-07-07T00:54:03Z",
+      "first_seen": "2023-05-30T21:11:21Z",
+      "timezone": "America/Detroit",
+      "location": [
+        -83.093536,
+        42.321389
+      ],
+      "geo": {
+        "geometry": {
+          "coordinates": [
+            -83.093536,
+            42.321389
+          ],
+          "type": "Point"
+        },
+        "placekey": "222-223@63v-48m-bkz"
+      },
+      "scope": "locality",
+      "country": "US",
+      "place_hierarchies": [
+        [
+          "6295630",
+          "6255149",
+          "6252001",
+          "5001836",
+          "5014227",
+          "4993183"
+        ],
+        [
+          "6295630",
+          "6255149",
+          "6252001",
+          "5001836",
+          "5014227",
+          "4990729"
+        ]
+      ],
+      "state": "active",
+      "brand_safe": true,
+      "private": false,
+      "predicted_event_spend": 3367,
+      "predicted_event_spend_industries": {
+        "accommodation": 0,
+        "hospitality": 2025,
+        "transportation": 1342
+      }
+    },
+    {
+      "relevance": 0.0,
+      "id": "3msX64PHz5vJ2v25rL",
+      "title": "Asian Transplantation Week",
+      "description": "",
+      "category": "conferences",
+      "labels": [
+        "conference"
+      ],
+      "rank": 44,
+      "local_rank": 52,
+      "phq_attendance": 500,
+      "entities": [
+        {
+          "entity_id": "8SWhwsUssq9GiazmM5tKg9",
+          "name": "Conrad Seoul",
+          "type": "venue",
+          "formatted_address": "Seoul, Seoul 07326\nKorea, Republic of"
+        }
+      ],
+      "duration": 1069200,
+      "start": "2023-11-16T00:00:00Z",
+      "end": "2023-11-28T09:00:00Z",
+      "updated": "2023-07-06T19:24:17Z",
+      "first_seen": "2022-12-25T03:40:49Z",
+      "timezone": "Asia/Seoul",
+      "location": [
+        126.9266296,
+        37.525439
+      ],
+      "geo": {
+        "geometry": {
+          "coordinates": [
+            126.9266296,
+            37.525439
+          ],
+          "type": "Point"
+        },
+        "placekey": "@6nm-24z-75z"
+      },
+      "scope": "locality",
+      "country": "KR",
+      "place_hierarchies": [
+        [
+          "6295630",
+          "6255147",
+          "1835841",
+          "1835847",
+          "1834836",
+          "1832144"
+        ],
+        [
+          "6295630",
+          "6255147",
+          "1835841",
+          "1835847",
+          "1835848"
+        ]
+      ],
+      "state": "active",
+      "brand_safe": true,
+      "private": false,
+      "predicted_event_spend": 564114,
+      "predicted_event_spend_industries": {
+        "accommodation": 85812,
+        "hospitality": 439400,
+        "transportation": 38902
+      }
+    },
+    {
+      "relevance": 0.0,
+      "id": "3qs42NVmNnD3C97r8i",
+      "title": "Deer Tick",
+      "description": "",
+      "category": "concerts",
+      "labels": [
+        "concert",
+        "music"
+      ],
+      "rank": 44,
+      "local_rank": 47,
+      "phq_attendance": 499,
+      "entities": [
+        {
+          "entity_id": "Y8qqQ6zqYVKTxTUhbvRwch",
+          "name": "Warsaw",
+          "type": "venue",
+          "formatted_address": "261 Driggs Avenue\nNY 11222\nUnited States of America"
+        }
+      ],
+      "duration": 0,
+      "start": "2023-11-16T00:00:00Z",
+      "end": "2023-11-16T00:00:00Z",
+      "updated": "2023-08-11T06:46:44Z",
+      "first_seen": "2023-04-25T22:43:28Z",
+      "timezone": "America/New_York",
+      "location": [
+        -73.9485191,
+        40.7224421
+      ],
+      "geo": {
+        "geometry": {
+          "coordinates": [
+            -73.9485191,
+            40.7224421
+          ],
+          "type": "Point"
+        },
+        "placekey": "22q-224@627-s8g-yjv"
+      },
+      "scope": "locality",
+      "country": "US",
+      "place_hierarchies": [
+        [
+          "6295630",
+          "6255149",
+          "6252001",
+          "5128638",
+          "6941775",
+          "6332456"
+        ],
+        [
+          "6295630",
+          "6255149",
+          "6252001",
+          "5128638",
+          "5128581"
+        ]
+      ],
+      "state": "active",
+      "brand_safe": true,
+      "private": false,
+      "predicted_event_spend": 20643,
+      "predicted_event_spend_industries": {
+        "accommodation": 5047,
+        "hospitality": 9184,
+        "transportation": 6412
+      }
+    },
+    {
+      "relevance": 0.0,
+      "id": "3ydpQ9qq2zhhbief8g",
+      "title": "Gunpowder Candy",
+      "description": "",
+      "category": "community",
+      "labels": [
+        "concert",
+        "music"
+      ],
+      "rank": 0,
+      "local_rank": 0,
+      "phq_attendance": null,
+      "entities": [
+        {
+          "entity_id": "6pFPKs7J6rG3jXTvbqJWuL",
+          "name": "Lil Indies",
+          "type": "venue",
+          "formatted_address": "1036 North Mills Avenue\nOrlando, FL 32803\nUnited States of America"
+        }
+      ],
+      "duration": 0,
+      "start": "2023-11-16T00:00:00Z",
+      "end": "2023-11-16T00:00:00Z",
+      "updated": "2023-08-13T14:20:49Z",
+      "first_seen": "2023-08-13T13:58:34Z",
+      "timezone": "America/New_York",
+      "location": [
+        -81.3646724,
+        28.559769
+      ],
+      "geo": {
+        "geometry": {
+          "coordinates": [
+            -81.3646724,
+            28.559769
+          ],
+          "type": "Point"
+        },
+        "placekey": "22f-222@8fy-8bs-pjv"
+      },
+      "scope": "locality",
+      "country": "US",
+      "place_hierarchies": [
+        [
+          "6295630",
+          "6255149",
+          "6252001",
+          "4155751",
+          "4167060",
+          "4167147"
+        ]
+      ],
+      "state": "active",
+      "brand_safe": true,
+      "private": false
+    },
+    {
+      "relevance": 0.0,
+      "id": "46BCp8Zcp4tTN7AeN2",
+      "title": "Peppa Pig's Sing-Along Party!",
+      "description": "Peppa, George, Mummy Pig, and Daddy Pig are throwing a Sing-Along Party and you are invited! In this new show you can join in the fun as Peppa and friends teach some of their favorite songs. Dance, clap, and sing with Peppa and her family along with Pedro Pony, Suzy Sheep, and Gerald Giraffe. Blow up those balloons and get the disco ball ready as you and your family party along with Peppa in this 60-minute interactive musical adventure!",
+      "category": "performing-arts",
+      "labels": [
+        "entertainment",
+        "performing-arts"
+      ],
+      "rank": 51,
+      "local_rank": 78,
+      "phq_attendance": 1118,
+      "entities": [
+        {
+          "entity_id": "35dPW5SYnp6eJjhXXPUbB96",
+          "name": "Thalia Mara Hall",
+          "type": "venue",
+          "formatted_address": "255 East Pascagoula Street\nJackson, MS 39201\nUnited States of America"
+        }
+      ],
+      "duration": 0,
+      "start": "2023-11-16T00:00:00Z",
+      "end": "2023-11-16T00:00:00Z",
+      "updated": "2023-08-16T13:22:25Z",
+      "first_seen": "2023-05-16T00:48:31Z",
+      "timezone": "America/Chicago",
+      "location": [
+        -90.185295,
+        32.2968913
+      ],
+      "geo": {
+        "geometry": {
+          "coordinates": [
+            -90.185295,
+            32.2968913
+          ],
+          "type": "Point"
+        },
+        "placekey": "zzw-222@8f6-skx-psq"
+      },
+      "scope": "locality",
+      "country": "US",
+      "place_hierarchies": [
+        [
+          "6295630",
+          "6255149",
+          "6252001",
+          "4436296",
+          "4429877",
+          "4431410"
+        ]
+      ],
+      "state": "active",
+      "brand_safe": true,
+      "private": false,
+      "predicted_event_spend": 30903,
+      "predicted_event_spend_industries": {
+        "accommodation": 2583,
+        "hospitality": 16695,
+        "transportation": 11625
+      },
+      "phq_labels": [
+        {
+          "label": "general-theatre",
+          "weight": 0.559
+        },
+        {
+          "label": "family-theatre",
+          "weight": 0.441
+        }
+      ]
+    },
+    {
+      "relevance": 0.0,
+      "id": "4LHP3GoWsVCp5cwzEz",
+      "title": "London VET Show",
+      "description": "The London VET Show is an informative and interactive expo event tailored for veterinary professionals, featuring a range of exhibitors showcasing the latest products, technologies, and services in the field. Attendees can also benefit from educational seminars, workshops, and networking opportunities with industry experts.",
+      "category": "expos",
+      "labels": [
+        "expo"
+      ],
+      "rank": 50,
+      "local_rank": 60,
+      "phq_attendance": 1000,
+      "entities": [
+        {
+          "entity_id": "qqZ9qg2RFE49K8L8mvJmZ",
+          "name": "ExCeL London",
+          "type": "venue",
+          "formatted_address": "1 Western Gateway\nLondon E16 1XL\nUnited Kingdom"
+        },
+        {
+          "entity_id": "64F8h2hzztmhJuhGBwnXwd",
+          "name": "London VET Show",
+          "type": "event-group",
+          "category": "expos",
+          "labels": [
+            "event-group",
+            "recurring"
+          ]
+        }
+      ],
+      "duration": 172799,
+      "start": "2023-11-16T00:00:00Z",
+      "end": "2023-11-17T23:59:59Z",
+      "updated": "2023-08-11T08:02:25Z",
+      "first_seen": "2022-11-18T19:01:48Z",
+      "timezone": "Europe/London",
+      "location": [
+        0.029846,
+        51.5084601
+      ],
+      "geo": {
+        "geometry": {
+          "coordinates": [
+            0.029846,
+            51.5084601
+          ],
+          "type": "Point"
+        },
+        "placekey": "zzw-225@4hh-ztt-jsq"
+      },
+      "scope": "locality",
+      "country": "GB",
+      "place_hierarchies": [
+        [
+          "6295630",
+          "6255148",
+          "2635167",
+          "6269131",
+          "2648110",
+          "2641639",
+          "2641215"
+        ],
+        [
+          "6295630",
+          "6255148",
+          "2635167",
+          "6269131",
+          "2648110",
+          "2643743"
+        ]
+      ],
+      "state": "active",
+      "brand_safe": true,
+      "private": false,
+      "predicted_event_spend": 87876,
+      "predicted_event_spend_industries": {
+        "accommodation": 32563,
+        "hospitality": 43604,
+        "transportation": 11709
+      },
+      "phq_labels": [
+        {
+          "label": "agriculture-forestry-and-fisheries",
+          "weight": 0.785
+        },
+        {
+          "label": "medical",
+          "weight": 0.215
+        }
+      ]
+    }
+  ]
+}
