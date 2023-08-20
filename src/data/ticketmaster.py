@@ -1,9 +1,9 @@
 from datetime import datetime
-from typing import Optional
 
 from aiohttp import ClientSession
 
 from config import settings
+from gen_typing import YieldAsync
 from utils.images import save_image_by_url
 
 from .base import BaseDataHandler
@@ -19,16 +19,18 @@ class TicketmasterDataHandler(BaseDataHandler):
     config_schema = TicketmasterConfigSchema
 
     async def to_event(self, data: dict) -> dict:
-        images_size = [i['width'] * i['height'] for i in data['images']]
-        image = data['images'][images_size.index(max(images_size))]
-        image_path = await save_image_by_url(
-            image=image['url'],
-            name=f'{datetime.utcnow().timestamp()}_{data["id"]}',  # UTC timestamp + user ID
-        )
+        image_path = None
+        if self.config.load_images:
+            images_size = [i['width'] * i['height'] for i in data['images']]
+            image = data['images'][images_size.index(max(images_size))]
+            image_path = await save_image_by_url(
+                image=image['url'],
+                name=f'{datetime.utcnow().timestamp()}_{data["id"]}',  # UTC timestamp + user ID
+            )
         schema = ParsedEventTicketmasterSchema(image_path=image_path, **data)
         return schema.model_dump()
 
-    async def get_events(self, session: ClientSession) -> Optional[list[dict]]:  # type: ignore
+    async def get_events(self, session: ClientSession) -> YieldAsync[dict]:
         page = 0
         headers = {'Content-Type': 'application/json'}
         params = {

@@ -1,15 +1,15 @@
 """initial
 
-Revision ID: 2a7d5c026929
+Revision ID: 3c8e1e868e83
 Revises:
-Create Date: 2023-08-10 22:14:17.451678
+Create Date: 2023-08-20 12:15:47.459129
 
 """
 import sqlalchemy as sa
 from alembic import op
 from sqlalchemy.dialects import postgresql
 
-revision = '2a7d5c026929'
+revision = '3c8e1e868e83'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -19,18 +19,20 @@ def upgrade() -> None:
     op.create_table(
         'data_source',
         sa.Column('id', sa.Integer(), nullable=False),
-        sa.Column('name', sa.String(length=32), nullable=True),
-        sa.Column('handler', sa.String(length=1024), nullable=True),
-        sa.Column('api_url', sa.String(length=1024), nullable=True),
+        sa.Column('name', sa.String(length=32), nullable=False),
+        sa.Column('handler', sa.String(length=1024), nullable=False),
+        sa.Column('api_url', sa.String(length=1024), nullable=False),
         sa.Column('secret', sa.String(length=1024), nullable=True),
-        sa.Column('config', postgresql.JSONB(astext_type=sa.Text()), nullable=True),  # type: ignore[no-untyped-call]
+        sa.Column('config', postgresql.JSONB(astext_type=sa.Text()), nullable=False),  # type: ignore
         sa.PrimaryKeyConstraint('id')
     )
     op.create_table(
         'events',
         sa.Column('id', sa.Integer(), nullable=False),
-        sa.Column('created_at', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'), nullable=False),
-        sa.Column('updated_at', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'), nullable=False),
+        sa.Column('created_at', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'),
+                  nullable=False),
+        sa.Column('updated_at', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'),
+                  nullable=False),
         sa.Column('name', sa.String(length=100), nullable=True),
         sa.Column('summary', sa.String(length=1000), nullable=True),
         sa.Column('image_path', sa.String(length=255), nullable=True),
@@ -48,8 +50,10 @@ def upgrade() -> None:
         sa.Column('email', sa.String(length=45), nullable=True),
         sa.Column('hashed_password', sa.String(length=1024), nullable=True),
         sa.Column('verified', sa.Boolean(), server_default='False', nullable=False),
-        sa.Column('created_at', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'), nullable=False),
-        sa.Column('updated_at', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'), nullable=False),
+        sa.Column('created_at', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'),
+                  nullable=False),
+        sa.Column('updated_at', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'),
+                  nullable=False),
         sa.Column('avatar_path', sa.String(length=255), nullable=True),
         sa.Column('tfa_secret', sa.String(length=32), nullable=True),
         sa.Column('tfa_enabled', sa.Boolean(), server_default='False', nullable=False),

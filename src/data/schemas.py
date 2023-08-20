@@ -8,6 +8,8 @@ __all__ = (
     'TicketmasterConfigSchema', 'PredictHQConfigSchema'
 )
 
+from config import settings
+
 
 class ParsedEventBaseSchema(BaseModel):
     name: str
@@ -20,11 +22,12 @@ class ParsedEventBaseSchema(BaseModel):
 
 
 class TicketmasterConfigSchema(BaseModel):
-    size: int
+    size: int = settings.DATA_HANDLER_PER_PAGE
+    load_images: bool = True
 
 
 class PredictHQConfigSchema(BaseModel):
-    limit: int
+    limit: int = settings.DATA_HANDLER_PER_PAGE
 
 
 class ParsedEventTicketmasterSchema(ParsedEventBaseSchema):
@@ -35,23 +38,24 @@ class ParsedEventTicketmasterSchema(ParsedEventBaseSchema):
         new_data: dict = {
             'online_event': data.get('place') is None,
             'source_id': data['id'],
-            'image_path': data['image_path'],
             'name': data['name']
         }
+        if data.get('image_path'):
+            new_data['image_path'] = data['image_path']
         if data.get('info'):
             new_data['summary'] = data['info']
         if data.get('description'):
             new_data['summary'] = data['description']
         if data['dates'].get('start'):
             if data['dates']['start'].get('dateTime'):
-                new_data['start'] = data['dates']['start']['dateTime']
+                new_data['start'] = datetime.strptime(data['dates']['start']['dateTime'], '%Y-%m-%dT%H:%M:%SZ')
             if data['dates']['start'].get('localDate'):
-                new_data['start'] = data['dates']['start']['localDate']
+                new_data['start'] = datetime.strptime(data['dates']['start']['localDate'], '%Y-%m-%d')
         if data['dates'].get('end'):
             if data['dates']['end'].get('dateTime'):
-                new_data['end'] = data['dates']['end']['dateTime']
+                new_data['end'] = datetime.strptime(data['dates']['end']['dateTime'], '%Y-%m-%dT%H:%M:%SZ')
             if data['dates']['end'].get('localDate'):
-                new_data['end'] = data['dates']['end']['localDate'], '%Y-%m-%d'
+                new_data['end'] = datetime.strptime(data['dates']['end']['localDate'], '%Y-%m-%d')
         return new_data
 
 

@@ -19,12 +19,12 @@ class DataContext:
     # Save events in DB
     async def load_events(self) -> None:
         async with ClientSession() as session:
-            async for event in self._handler.get_events(session):  # type: ignore[attr-defined]
+            async for event in self._handler.get_events(session):
                 try:
                     await Event.create(**event)
                 except IntegrityError:
                     # Log parse result and finish
                     logger.info(f'Events parsing finished for {self._handler.ds.name}')
-                    if event.image_path:
-                        await remove_image(f'{settings.MEDIA_ROOT}/{event.image_path}')
+                    if image_path := event['image_path']:
+                        await remove_image(f'{settings.MEDIA_ROOT}/{image_path}')
                     break

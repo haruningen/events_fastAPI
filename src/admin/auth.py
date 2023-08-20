@@ -22,7 +22,7 @@ class AdminAuth(AuthenticationBackend):
         if not user:
             return False
 
-        if not (user.verified or user.is_moderator or user.is_superuser):
+        if not (user.verified and (user.is_moderator or user.is_superuser)):
             return False
 
         if not verify_password(password, user.hashed_password):
