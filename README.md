@@ -20,6 +20,7 @@ The application in the background (once a day) collects information about events
 1. [Ticketmaster developer](https://developer.ticketmaster.com/products-and-docs/apis/getting-started/)
 
 Handler: data.TicketmasterDataHandler
+
 2. [PredictHQ](https://www.predicthq.com/support/getting-started-with-api)
 
 Handler: data.PredictHQDataHandler
