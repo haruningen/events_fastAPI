@@ -21,8 +21,7 @@ class TestLoadPredictHQData:
         ds = DataSource(
             name='predicthq',
             handler='data.PredictHQDataHandler',
-            api_url='',
-            secret='',
+            api_url='http://0.0.0.0:8080/',
             config={},
         )
         handler = PredictHQDataHandler(ds)

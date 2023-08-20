@@ -1,15 +1,15 @@
 """initial
 
-Revision ID: e2506572dfd7
+Revision ID: 3c8e1e868e83
 Revises:
-Create Date: 2023-08-20 11:01:37.674365
+Create Date: 2023-08-20 12:15:47.459129
 
 """
 import sqlalchemy as sa
 from alembic import op
 from sqlalchemy.dialects import postgresql
 
-revision = 'e2506572dfd7'
+revision = '3c8e1e868e83'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -19,11 +19,11 @@ def upgrade() -> None:
     op.create_table(
         'data_source',
         sa.Column('id', sa.Integer(), nullable=False),
-        sa.Column('name', sa.String(length=32), nullable=True),
-        sa.Column('handler', sa.String(length=1024), nullable=True),
-        sa.Column('api_url', sa.String(length=1024), nullable=True),
+        sa.Column('name', sa.String(length=32), nullable=False),
+        sa.Column('handler', sa.String(length=1024), nullable=False),
+        sa.Column('api_url', sa.String(length=1024), nullable=False),
         sa.Column('secret', sa.String(length=1024), nullable=True),
-        sa.Column('config', postgresql.JSONB(astext_type=sa.Text()), nullable=False),  # type: ignore
+        sa.Column('config', postgresql.JSONB(astext_type=sa.Text()), nullable=False),
         sa.PrimaryKeyConstraint('id')
     )
     op.create_table(

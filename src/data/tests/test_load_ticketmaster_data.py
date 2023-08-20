@@ -21,8 +21,7 @@ class TestLoadTicketmasterData:
         ds = DataSource(
             name='predicthq',
             handler='data.TicketmasterDataHandler',
-            api_url='',
-            secret='',
+            api_url='http://0.0.0.0:8080/',
             config={'load_images': False},
         )
         handler = TicketmasterDataHandler(ds)
