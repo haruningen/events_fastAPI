@@ -12,8 +12,8 @@ celery = Celery(
 celery.autodiscover_tasks(['data'])
 
 celery.conf.beat_schedule = {
-    'every day at 3:30 PM': {
+    'every day at 13 PM': {
         'task': 'load_data_task',
-        'schedule': crontab(minute='30', hour='15')
+        'schedule': crontab(minute='00', hour='13')
     },
 }

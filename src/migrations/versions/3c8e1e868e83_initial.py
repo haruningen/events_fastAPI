@@ -23,7 +23,7 @@ def upgrade() -> None:
         sa.Column('handler', sa.String(length=1024), nullable=False),
         sa.Column('api_url', sa.String(length=1024), nullable=False),
         sa.Column('secret', sa.String(length=1024), nullable=True),
-        sa.Column('config', postgresql.JSONB(astext_type=sa.Text()), nullable=False),
+        sa.Column('config', postgresql.JSONB(astext_type=sa.Text()), nullable=False),  # type: ignore
         sa.PrimaryKeyConstraint('id')
     )
     op.create_table(
