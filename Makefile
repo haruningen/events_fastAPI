@@ -27,6 +27,9 @@ start:  ## Start application
 tests:  ## Run tests
 	$(COMPOSE_RUN_APP) bash -c "cd /app && pytest -c $(pyproject)"
 
+unittests: ## Run only unit tests
+	$(COMPOSE_RUN_APP) /bin/bash -c "cd /app && pytest -c $(pyproject) -m unit"
+
 mypy:  ## Run mypy
 	$(COMPOSE_RUN_APP) mypy .
 

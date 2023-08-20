@@ -3,7 +3,7 @@ from typing import Any, Optional
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.depends import PaginationDeps, get_authed_user, get_db
+from api.depends import GetAuthUser, PaginationDeps, get_db
 from api.events.schemas import EventDetailScheme, EventsListSchema
 from api.schemas import MessageSchema
 from models import Event, User
@@ -31,7 +31,7 @@ async def get_events(pagination: PaginationDeps) -> dict[str, Any]:
 )
 async def get_user_events(
         pagination: PaginationDeps,
-        user: User = Depends(get_authed_user),
+        user: User = Depends(GetAuthUser()),
 ) -> dict[str, Any]:
     events_list: list[Event] = await Event.get_list(
         Event.users.any(id=user.id),
@@ -43,21 +43,22 @@ async def get_user_events(
 
 
 @router.get('/{event_id}', summary='Get event info by id', response_model=EventDetailScheme)
-async def get_event(event_id: int, user: User = Depends(get_authed_user)) -> Event:
+async def get_event(event_id: int, user: User = Depends(GetAuthUser(required=False))) -> Event:
     event: Optional[Event] = await Event.get(event_id)  # type: ignore[func-returns-value]
     if not event:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f'Event with ID {event_id} does not exist'
         )
-    event.want_go = any(eu for eu in event.users if user.id == eu.id)  # type: ignore[attr-defined]
+    if user:
+        event.want_go = any(eu for eu in event.users if user.id == eu.id)  # type: ignore[attr-defined]
     return event
 
 
 @router.post('/attend/{event_id}', summary='Attach event to user', response_model=MessageSchema)
 async def attend_event(
         event_id: int,
-        user: User = Depends(get_authed_user),
+        user: User = Depends(GetAuthUser()),
         _db: AsyncSession = Depends(get_db)
 ) -> dict[str, str]:
     event: Optional[Event] = await Event.get(event_id)  # type: ignore[func-returns-value]

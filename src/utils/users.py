@@ -7,10 +7,10 @@ from bcrypt import checkpw, hashpw
 from fastapi import HTTPException, status
 from pydantic import ValidationError
 
-from api.users.schemas import TokenPayload
 from config import settings
 from models import OAuthAccount, User
 from utils import cryptography
+from utils.schemas import TokenPayload
 
 
 def make_hashed_password(password: str) -> str:

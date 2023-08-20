@@ -26,6 +26,8 @@ class Settings(BaseSettings):
     EMAIL_VERIFY_KEY: bytes
     RESET_PASSWORD_KEY: bytes
     PASSWORD_SALT: bytes = gensalt()
+    DATA_HANDLER_TOTAL_PAGE: int = 3
+    DATA_HANDLER_PER_PAGE: int = 10
 
     # ---------- Storage ----------
 
@@ -42,6 +44,11 @@ class Settings(BaseSettings):
     POSTGRES_HOSTNAME: str
     POSTGRES_DSN: str
 
+    # ---------- Celery ----------
+
+    CELERY_BROKER_URL: str
+    CELERY_RESULT_BACKEND: str
+
     # ---------- Services ----------
 
     # SMTP secrets
@@ -49,9 +56,6 @@ class Settings(BaseSettings):
     EMAIL_HOST: str
     EMAIL_HOST_PASSWORD: str
     EMAIL_PORT: int
-    # Ticketmaster secrets
-    TICKETMASTER_API_URL: str
-    TICKETMASTER_API_KEY: str
     # Frontend url
     FRONTEND_URL: str
     # Tokens secrets
