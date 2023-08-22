@@ -3,13 +3,9 @@ Create a web page that will display a list of events (meetups, conferences, etc)
 
 A normal user can only view and subscribe to events. If the user goes to an event, the application generate a QR with a link to this event.
 
-Moderator or admin can manually create events and publish. An admin or moderator can make two types of reports in the admin panel: CSV on events. The second report is in PDF format and reflect information about the number of events for the period (how many of them were visited and how many times).
+Moderator or admin can manually create events and publish. An admin or moderator can make CSV reports on events in the admin panel.
 
-The application in the background (once a day) collects information about events using third-party APIs and saves it to the database.
-
-# Demo
-
-![](https://github.com/haruningen/events_fastAPI/blob/main/demo/admin_demo.gif)
+The application in the background (every day at 1 PM) collects information about events using third-party APIs and saves it to the database.
 
 ## Tech stack
 - Python 3.11
@@ -42,6 +38,14 @@ make start
 
 You can find an example site [here](https://github.com/haruningen/events_test/tree/fastAPI)
 
+## Admin (Powered by SQLAdmin)
+
+http://0.0.0.0:8080/admin
+
+![](https://github.com/haruningen/events_fastAPI/blob/main/demo/admin.png)
+
 ## Swagger
+
+http://0.0.0.0:8080/docs#/
 
 ![](https://github.com/haruningen/events_fastAPI/blob/main/demo/swagger.png)
