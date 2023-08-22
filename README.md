@@ -7,13 +7,19 @@ Moderator or admin can manually create events and publish. An admin or moderator
 
 The application in the background (once a day) collects information about events using third-party APIs and saves it to the database.
 
+# Demo
+
+![](https://github.com/haruningen/events_fastAPI/blob/main/demo/admin_demo.gif)
+
 ## Tech stack
-- python 3.11
-- fastApi
-- SqlAlchemy 1.4.31
+- Python 3.11
+- FastApi
+- SqlAlchemy 1.4
+- PyTest
+- Poetry
 
 ## Foreign components 
-- postgres
+- PostgreSQL
 
 ## You need to add a datasource to the table!
 ### Data source for load events background task:
@@ -36,6 +42,6 @@ make start
 
 You can find an example site [here](https://github.com/haruningen/events_test/tree/fastAPI)
 
-# Demo
-
 ## Swagger
+
+![](https://github.com/haruningen/events_fastAPI/blob/main/demo/swagger.png)
