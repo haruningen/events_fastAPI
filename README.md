@@ -31,3 +31,11 @@ make build
 make migrate
 make start
 ```
+
+# Frontend
+
+You can find an example site [here](https://github.com/haruningen/events_test/tree/fastAPI)
+
+# Demo
+
+## Swagger
